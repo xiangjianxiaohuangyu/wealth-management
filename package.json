@@ -1,10 +1,10 @@
 {
-  "name": "wealth-management-app",
+  "name": "wealth-management",
   "version": "0.0.1",
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/xiangjianxiaohuangyu/wealth-management-app.git"
+    "url": "https://github.com/xiangjianxiaohuangyu/wealth-management.git"
   },
   "scripts": {
     "dev": "electron .",
@@ -13,7 +13,13 @@
     "build": "electron-builder -p always",
     "build:win": "cd renderer && npm run build && electron-builder --win",
     "build:mac": "cd renderer && npm run build && electron-builder --mac",
-    "dist": "electron-builder -p always"
+    "dist": "electron-builder -p always",
+    "bump": "npm version patch -m \"chore(release): %s\"",
+    "bump:minor": "npm version minor -m \"chore(release): %s\"",
+    "bump:major": "npm version major -m \"chore(release): %s\"",
+    "release": "npm run bump && npm run build && git push --follow-tags",
+    "release:minor": "npm run bump:minor && npm run build && git push --follow-tags",
+    "release:major": "npm run bump:major && npm run build && git push --follow-tags"
   },
   "devDependencies": {
     "electron": "^40.0.0",
@@ -21,14 +27,15 @@
   },
   "build": {
     "appId": "com.example.wealthmanagement",
-    "productName": "wm-app-test",
+    "productName": "wealth-management",
     "publish": {
       "provider": "github",
       "owner": "xiangjianxiaohuangyu",
-      "repo": "wealth-management-app"
+      "repo": "wealth-management"
     },
     "files": [
       "main.js",
+      "preload.js",
       "renderer/dist/**/*",
       "renderer/index.html",
       "package.json"

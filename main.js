@@ -31,7 +31,8 @@ function createWindow() {
     minHeight: 700,
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js')
     },
     backgroundColor: '#f5f7fa',
     title: '财富管理 - Wealth Management',
@@ -46,8 +47,8 @@ function createWindow() {
     // 打开开发者工具
     win.webContents.openDevTools();
   } else {
-    // 生产环境：加载打包后的文件
-    win.loadFile(path.join(__dirname, 'renderer/index.html'));
+    // 生产环境：加载构建后的文件
+    win.loadFile(path.join(__dirname, 'renderer/dist/index.html'));
   }
 
   // 设置自动更新
@@ -63,7 +64,7 @@ function createWindow() {
     autoUpdater.setFeedURL({
       provider: 'github',
       owner: 'xiangjianxiaohuangyu',
-      repo: 'wealth-management-app'
+      repo: 'wealth-management'
     });
 
     // 检查更新
