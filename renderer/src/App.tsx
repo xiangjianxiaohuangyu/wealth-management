@@ -1,6 +1,6 @@
 import { RouterProvider } from './context/RouterContext'
 import { AppLayout } from './components/layout'
-import { UpdateManager } from './components/update/UpdateDialog'
+import { UpdateManager } from './components/update'
 import './styles/variables.css'
 
 /**

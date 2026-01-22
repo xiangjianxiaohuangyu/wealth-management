@@ -88,7 +88,7 @@ export default function Dashboard({ wealthSummary }: DashboardProps) {
         <div className="dashboard__chart">
           <LineChart
             data={trendData}
-            title="收支趋势"
+            title="收支趋势-更新版本测试"
             showLegend
             showArea
             height={300}
