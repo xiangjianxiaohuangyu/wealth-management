@@ -164,16 +164,10 @@ ipcMain.handle('delete-plan-file', async (event, filePath) => {
 
 // 获取应用版本号
 ipcMain.handle('get-app-version', async () => {
-  const packagePath = path.join(__dirname, '../../package.json');
-  console.log('Reading package.json from:', packagePath);
-  try {
-    const packageData = JSON.parse(fs.readFileSync(packagePath, 'utf-8'));
-    console.log('Package version:', packageData.version);
-    return packageData.version || '0.0.0';
-  } catch (error) {
-    console.error('Error reading package.json:', error);
-    return '0.0.0';
-  }
+  // 直接使用 Electron 的 app.getVersion() 方法
+  const version = app.getVersion();
+  log.info('App version requested:', version);
+  return version;
 });
 
 // 读取项目目录中的文件（用于更新日志等）
@@ -213,7 +207,13 @@ ipcMain.handle('check-for-updates', async () => {
   }
 });
 
-// 下载更新
+// 下载更新（使用 ipcMain.on 配合前端的 send）
+ipcMain.on('download-update', () => {
+  log.info('Downloading update...');
+  autoUpdater.downloadUpdate();
+});
+
+// 保留 handle 用于 invoke 调用
 ipcMain.handle('download-update', async () => {
   try {
     log.info('Downloading update...');
@@ -225,12 +225,16 @@ ipcMain.handle('download-update', async () => {
   }
 });
 
-// 安装更新并重启
+// 安装更新并重启（使用 ipcMain.on 配合前端的 send）
+ipcMain.on('install-update', () => {
+  log.info('Installing update...');
+  autoUpdater.quitAndInstall(true, true);
+});
+
+// 保留 handle 用于 invoke 调用
 ipcMain.handle('install-update', async () => {
   try {
     log.info('Installing update...');
-    // 使用静默安装模式，isSilent=true 表示不显示安装界面
-    // isForceRunAfter=true 表示安装完成后自动运行应用
     autoUpdater.quitAndInstall(true, true);
     return { success: true };
   } catch (error) {
@@ -289,13 +293,7 @@ function setupAutoUpdater() {
 
   // 下载进度
   autoUpdater.on('download-progress', (progress) => {
-    log.warn('Unexpected download progress detected!', progress);
-    log.warn('autoDownload was supposed to be false!');
-    // 如果不应该下载，记录警告
-    if (!autoUpdater.autoDownload) {
-      log.error('ERROR: Download started despite autoDownload being false!');
-    }
-
+    log.info('Download progress:', progress.percent.toFixed(1) + '%');
     if (mainWindow) {
       mainWindow.webContents.send('update-download-progress', {
         percent: progress.percent,
