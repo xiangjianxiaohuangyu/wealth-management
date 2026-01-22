@@ -60,15 +60,11 @@ function createWindow() {
     autoUpdater.autoDownload = false;
     log.info('autoDownload set to false before checking updates');
 
-    // 配置更新服务器地址
-    autoUpdater.setFeedURL({
-      provider: 'github',
-      owner: 'xiangjianxiaohuangyu',
-      repo: 'wealth-management'
+    // 检查更新（FeedURL 已在 setupAutoUpdater 中配置）
+    log.info('Current app version:', app.getVersion());
+    autoUpdater.checkForUpdates().catch(err => {
+      log.error('检查更新失败:', err);
     });
-
-    // 检查更新
-    autoUpdater.checkForUpdates();
   }, 1000);
 }
 
@@ -250,6 +246,14 @@ function setupAutoUpdater() {
   autoUpdater.autoInstallOnAppQuit = false;
   log.info('setupAutoUpdater: autoDownload and autoInstallOnAppQuit set to false');
 
+  // 配置更新服务器（在 setup 中配置，确保更早生效）
+  autoUpdater.setFeedURL({
+    provider: 'github',
+    owner: 'xiangjianxiaohuangyu',
+    repo: 'wealth-management'
+  });
+  log.info('FeedURL configured: github.com/xiangjianxiaohuangyu/wealth-management');
+
   // 当发现可用更新时
   autoUpdater.on('update-available', (info) => {
     log.info('Update available:', info);
@@ -258,17 +262,24 @@ function setupAutoUpdater() {
     log.info('update-available event: autoDownload set to false again');
 
     if (mainWindow) {
+      log.info('Sending update-available event to renderer process');
       mainWindow.webContents.send('update-available', {
         version: info.version,
         releaseNotes: info.releaseNotes,
         date: info.releaseDate
       });
+    } else {
+      log.error('mainWindow is null, cannot send update-available event');
     }
   });
 
   // 当没有可用更新时
   autoUpdater.on('update-not-available', (info) => {
-    log.info('Update not available:', info);
+    log.info('===== UPDATE NOT AVAILABLE =====');
+    log.info('Current version:', app.getVersion());
+    log.info('Latest version on GitHub:', info.version);
+    log.info('Full info:', JSON.stringify(info, null, 2));
+    log.info('================================');
     if (mainWindow) {
       mainWindow.webContents.send('update-not-available', {
         version: info.version

@@ -114,6 +114,7 @@ export function UpdateManager() {
   useEffect(() => {
     // 监听更新可用事件
     const handleUpdateAvailable = (_event: any, info: UpdateInfo) => {
+      console.log('🎉 前端收到 update-available 事件:', info)
       setUpdateInfo(info)
     }
 
@@ -145,6 +146,10 @@ export function UpdateManager() {
     }
 
     // 添加监听器
+    console.log('注册更新监听器...')
+    if (!window.electron) {
+      console.error('window.electron 不存在，IPC 通信未正确配置')
+    }
     window.electron?.on?.('update-available', handleUpdateAvailable)
     window.electron?.on?.('update-not-available', handleUpdateNotAvailable)
     window.electron?.on?.('update-download-progress', handleDownloadProgress)

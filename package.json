@@ -65,7 +65,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "wm-app-test",
+      "shortcutName": "wealth-management",
       "perMachine": false,
       "runAfterFinish": true
     }
