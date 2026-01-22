@@ -1,0 +1,71 @@
+{
+  "name": "wealth-management-app",
+  "version": "0.0.1",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiangjianxiaohuangyu/wealth-management-app.git"
+  },
+  "scripts": {
+    "dev": "electron .",
+    "start": "electron .",
+    "prebuild": "cd renderer && npm run build",
+    "build": "electron-builder -p always",
+    "build:win": "cd renderer && npm run build && electron-builder --win",
+    "build:mac": "cd renderer && npm run build && electron-builder --mac",
+    "dist": "electron-builder -p always"
+  },
+  "devDependencies": {
+    "electron": "^40.0.0",
+    "electron-builder": "^26.4.0"
+  },
+  "build": {
+    "appId": "com.example.wealthmanagement",
+    "productName": "wm-app-test",
+    "publish": {
+      "provider": "github",
+      "owner": "xiangjianxiaohuangyu",
+      "repo": "wealth-management-app"
+    },
+    "files": [
+      "main.js",
+      "renderer/dist/**/*",
+      "renderer/index.html",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.finance"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "wm-app-test",
+      "perMachine": false,
+      "runAfterFinish": true
+    }
+  },
+  "dependencies": {
+    "echarts": "^6.0.0",
+    "electron-log": "^5.4.3",
+    "electron-updater": "^6.7.3"
+  }
+}
