@@ -28,7 +28,14 @@ export function UpdateDialog({
   downloadProgress,
   isDownloaded
 }: UpdateDialogProps) {
+  const [isPreparing, setIsPreparing] = useState(false)
+
   if (!updateInfo) return null
+
+  const handleDownload = () => {
+    setIsPreparing(true)
+    onDownload()
+  }
 
   return (
     <div className="update-overlay">
@@ -45,6 +52,15 @@ export function UpdateDialog({
             <div className="release-notes">
               <h4>更新内容：</h4>
               <pre>{updateInfo.releaseNotes}</pre>
+            </div>
+          )}
+
+          {isPreparing && !downloadProgress && !isDownloaded && (
+            <div className="download-progress">
+              <div className="progress-bar">
+                <div className="progress-fill" style={{ width: '0%' }} />
+              </div>
+              <p className="progress-text">准备下载中...</p>
             </div>
           )}
 
@@ -72,20 +88,20 @@ export function UpdateDialog({
         </div>
 
         <div className="update-footer">
-          {!downloadProgress && !isDownloaded && (
+          {!isPreparing && !downloadProgress && !isDownloaded && (
             <>
               <button className="btn btn-secondary" onClick={onCancel}>
                 稍后更新
               </button>
-              <button className="btn btn-primary" onClick={onDownload}>
+              <button className="btn btn-primary" onClick={handleDownload}>
                 立即更新
               </button>
             </>
           )}
 
-          {downloadProgress && !isDownloaded && (
+          {(isPreparing || downloadProgress) && !isDownloaded && (
             <button className="btn btn-secondary" onClick={onCancel} disabled>
-              下载中...
+              {isPreparing ? '准备中...' : '下载中...'}
             </button>
           )}
 
@@ -130,11 +146,13 @@ export function UpdateManager() {
 
     // 监听下载进度
     const handleDownloadProgress = (_event: any, progress: any) => {
+      console.log('下载进度更新:', progress.percent.toFixed(1) + '%')
       setDownloadProgress(progress)
     }
 
     // 监听下载完成
     const handleUpdateDownloaded = (_event: any) => {
+      console.log('下载完成')
       setIsDownloaded(true)
       setDownloadProgress(null)
     }
@@ -167,10 +185,12 @@ export function UpdateManager() {
   }, [])
 
   const handleDownload = () => {
+    console.log('用户点击下载更新')
     window.electron?.send?.('download-update')
   }
 
   const handleInstall = () => {
+    console.log('用户点击安装更新')
     window.electron?.send?.('install-update')
   }
 
