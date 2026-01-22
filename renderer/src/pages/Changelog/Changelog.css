@@ -1,0 +1,158 @@
+/**
+ * Changelog 页面样式
+ */
+
+.changelog {
+  max-width: var(--container-max-width, 1200px);
+  margin: 0 auto;
+}
+
+.changelog__title {
+  font-size: var(--font-size-3xl, 24px);
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--color-text, #2d3436);
+  margin-bottom: var(--spacing-sm, 8px);
+}
+
+.changelog__description {
+  font-size: var(--font-size-base, 14px);
+  color: var(--color-text-secondary, #636e72);
+  margin-bottom: var(--spacing-2xl, 32px);
+}
+
+.changelog__timeline {
+  position: relative;
+  padding-left: var(--spacing-2xl, 32px);
+}
+
+.changelog__timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--color-border, #dfe6e9);
+}
+
+.changelog__item {
+  position: relative;
+  margin-bottom: var(--spacing-xl, 24px);
+}
+
+.changelog__marker {
+  position: absolute;
+  left: -29px;
+  top: 20px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--color-primary, #6c5ce7);
+  border: 3px solid var(--color-bg-elevated, #ffffff);
+  box-shadow: 0 0 0 2px var(--color-primary, #6c5ce7);
+}
+
+.changelog__card {
+  background-color: var(--color-bg-elevated, #ffffff);
+  border: 1px solid var(--color-border, #dfe6e9);
+}
+
+.changelog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg, 16px);
+  padding-bottom: var(--spacing-md, 12px);
+  border-bottom: 1px solid var(--color-border-light, #f1f2f6);
+}
+
+.changelog__version-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 12px);
+}
+
+.changelog__version {
+  margin: 0;
+  font-size: var(--font-size-xl, 18px);
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--color-text, #2d3436);
+}
+
+.changelog__version-badge {
+  padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
+  border-radius: var(--border-radius-sm, 4px);
+  font-size: var(--font-size-xs, 11px);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.changelog__version--major {
+  background-color: rgba(214, 48, 49, 0.1);
+  color: var(--color-danger, #d63031);
+}
+
+.changelog__version--minor {
+  background-color: rgba(108, 92, 231, 0.1);
+  color: var(--color-primary, #6c5ce7);
+}
+
+.changelog__version--patch {
+  background-color: rgba(0, 184, 148, 0.1);
+  color: var(--color-success, #00b894);
+}
+
+.changelog__date {
+  font-size: var(--font-size-sm, 12px);
+  color: var(--color-text-secondary, #636e72);
+}
+
+.changelog__changes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm, 8px);
+}
+
+.changelog__change {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+}
+
+.changelog__badge {
+  padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
+  border-radius: var(--border-radius-sm, 4px);
+  font-size: var(--font-size-xs, 11px);
+  font-weight: var(--font-weight-medium, 500);
+  flex-shrink: 0;
+}
+
+.changelog__badge--added {
+  background-color: rgba(0, 184, 148, 0.1);
+  color: var(--color-success, #00b894);
+}
+
+.changelog__badge--changed {
+  background-color: rgba(108, 92, 231, 0.1);
+  color: var(--color-primary, #6c5ce7);
+}
+
+.changelog__badge--fixed {
+  background-color: rgba(253, 203, 110, 0.2);
+  color: var(--color-warning, #fdcb6e);
+}
+
+.changelog__badge--removed {
+  background-color: rgba(214, 48, 49, 0.1);
+  color: var(--color-danger, #d63031);
+}
+
+.changelog__badge--security {
+  background-color: rgba(9, 132, 227, 0.1);
+  color: var(--color-info, #0984e3);
+}
+
+.changelog__description {
+  font-size: var(--font-size-base, 14px);
+  color: var(--color-text, #2d3436);
+  line-height: var(--line-height-normal, 1.5);
+}

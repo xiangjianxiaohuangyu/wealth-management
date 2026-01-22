@@ -1,0 +1,166 @@
+/**
+ * 模态框样式 - 玻璃态设计
+ */
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: var(--z-index-modal, 1050);
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+  animation: modal-fade-in 0.2s ease-out;
+}
+
+/* 模态框激活状态 */
+.modal--active {
+  display: flex;
+}
+
+/* 模态框内容容器 */
+.modal__content {
+  background: var(--color-bg-elevated);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border-radius: var(--border-radius-lg, 12px);
+  border: 1px solid var(--color-border);
+  max-width: 700px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: auto;
+  box-shadow: var(--shadow-xl, 0 12px 32px rgba(0, 0, 0, 0.25));
+  animation: modal-slide-up 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.modal__content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(77, 163, 255, 0.3) 50%,
+    transparent 100%
+  );
+}
+
+/* 模态框头部 */
+.modal__header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.modal__title {
+  font-size: var(--font-size-2xl, 20px);
+  font-weight: var(--font-weight-semibold, 600);
+  margin: 0;
+  color: var(--color-text);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 关闭按钮 */
+.modal__close {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md, 8px);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast, 0.15s) ease;
+}
+
+.modal__close:hover {
+  background: rgba(255, 77, 77, 0.15);
+  border-color: rgba(255, 77, 77, 0.3);
+  color: var(--color-text);
+  transform: rotate(90deg);
+}
+
+/* 模态框主体 */
+.modal__body {
+  padding: 24px;
+  color: var(--color-text);
+}
+
+/* 模态框底部 */
+.modal__footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--color-border-light);
+  text-align: right;
+  display: flex;
+  gap: var(--spacing-md, 12px);
+  justify-content: flex-end;
+}
+
+/* 动画 */
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .modal__content {
+    width: 95%;
+    max-width: none;
+  }
+
+  .modal__header,
+  .modal__body,
+  .modal__footer {
+    padding-left: var(--spacing-lg, 16px);
+    padding-right: var(--spacing-lg, 16px);
+  }
+}
+
+/* 滚动条样式 */
+.modal__content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal__content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal__content::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar);
+  border-radius: 3px;
+}
+
+.modal__content::-webkit-scrollbar-thumb:hover {
+  background: var(--color-scrollbar-hover);
+}

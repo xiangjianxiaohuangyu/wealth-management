@@ -1,0 +1,23 @@
+/**
+ * 图表组件通用样式
+ */
+
+.chart {
+  width: 100%;
+  min-height: 200px;
+  position: relative;
+}
+
+/* 图表容器 */
+.chart canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* 响应式处理 */
+@media (max-width: 768px) {
+  .chart {
+    min-height: 250px;
+  }
+}

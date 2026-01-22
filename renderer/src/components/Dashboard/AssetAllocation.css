@@ -1,0 +1,11 @@
+/**
+ * 资产配置组件样式
+ */
+
+.asset-allocation {
+  margin-bottom: var(--spacing-xl, 24px);
+}
+
+.asset-allocation .card__body {
+  padding: var(--spacing-lg, 16px);
+}

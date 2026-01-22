@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

@@ -1,0 +1,62 @@
+/**
+ * 财富摘要组件样式
+ */
+
+.wealth-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg, 16px);
+  margin-bottom: var(--spacing-xl, 24px);
+}
+
+.wealth-summary__card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg, 16px);
+  transition: transform var(--transition-fast, 0.15s) ease;
+}
+
+.wealth-summary__card:hover {
+  transform: translateY(-4px);
+}
+
+.wealth-summary__icon {
+  font-size: 48px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.wealth-summary__content {
+  flex: 1;
+}
+
+.wealth-summary__title {
+  font-size: var(--font-size-sm, 12px);
+  color: var(--color-text-secondary, #636e72);
+  margin-bottom: var(--spacing-xs, 4px);
+}
+
+.wealth-summary__value {
+  font-size: var(--font-size-2xl, 20px);
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--color-text, #2d3436);
+}
+
+.wealth-summary__card--success .wealth-summary__value {
+  color: var(--color-success, #00b894);
+}
+
+.wealth-summary__card--danger .wealth-summary__value {
+  color: var(--color-danger, #d63031);
+}
+
+.wealth-summary__card--primary .wealth-summary__value {
+  color: var(--color-primary, #6c5ce7);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .wealth-summary {
+    grid-template-columns: 1fr;
+  }
+}

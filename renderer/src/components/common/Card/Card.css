@@ -1,0 +1,100 @@
+/**
+ * 卡片组件样式 - 玻璃态设计
+ */
+
+.card {
+  background: var(--color-bg-elevated);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: var(--border-radius-lg, 12px);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.15));
+  transition: all var(--transition-base, 0.2s) ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+}
+
+.card--bordered {
+  border: var(--border-width, 1px) solid var(--color-border);
+}
+
+.card--hoverable {
+  cursor: pointer;
+}
+
+.card--hoverable:hover {
+  box-shadow: var(--shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.2));
+  transform: translateY(-2px);
+  border-color: rgba(77, 163, 255, 0.3);
+}
+
+.card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg, 16px) var(--spacing-xl, 24px);
+  border-bottom: 1px solid var(--color-border-light);
+  position: relative;
+  z-index: 1;
+}
+
+.card__header-content {
+  flex: 1;
+}
+
+.card__title {
+  margin: 0;
+  font-size: var(--font-size-lg, 16px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text);
+}
+
+.card__subtitle {
+  margin: var(--spacing-xs, 4px) 0 0 0;
+  font-size: var(--font-size-sm, 12px);
+  color: var(--color-text-secondary);
+}
+
+.card__extra {
+  flex-shrink: 0;
+  margin-left: var(--spacing-md, 12px);
+}
+
+.card__body {
+  padding: var(--spacing-xl, 24px);
+  position: relative;
+  z-index: 1;
+}
+
+/* 当没有头部时，body 的样式 */
+.card__body:first-child:last-child {
+  padding: var(--spacing-xl, 24px);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .card__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm, 8px);
+  }
+
+  .card__extra {
+    margin-left: 0;
+    width: 100%;
+  }
+}
