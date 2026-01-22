@@ -3,12 +3,12 @@
  */
 
 import type { ReactNode, CSSProperties, MouseEventHandler } from 'react'
-import type { Color, ButtonSize } from '../../../types/common.types'
+import type { ButtonSize } from '../../../types/common.types'
 
 /**
  * 按钮变体
  */
-export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'text' | 'link'
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'text' | 'link' | 'danger'
 
 /**
  * 按钮原生类型

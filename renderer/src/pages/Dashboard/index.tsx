@@ -14,23 +14,23 @@ import './Dashboard.css'
 
 // 示例数据（实际应用中应从存储或 API 获取）
 const mockAssets = [
-  { id: '1', name: '现金', category: 'cash' as const, value: 50000, currency: 'CNY', createdAt: '2024-01-01', updatedAt: '2024-01-01' },
-  { id: '2', name: '股票投资', category: 'stock' as const, value: 150000, currency: 'CNY', createdAt: '2024-01-01', updatedAt: '2024-01-01' },
-  { id: '3', name: '基金', category: 'fund' as const, value: 80000, currency: 'CNY', createdAt: '2024-01-01', updatedAt: '2024-01-01' },
-  { id: '4', name: '加密货币', category: 'crypto' as const, value: 30000, currency: 'CNY', createdAt: '2024-01-01', updatedAt: '2024-01-01' }
+  { id: '1', name: '现金', category: 'cash' as const, value: 50000, currency: 'CNY' as const, createdAt: '2024-01-01', updatedAt: '2024-01-01' },
+  { id: '2', name: '股票投资', category: 'stock' as const, value: 150000, currency: 'CNY' as const, createdAt: '2024-01-01', updatedAt: '2024-01-01' },
+  { id: '3', name: '基金', category: 'fund' as const, value: 80000, currency: 'CNY' as const, createdAt: '2024-01-01', updatedAt: '2024-01-01' },
+  { id: '4', name: '加密货币', category: 'crypto' as const, value: 30000, currency: 'CNY' as const, createdAt: '2024-01-01', updatedAt: '2024-01-01' }
 ]
 
 const mockLiabilities = [
-  { id: '1', name: '房贷', category: 'mortgage' as const, amount: 500000, currency: 'CNY', createdAt: '2024-01-01', updatedAt: '2024-01-01' },
-  { id: '2', name: '信用卡', category: 'credit_card' as const, amount: 10000, currency: 'CNY', createdAt: '2024-01-01', updatedAt: '2024-01-01' }
+  { id: '1', name: '房贷', category: 'mortgage' as const, amount: 500000, currency: 'CNY' as const, createdAt: '2024-01-01', updatedAt: '2024-01-01' },
+  { id: '2', name: '信用卡', category: 'credit_card' as const, amount: 10000, currency: 'CNY' as const, createdAt: '2024-01-01', updatedAt: '2024-01-01' }
 ]
 
 const mockTransactions = [
-  { id: '1', type: 'income' as const, category: 'salary' as const, amount: 15000, currency: 'CNY', date: '2024-01-15', description: '1月工资', createdAt: '2024-01-15', updatedAt: '2024-01-15' },
-  { id: '2', type: 'expense' as const, category: 'food' as const, amount: 2000, currency: 'CNY', date: '2024-01-14', description: '餐饮支出', createdAt: '2024-01-14', updatedAt: '2024-01-14' },
-  { id: '3', type: 'expense' as const, category: 'shopping' as const, amount: 3000, currency: 'CNY', date: '2024-01-13', description: '购物', createdAt: '2024-01-13', updatedAt: '2024-01-13' },
-  { id: '4', type: 'income' as const, category: 'bonus' as const, amount: 5000, currency: 'CNY', date: '2024-01-10', description: '项目奖金', createdAt: '2024-01-10', updatedAt: '2024-01-10' },
-  { id: '5', type: 'expense' as const, category: 'transport' as const, amount: 500, currency: 'CNY', date: '2024-01-09', description: '交通费', createdAt: '2024-01-09', updatedAt: '2024-01-09' }
+  { id: '1', type: 'income' as const, category: 'salary' as const, amount: 15000, currency: 'CNY' as const, date: '2024-01-15', description: '1月工资', createdAt: '2024-01-15', updatedAt: '2024-01-15' },
+  { id: '2', type: 'expense' as const, category: 'food' as const, amount: 2000, currency: 'CNY' as const, date: '2024-01-14', description: '餐饮支出', createdAt: '2024-01-14', updatedAt: '2024-01-14' },
+  { id: '3', type: 'expense' as const, category: 'shopping' as const, amount: 3000, currency: 'CNY' as const, date: '2024-01-13', description: '购物', createdAt: '2024-01-13', updatedAt: '2024-01-13' },
+  { id: '4', type: 'income' as const, category: 'bonus' as const, amount: 5000, currency: 'CNY' as const, date: '2024-01-10', description: '项目奖金', createdAt: '2024-01-10', updatedAt: '2024-01-10' },
+  { id: '5', type: 'expense' as const, category: 'transport' as const, amount: 500, currency: 'CNY' as const, date: '2024-01-09', description: '交通费', createdAt: '2024-01-09', updatedAt: '2024-01-09' }
 ]
 
 export default function Dashboard({ wealthSummary }: DashboardProps) {

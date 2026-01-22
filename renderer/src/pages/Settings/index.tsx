@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
 import { Card } from '../../components/common/Card'
 import { Button } from '../../components/common/Button'
 import type { AppSettings } from './Settings.types'
-import { settingsStorage, userDataStorage, STORAGE_KEYS } from '../../services/storage/localStorage'
+import { settingsStorage, userDataStorage } from '../../services/storage/localStorage'
 import { APP_INFO } from '../../utils/constants'
 import './Settings.css'
 

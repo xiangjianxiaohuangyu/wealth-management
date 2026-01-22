@@ -2,7 +2,7 @@
  * 应用常量定义
  */
 
-import type { MenuItem, RoutePath } from '../types/navigation.types'
+import type { RoutePath } from '../types/navigation.types'
 import type { AssetCategory, LiabilityCategory, TransactionCategory } from '../types/wealth.types'
 
 /**

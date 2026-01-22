@@ -2,14 +2,12 @@
  * Investment 页面类型定义
  */
 
-import type { Portfolio, InvestmentCalculatorParams } from '../../types/wealth.types'
-
 /**
  * 投资页面属性
  */
 export interface InvestmentProps {
   /** 投资组合数据 */
-  portfolios?: Portfolio[]
+  portfolios?: PortfolioItem[]
 }
 
 /**

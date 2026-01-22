@@ -2,7 +2,7 @@
  * 路由上下文
  */
 
-import { createContext, useState, useCallback, ReactNode } from 'react'
+import { createContext, useState, useCallback } from 'react'
 import type { RouterProviderProps, RouteContextValue } from '../router/route.types'
 import type { RoutePath } from '../types/navigation.types'
 import { DEFAULT_ROUTE, menuItems } from '../router/routes'

@@ -2,7 +2,7 @@
  * 侧边栏组件
  */
 
-import { MouseEvent } from 'react'
+import type { MouseEvent } from 'react'
 import type { SidebarProps } from './layout.types'
 import './Sidebar.css'
 

@@ -60,9 +60,9 @@ export function Modal({
       aria-labelledby={title ? 'modal-title' : undefined}
     >
       <div className="modal__content" onClick={e => e.stopPropagation()}>
-        {(title || onClose) && (
+        {title && (
           <div className="modal__header">
-            {title && <h3 id="modal-title" className="modal__title">{title}</h3>}
+            <h3 id="modal-title" className="modal__title">{title}</h3>
             {onClose && (
               <button
                 className="modal__close"

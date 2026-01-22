@@ -4,7 +4,7 @@
 
 import { Card } from '../common/Card'
 import type { PortfolioItem } from '../../pages/Investment/Investment.types'
-import { formatCurrency, formatPercentage, formatGrowth } from '../../utils/format/currency'
+import { formatCurrency, formatGrowth } from '../../utils/format/currency'
 import './PortfolioList.css'
 
 interface PortfolioListProps {

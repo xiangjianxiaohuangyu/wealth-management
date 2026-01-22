@@ -147,6 +147,9 @@ export function UpdateDialog() {
   )
 }
 
+// 导出别名供 App.tsx 使用
+export { UpdateDialog as UpdateManager }
+
 // 简单的信息提示 Modal
 function UpdateInfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   return (

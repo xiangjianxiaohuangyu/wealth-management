@@ -4,8 +4,6 @@
  * 提供类型安全的与主进程通信的接口
  */
 
-import type { ApiResponse } from '../../types/common.types'
-
 /**
  * IPC 通道名
  */

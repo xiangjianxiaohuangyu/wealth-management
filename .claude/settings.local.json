@@ -4,7 +4,10 @@
       "Bash(tree:*)",
       "Bash(find:*)",
       "Bash(npm run type-check:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npm run check:*)",
+      "Bash(npm run)",
+      "Bash(npm run build:*)"
     ]
   }
 }

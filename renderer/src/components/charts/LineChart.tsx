@@ -102,33 +102,40 @@ export function LineChart({
     const xAxisData = seriesData[0]?.data?.map(point => point.x) || []
 
     // 构建系列配置
-    const series = seriesData.map((seriesItem, index) => ({
-      name: seriesItem.name,
-      type: 'line',
-      smooth: seriesItem.smooth ?? true,
-      symbol: showPoints ? 'circle' : 'none',
-      symbolSize: showPoints ? 6 : 0,
-      data: seriesItem.data?.map(point => point.y) || [],
-      itemStyle: {
-        color: seriesItem.color || CHART_COLORS[index % CHART_COLORS.length]
-      },
-      lineStyle: {
-        width: 2
-      },
-      areaStyle: showArea ? {
-        color: {
-          type: 'linear',
-          x: 0,
-          y: 0,
-          x2: 0,
-          y2: 1,
-          colorStops: [
-            { offset: 0, color: (seriesItem.color || CHART_COLORS[index % CHART_COLORS.length]) + '40' },
-            { offset: 1, color: (seriesItem.color || CHART_COLORS[index % CHART_COLORS.length]) + '05' }
-          ]
+    const series = seriesData.map((seriesItem, index) => {
+      const seriesOption: echarts.LineSeriesOption = {
+        name: seriesItem.name,
+        type: 'line',
+        smooth: seriesItem.smooth ?? true,
+        symbol: showPoints ? 'circle' : 'none',
+        symbolSize: showPoints ? 6 : 0,
+        data: seriesItem.data?.map(point => point.y) || [],
+        itemStyle: {
+          color: seriesItem.color || CHART_COLORS[index % CHART_COLORS.length]
+        },
+        lineStyle: {
+          width: 2
         }
-      } : undefined
-    }))
+      }
+
+      if (showArea) {
+        seriesOption.areaStyle = {
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: (seriesItem.color || CHART_COLORS[index % CHART_COLORS.length]) + '40' },
+              { offset: 1, color: (seriesItem.color || CHART_COLORS[index % CHART_COLORS.length]) + '05' }
+            ]
+          }
+        }
+      }
+
+      return seriesOption
+    })
 
     // 构建图表配置
     const option: echarts.EChartsOption = {

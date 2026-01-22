@@ -3,8 +3,8 @@
  */
 
 import { useMemo } from 'react'
-import type { PieDataItem, LineDataPoint, LineSeries } from '../components/charts/charts.types'
-import type { Asset, Transaction, TransactionType } from '../types/wealth.types'
+import type { PieDataItem, LineSeries } from '../components/charts/charts.types'
+import type { Asset, Transaction } from '../types/wealth.types'
 
 /**
  * 图表数据处理 Hook 的属性
@@ -86,7 +86,7 @@ const TRANSACTION_CATEGORY_LABELS: Record<string, string> = {
 export function useChartData({
   assets = [],
   transactions = [],
-  currency = 'CNY'
+  currency: _currency = 'CNY'
 }: UseChartDataProps = {}): UseChartDataReturn {
 
   /**
