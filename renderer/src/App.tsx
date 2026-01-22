@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { UpdateManager } from './components/UpdateDialog'
+import { UpdateManager } from './components/update/UpdateDialog'
 
 function App() {
   const [count, setCount] = useState(0)
