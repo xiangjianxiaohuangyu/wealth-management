@@ -32,9 +32,19 @@ export function UpdateDialog({
 
   if (!updateInfo) return null
 
-  const handleDownload = () => {
+  const handleDownload = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // 立即更新按钮 DOM，提供即时反馈
+    const button = e.currentTarget
+    button.textContent = '准备中...'
+    button.disabled = true
+
+    console.log('UpdateDialog: 用户点击立即更新')
     setIsPreparing(true)
-    onDownload()
+
+    // 延迟调用 onDownload，确保 UI 已更新
+    requestAnimationFrame(() => {
+      onDownload()
+    })
   }
 
   return (
