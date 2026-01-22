@@ -12,7 +12,7 @@ contextBridge.exposeInMainWorld('electron', {
       'update-error'
     ]
     if (validChannels.includes(channel)) {
-      ipcRenderer.on(channel, (_event, ...args) => callback(...args))
+      ipcRenderer.on(channel, (event, ...args) => callback(event, ...args))
     }
   },
   // 移除监听器
