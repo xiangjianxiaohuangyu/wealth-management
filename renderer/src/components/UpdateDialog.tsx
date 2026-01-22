@@ -109,11 +109,22 @@ export function UpdateManager() {
   const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null)
   const [downloadProgress, setDownloadProgress] = useState<any>(null)
   const [isDownloaded, setIsDownloaded] = useState(false)
+  const [showLatestVersion, setShowLatestVersion] = useState(false)
 
   useEffect(() => {
     // 监听更新可用事件
     const handleUpdateAvailable = (_event: any, info: UpdateInfo) => {
       setUpdateInfo(info)
+    }
+
+    // 监听没有可用更新事件
+    const handleUpdateNotAvailable = (_event: any, info: any) => {
+      console.log('已是最新版本:', info.version)
+      setShowLatestVersion(true)
+      // 3秒后自动关闭提示
+      setTimeout(() => {
+        setShowLatestVersion(false)
+      }, 3000)
     }
 
     // 监听下载进度
@@ -135,6 +146,7 @@ export function UpdateManager() {
 
     // 添加监听器
     window.electron?.on?.('update-available', handleUpdateAvailable)
+    window.electron?.on?.('update-not-available', handleUpdateNotAvailable)
     window.electron?.on?.('update-download-progress', handleDownloadProgress)
     window.electron?.on?.('update-downloaded', handleUpdateDownloaded)
     window.electron?.on?.('update-error', handleUpdateError)
@@ -142,6 +154,7 @@ export function UpdateManager() {
     return () => {
       // 清理监听器
       window.electron?.removeListener?.('update-available', handleUpdateAvailable)
+      window.electron?.removeListener?.('update-not-available', handleUpdateNotAvailable)
       window.electron?.removeListener?.('update-download-progress', handleDownloadProgress)
       window.electron?.removeListener?.('update-downloaded', handleUpdateDownloaded)
       window.electron?.removeListener?.('update-error', handleUpdateError)
@@ -163,13 +176,28 @@ export function UpdateManager() {
   }
 
   return (
-    <UpdateDialog
-      updateInfo={updateInfo}
-      onDownload={handleDownload}
-      onInstall={handleInstall}
-      onCancel={handleCancel}
-      downloadProgress={downloadProgress}
-      isDownloaded={isDownloaded}
-    />
+    <>
+      <UpdateDialog
+        updateInfo={updateInfo}
+        onDownload={handleDownload}
+        onInstall={handleInstall}
+        onCancel={handleCancel}
+        downloadProgress={downloadProgress}
+        isDownloaded={isDownloaded}
+      />
+      {showLatestVersion && (
+        <div className="update-overlay">
+          <div className="update-dialog update-dialog-info">
+            <div className="update-header">
+              <h2>✓ 检查更新</h2>
+              <button className="close-btn" onClick={() => setShowLatestVersion(false)}>✕</button>
+            </div>
+            <div className="update-content">
+              <p className="success-text">已是最新版本</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
