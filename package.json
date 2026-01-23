@@ -19,7 +19,7 @@
     "bump": "npm version patch -m \"chore(release): %s\"",
     "bump:minor": "npm version minor -m \"chore(release): %s\"",
     "bump:major": "npm version major -m \"chore(release): %s\"",
-    "commit:all": "git add -A && git commit -m \"chore: prepare for release\n\nWhat's Changed:\n- Bug fixes and improvements\n- Dependency updates\n- Performance enhancements\n\nSee CHANGELOG.md for full details\" || true",
+    "commit:all": "git add -A && git commit -F .gitmessage || true",
     "release": "npm run commit:all && npm run bump && npm run build && git push --follow-tags",
     "release:minor": "npm run commit:all && npm run bump:minor && npm run build && git push --follow-tags",
     "release:major": "npm run commit:all && npm run bump:major && npm run build && git push --follow-tags"
