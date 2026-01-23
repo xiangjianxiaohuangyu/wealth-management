@@ -2,6 +2,23 @@
  * 更新对话框样式 - 玻璃态设计
  */
 
+/* 缩小更新对话框标题中的图标和文字 */
+.update-dialog-modal .modal__title {
+  font-size: 15px;
+}
+
+/* 缩小信息提示对话框标题 */
+.update-info-modal .modal__title {
+  font-size: 15px;
+}
+
+/* 增大更新对话框按钮尺寸 */
+.update-dialog__footer .btn {
+  min-height: 42px;
+  padding: 12px 24px;
+  font-size: 15px;
+}
+
 /* 更新对话框 - 保持固定最小尺寸 */
 .update-dialog__content {
   color: var(--color-text);

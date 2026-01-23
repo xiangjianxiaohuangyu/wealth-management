@@ -7,7 +7,9 @@
     "url": "https://github.com/xiangjianxiaohuangyu/wealth-management.git"
   },
   "scripts": {
-    "dev": "electron .",
+    "dev": "concurrently \"cd renderer && npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
+    "dev:renderer": "cd renderer && npm run dev",
+    "dev:electron": "electron .",
     "start": "electron .",
     "prebuild": "cd renderer && npm run build",
     "build": "electron-builder -p always",
@@ -17,13 +19,16 @@
     "bump": "npm version patch -m \"chore(release): %s\"",
     "bump:minor": "npm version minor -m \"chore(release): %s\"",
     "bump:major": "npm version major -m \"chore(release): %s\"",
-    "release": "npm run bump && npm run build && git push --follow-tags",
-    "release:minor": "npm run bump:minor && npm run build && git push --follow-tags",
-    "release:major": "npm run bump:major && npm run build && git push --follow-tags"
+    "prerelease": "git add -A && git commit -m \"$(cat <<'EOF'\nchore: prepare for release\n\nWhat's Changed:\n- Bug fixes and improvements\n- Dependency updates\n- Performance enhancements\n\nSee CHANGELOG.md for full details\nEOF\n)\" || true",
+    "release": "npm run prerelease && npm run bump && npm run build && git push --follow-tags",
+    "release:minor": "npm run prerelease && npm run bump:minor && npm run build && git push --follow-tags",
+    "release:major": "npm run prerelease && npm run bump:major && npm run build && git push --follow-tags"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "electron": "^40.0.0",
-    "electron-builder": "^26.4.0"
+    "electron-builder": "^26.4.0",
+    "wait-on": "^9.0.3"
   },
   "build": {
     "appId": "com.example.wealthmanagement",

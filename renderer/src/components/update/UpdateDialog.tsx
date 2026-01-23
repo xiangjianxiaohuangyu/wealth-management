@@ -85,6 +85,7 @@ export function UpdateDialog() {
         isOpen={!!updateInfo}
         onClose={handleCancelClick}
         title="🎉 发现新版本"
+        className="update-dialog-modal"
         footer={
           <div className="update-dialog__footer">
             {!isDownloading && !isDownloaded && (
@@ -163,6 +164,7 @@ function UpdateInfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
       isOpen={isOpen}
       onClose={onClose}
       title="✓ 检查更新"
+      className="update-info-modal"
       footer={
         <Button variant="primary" onClick={onClose}>
           确定

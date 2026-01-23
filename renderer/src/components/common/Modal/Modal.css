@@ -76,28 +76,29 @@
 .modal__close {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm, 6px);
-  width: 28px;
-  height: 28px;
+  border-radius: var(--border-radius-sm, 4px);
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 12px;
   color: var(--color-text-secondary);
   transition: all var(--transition-fast, 0.15s) ease;
   outline: none;
+  line-height: 1;
 }
 
 .modal__close:hover {
   background: rgba(255, 77, 77, 0.15);
   border-color: rgba(255, 77, 77, 0.3);
   color: var(--color-text);
-  transform: rotate(90deg) scale(1.05);
+  transform: rotate(90deg) scale(1.1);
 }
 
 .modal__close:active {
-  transform: rotate(90deg) scale(0.95);
+  transform: rotate(90deg) scale(1);
 }
 
 /* 模态框主体 */
