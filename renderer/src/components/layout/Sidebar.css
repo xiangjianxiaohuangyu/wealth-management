@@ -151,18 +151,52 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-md, 12px);
-  padding: 14px 24px;
+  padding: 16px 24px;
   border: none;
-  border-left: 3px solid transparent;
-  border-radius: 0 var(--border-radius-lg, 12px) var(--border-radius-lg, 12px) 0;
+  border-radius: var(--border-radius-lg, 12px);
   background-color: transparent;
   color: var(--sidebar-text);
   cursor: pointer;
-  transition: all var(--transition-smooth);
-  font-size: 15px;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease;
+  font-size: 16px;
   text-align: left;
   position: relative;
   outline: none;
+  overflow: hidden;
+}
+
+/* 使用伪元素创建平滑过渡的背景效果 */
+.sidebar__menu-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg,
+    rgba(77, 163, 255, 0.12) 0%,
+    rgba(77, 163, 255, 0.08) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.sidebar__menu-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--nav-active-bg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
 }
 
 .sidebar__menu-button:focus {
@@ -170,26 +204,26 @@
 }
 
 .sidebar__menu-button:hover:not(:disabled) {
-  background: linear-gradient(90deg,
-    rgba(77, 163, 255, 0.12) 0%,
-    rgba(77, 163, 255, 0.08) 100%
-  );
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-left-color: rgba(77, 163, 255, 0.5);
   transform: translateX(4px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   color: var(--color-text);
 }
 
+.sidebar__menu-button:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
 .sidebar__menu-button--active {
-  background: var(--nav-active-bg);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  border-left-color: var(--nav-active-border);
-  box-shadow: 0 4px 16px rgba(77, 163, 255, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 0 0 2px rgba(77, 163, 255, 0.3),
+    0 4px 16px rgba(77, 163, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   color: var(--sidebar-text-active);
   font-weight: var(--font-weight-medium, 500);
+}
+
+.sidebar__menu-button--active::after {
+  opacity: 1;
 }
 
 .sidebar__menu-button:disabled {

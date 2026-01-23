@@ -33,7 +33,7 @@ export const routeConfigs: RouteConfig[] = [
     title: '投资规划',
     meta: {
       description: '管理投资组合和计算投资回报',
-      icon: '💼',
+      icon: '📋',
       order: 2
     }
   },

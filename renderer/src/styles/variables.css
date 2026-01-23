@@ -136,7 +136,6 @@
   --transition-base: 0.2s;
   --transition-slow: 0.3s;
   --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
   --transition-timing: ease;
 
   /* ========================================
