@@ -45,7 +45,7 @@ export function InvestmentCalculator() {
   }, [params, result])
 
   return (
-    <Card title="投资计算器" className="investment-calculator">
+    <Card title="投资计算器 - 慢慢变富" className="investment-calculator">
       <div className="investment-calculator__content">
         {/* 输入表单 */}
         <div className="investment-calculator__form">

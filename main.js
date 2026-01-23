@@ -44,8 +44,8 @@ function createWindow() {
   if (isDev) {
     // 开发环境：加载 Vite 开发服务器
     win.loadURL('http://localhost:5173');
-    // 打开开发者工具
-    win.webContents.openDevTools();
+    // 开发者工具已默认关闭，如需调试可按 F12 或 Ctrl+Shift+I
+    // win.webContents.openDevTools();
   } else {
     // 生产环境：加载构建后的文件
     win.loadFile(path.join(__dirname, 'renderer/dist/index.html'));

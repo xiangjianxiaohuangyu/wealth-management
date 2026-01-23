@@ -4,12 +4,27 @@
 
 /* 缩小更新对话框标题中的图标和文字 */
 .update-dialog-modal .modal__title {
-  font-size: 15px;
+  font-size: 13px;
+  letter-spacing: -0.3px;
 }
 
 /* 缩小信息提示对话框标题 */
 .update-info-modal .modal__title {
-  font-size: 15px;
+  font-size: 13px;
+}
+
+/* 缩小更新对话框的关闭按钮 */
+.update-dialog-modal .modal__close {
+  width: 16px !important;
+  height: 16px !important;
+  font-size: 10px !important;
+}
+
+/* 缩小信息提示对话框的关闭按钮 */
+.update-info-modal .modal__close {
+  width: 16px !important;
+  height: 16px !important;
+  font-size: 10px !important;
 }
 
 /* 增大更新对话框按钮尺寸 */

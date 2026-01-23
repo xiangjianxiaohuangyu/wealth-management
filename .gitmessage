@@ -1,7 +1,8 @@
-chore: prepare for release
+chore: prepare for release 
 
-本次更新:
--【优化】上传更新项目
--【测试】更新框样式
+What's Changed:
+- Bug fixes and improvements
+- Dependency updates
+- Performance enhancements
 
-详细说明:
+See CHANGELOG.md for full details

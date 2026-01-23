@@ -6,6 +6,7 @@
   flex: 1;
   height: 100vh;
   overflow-y: auto;
+  scrollbar-gutter: stable; /* 预留滚动条空间，防止内容跳动 */
   background: linear-gradient(135deg, #0B1220 0%, #111A2E 100%);
 }
 

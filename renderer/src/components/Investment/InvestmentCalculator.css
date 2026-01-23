@@ -99,6 +99,14 @@
   overflow-x: auto;
   border-radius: var(--border-radius-md, 8px);
   border: 1px solid var(--color-border, #dfe6e9);
+  /* 完全隐藏滚动条，不占用空间 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Chrome, Safari, Opera - 完全隐藏滚动条 */
+.investment-calculator__table::-webkit-scrollbar {
+  display: none;
 }
 
 .investment-calculator__table table {
