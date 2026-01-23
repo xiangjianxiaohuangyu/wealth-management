@@ -13,6 +13,7 @@ export function UpdateDialog() {
   const [downloadProgress, setDownloadProgress] = useState<DownloadProgress | null>(null)
   const [isDownloaded, setIsDownloaded] = useState(false)
   const [showLatestVersion, setShowLatestVersion] = useState(false)
+  const [isDownloading, setIsDownloading] = useState(false)
 
   // 监听更新事件
   useEffect(() => {
@@ -30,11 +31,13 @@ export function UpdateDialog() {
     const handleDownloadProgress = (_event: any, progress: DownloadProgress) => {
       console.log('下载进度:', progress.percent.toFixed(1) + '%')
       setDownloadProgress(progress)
+      setIsDownloading(true)
     }
 
     const handleUpdateDownloaded = (_event: any) => {
       console.log('下载完成')
       setIsDownloaded(true)
+      setIsDownloading(false)
       setDownloadProgress(null)
     }
 
@@ -60,6 +63,7 @@ export function UpdateDialog() {
 
   const handleDownloadClick = () => {
     console.log('用户点击下载更新')
+    setIsDownloading(true)
     window.electron?.send?.('download-update')
   }
 
@@ -72,6 +76,7 @@ export function UpdateDialog() {
     setUpdateInfo(null)
     setDownloadProgress(null)
     setIsDownloaded(false)
+    setIsDownloading(false)
   }
 
   return (
@@ -82,7 +87,7 @@ export function UpdateDialog() {
         title="🎉 发现新版本"
         footer={
           <div className="update-dialog__footer">
-            {!downloadProgress && !isDownloaded && (
+            {!isDownloading && !isDownloaded && (
               <>
                 <Button variant="outline" onClick={handleCancelClick}>
                   稍后更新
@@ -93,10 +98,10 @@ export function UpdateDialog() {
               </>
             )}
 
-            {(downloadProgress || isDownloaded) && (
+            {(isDownloading || isDownloaded) && (
               <>
                 <Button variant="outline" onClick={handleCancelClick} disabled>
-                  {downloadProgress ? '下载中...' : '稍后重启'}
+                  {isDownloading && !isDownloaded ? '下载中...' : '稍后重启'}
                 </Button>
                 {isDownloaded && (
                   <Button variant="primary" onClick={handleInstallClick}>
@@ -111,25 +116,26 @@ export function UpdateDialog() {
         <div className="update-dialog__content">
           <p className="update-dialog__version">新版本：v{updateInfo?.version}</p>
 
-          {updateInfo?.releaseNotes && (
+          {!(isDownloading || isDownloaded) && updateInfo?.releaseNotes && (
             <div className="update-dialog__notes">
               <h4>更新内容：</h4>
               <pre>{updateInfo.releaseNotes}</pre>
             </div>
           )}
 
-          {downloadProgress && !isDownloaded && (
+          {(isDownloading || downloadProgress) && !isDownloaded && (
             <div className="update-dialog__progress">
               <div className="progress-bar">
                 <div
                   className="progress-fill"
-                  style={{ width: `${downloadProgress.percent}%` }}
+                  style={{ width: `${downloadProgress?.percent || 0}%` }}
                 />
               </div>
               <p className="progress-text">
-                正在下载：{downloadProgress.percent.toFixed(1)}%
-                ({(downloadProgress.transferred / 1024 / 1024).toFixed(1)} MB /
-                {(downloadProgress.total / 1024 / 1024).toFixed(1)} MB)
+                {downloadProgress
+                  ? `正在下载：${downloadProgress.percent.toFixed(1)}% (${(downloadProgress.transferred / 1024 / 1024).toFixed(1)} MB / ${(downloadProgress.total / 1024 / 1024).toFixed(1)} MB)`
+                  : '正在准备下载...'
+                }
               </p>
             </div>
           )}

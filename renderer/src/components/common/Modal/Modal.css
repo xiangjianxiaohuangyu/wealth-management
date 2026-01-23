@@ -55,7 +55,7 @@
 
 /* 模态框头部 */
 .modal__header {
-  padding: 20px 24px;
+  padding: 14px 20px;
   border-bottom: 1px solid var(--color-border-light);
   display: flex;
   justify-content: space-between;
@@ -65,39 +65,44 @@
 }
 
 .modal__title {
-  font-size: var(--font-size-2xl, 20px);
+  font-size: var(--font-size-xl, 18px);
   font-weight: var(--font-weight-semibold, 600);
   margin: 0;
   color: var(--color-text);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* 关闭按钮 */
+/* 关闭按钮 - 优化样式 */
 .modal__close {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-md, 8px);
-  width: 32px;
-  height: 32px;
+  border-radius: var(--border-radius-sm, 6px);
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   color: var(--color-text-secondary);
   transition: all var(--transition-fast, 0.15s) ease;
+  outline: none;
 }
 
 .modal__close:hover {
   background: rgba(255, 77, 77, 0.15);
   border-color: rgba(255, 77, 77, 0.3);
   color: var(--color-text);
-  transform: rotate(90deg);
+  transform: rotate(90deg) scale(1.05);
+}
+
+.modal__close:active {
+  transform: rotate(90deg) scale(0.95);
 }
 
 /* 模态框主体 */
 .modal__body {
-  padding: 24px;
+  padding: 20px 24px 24px;
   color: var(--color-text);
 }
 

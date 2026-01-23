@@ -16,6 +16,11 @@
   white-space: nowrap;
   user-select: none;
   text-decoration: none;
+  outline: none;
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 2px rgba(77, 163, 255, 0.3);
 }
 
 .btn:disabled {
