@@ -10,7 +10,7 @@
   top: 20px;
   right: 20px;
   z-index: 10001;
-  width: 260px;
+  max-width: 450px;
   animation: slideIn 0.3s ease-out;
 }
 
@@ -43,27 +43,27 @@
 
 /* 更新通知主体 */
 .update-body {
-  padding: 16px;
+  padding: 24px;
 }
 
 /* 头部信息区域 */
 .update-header-info {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   margin-bottom: 12px;
 }
 
 /* 更新图标 */
 .update-icon {
-  font-size: 20px;
+  font-size: 28px;
   flex-shrink: 0;
 }
 
 /* 更新通知标题 */
 .update-header-info h3 {
   flex: 1;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: var(--font-weight-semibold, 600);
   color: var(--color-text);
   margin: 0;
@@ -73,43 +73,42 @@
 /* 更新通知关闭按钮 */
 .update-content .close-btn {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 12px;
+  right: 12px;
   background: transparent;
   border: none;
-  font-size: 16px;
+  font-size: 24px;
   color: var(--color-text-secondary);
   cursor: pointer;
-  padding: 3px;
-  width: 22px;
-  height: 22px;
+  padding: 0;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  transition: all var(--transition-fast, 0.15s) ease;
+  transition: all var(--transition-fast, 0.2s) ease;
   z-index: 10;
   outline: none;
 }
 
 /* 更新通知关闭按钮悬停 */
 .update-content .close-btn:hover {
-  background-color: rgba(255, 77, 77, 0.12);
+  background-color: rgba(255, 255, 255, 0.1);
   color: var(--color-text);
-  transform: rotate(90deg) scale(1.1);
 }
 
 /* 更新通知关闭按钮点击 */
 .update-content .close-btn:active {
-  transform: rotate(90deg) scale(1);
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 /* 更新通知消息 */
 .update-message {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-text-secondary);
-  margin-bottom: 12px;
-  line-height: 1.5;
+  margin-bottom: 20px;
+  line-height: 1.6;
 }
 
 /* 更新日志 */
@@ -140,7 +139,7 @@
 /* 更新通知操作按钮组 */
 .update-actions {
   display: flex;
-  gap: var(--spacing-sm, 8px);
+  gap: 12px;
 }
 
 /* 更新通知操作按钮 */
@@ -149,8 +148,8 @@
   justify-content: center;
   outline: none !important;
   padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-  font-size: 12px;
-  min-height: 28px;
+  font-size: 13px;
+  min-height: 32px;
 }
 
 .update-actions .btn:focus,
@@ -181,7 +180,7 @@
   top: 20px;
   right: 20px;
   z-index: 10001;
-  width: 200px;
+  max-width: 400px;
   animation: slideIn 0.3s ease-out;
 }
 
@@ -194,7 +193,7 @@
   border-radius: 12px;
   box-shadow: var(--shadow-xl, 0 8px 32px rgba(0, 0, 0, 0.4));
   border: 1px solid var(--color-border);
-  padding: 16px;
+  padding: 20px 24px;
 }
 
 .progress-content::before {
@@ -216,18 +215,18 @@
 .progress-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 /* 下载进度图标 */
 .progress-icon {
-  font-size: 18px;
+  font-size: 24px;
 }
 
 /* 下载进度标题 */
 .progress-header h4 {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: var(--font-weight-semibold, 600);
   color: var(--color-text);
   margin: 0;
@@ -236,11 +235,11 @@
 /* 下载进度条容器 */
 .progress-bar-container {
   width: 100%;
-  height: 6px;
+  height: 8px;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   overflow: hidden;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 /* 下载进度条填充 */
@@ -255,9 +254,9 @@
 .progress-info {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-text-secondary);
-  gap: 8px;
+  gap: 12px;
 }
 
 /* 下载进度信息文本 */

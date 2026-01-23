@@ -129,7 +129,7 @@ export function UpdateNotification() {
               <h3>更新已下载</h3>
             </div>
             <p className="update-message">
-              新版本 v{updateInfo?.version} 已下载完成，重启应用即可安装。
+              重启应用即可安装。
             </p>
             <div className="update-actions">
               <Button variant="outline" onClick={handleDismissClick}>
@@ -158,15 +158,6 @@ export function UpdateNotification() {
               <span className="update-icon">🎉</span>
               <h3>发现新版本</h3>
             </div>
-            <p className="update-message">
-              新版本 <strong>v{updateInfo.version}</strong> 已发布
-            </p>
-            {updateInfo.releaseNotes && (
-              <div className="update-notes">
-                <h4>更新内容：</h4>
-                <pre>{updateInfo.releaseNotes}</pre>
-              </div>
-            )}
             <div className="update-actions">
               <Button variant="outline" onClick={handleDismissClick}>
                 稍后更新

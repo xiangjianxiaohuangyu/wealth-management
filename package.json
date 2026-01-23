@@ -38,7 +38,9 @@
       "preload.js",
       "renderer/dist/**/*",
       "renderer/index.html",
-      "package.json"
+      "package.json",
+      "changelog.md",
+      "changelog_upcoming.md"
     ],
     "directories": {
       "output": "release"
