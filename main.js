@@ -172,14 +172,10 @@ ipcMain.handle('get-app-version', async () => {
 
 // 读取项目目录中的文件（用于更新日志等）
 ipcMain.handle('read-project-file', async (_event, fileName) => {
-  // 开发环境：main.js 在项目根目录，直接使用 __dirname
-  // 生产环境：main.js 在 resources/app 目录，需要向上两级
-  let projectRoot;
-  if (isDev) {
-    projectRoot = __dirname;
-  } else {
-    projectRoot = path.join(__dirname, '../..');
-  }
+  // 开发环境和生产环境：main.js 和 changelog.md 都在同一目录
+  // 开发环境：项目根目录
+  // 生产环境：resources/app 目录
+  const projectRoot = __dirname;
 
   const filePath = path.join(projectRoot, fileName);
   console.log('Reading file:', filePath);
