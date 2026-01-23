@@ -12,6 +12,7 @@ export function UpdateNotification() {
   const [downloadProgress, setDownloadProgress] = useState<DownloadProgress | null>(null)
   const [isDownloaded, setIsDownloaded] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const [isDownloading, setIsDownloading] = useState(false)
 
   // 监听更新事件
   useEffect(() => {
@@ -28,12 +29,14 @@ export function UpdateNotification() {
     const handleDownloadProgress = (_event: any, progress: DownloadProgress) => {
       console.log('下载进度:', progress.percent.toFixed(1) + '%')
       setDownloadProgress(progress)
+      setIsDownloading(true)
       setIsVisible(true)
     }
 
     const handleUpdateDownloaded = (_event: any) => {
       console.log('下载完成')
       setIsDownloaded(true)
+      setIsDownloading(false)
       setDownloadProgress(null)
     }
 
@@ -60,6 +63,8 @@ export function UpdateNotification() {
 
   const handleDownloadClick = () => {
     console.log('用户点击下载更新')
+    setIsDownloading(true)
+    setIsVisible(true)
     window.electron?.send?.('download-update')
   }
 
@@ -75,11 +80,12 @@ export function UpdateNotification() {
       setUpdateInfo(null)
       setDownloadProgress(null)
       setIsDownloaded(false)
+      setIsDownloading(false)
     }, 300)
   }
 
   // 下载进度通知
-  if (downloadProgress && !isDownloaded) {
+  if ((isDownloading || downloadProgress) && !isDownloaded) {
     return (
       <div className={`download-progress-notification ${isVisible ? 'show' : ''}`}>
         <div className="progress-content">
@@ -91,15 +97,17 @@ export function UpdateNotification() {
           <div className="progress-bar-container">
             <div
               className="progress-bar-fill"
-              style={{ width: `${downloadProgress.percent}%` }}
+              style={{ width: `${downloadProgress?.percent || 0}%` }}
             />
           </div>
 
           <div className="progress-info">
-            <span>{downloadProgress.percent.toFixed(1)}%</span>
+            <span>{downloadProgress ? downloadProgress.percent.toFixed(1) + '%' : '0%'}</span>
             <span>
-              {(downloadProgress.transferred / 1024 / 1024).toFixed(1)} MB /
-              {(downloadProgress.total / 1024 / 1024).toFixed(1)} MB
+              {downloadProgress
+                ? `${(downloadProgress.transferred / 1024 / 1024).toFixed(1)} MB / ${(downloadProgress.total / 1024 / 1024).toFixed(1)} MB`
+                : '准备中...'
+              }
             </span>
           </div>
         </div>

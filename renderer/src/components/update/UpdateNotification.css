@@ -10,7 +10,7 @@
   top: 20px;
   right: 20px;
   z-index: 10001;
-  width: 480px;
+  width: 260px;
   animation: slideIn 0.3s ease-out;
 }
 
@@ -43,27 +43,27 @@
 
 /* 更新通知主体 */
 .update-body {
-  padding: 24px;
+  padding: 16px;
 }
 
 /* 头部信息区域 */
 .update-header-info {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 /* 更新图标 */
 .update-icon {
-  font-size: 28px;
+  font-size: 20px;
   flex-shrink: 0;
 }
 
 /* 更新通知标题 */
 .update-header-info h3 {
   flex: 1;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: var(--font-weight-semibold, 600);
   color: var(--color-text);
   margin: 0;
@@ -73,20 +73,20 @@
 /* 更新通知关闭按钮 */
 .update-content .close-btn {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 8px;
+  right: 8px;
   background: transparent;
   border: none;
-  font-size: 20px;
+  font-size: 16px;
   color: var(--color-text-secondary);
   cursor: pointer;
-  padding: 4px;
-  width: 28px;
-  height: 28px;
+  padding: 3px;
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: 4px;
   transition: all var(--transition-fast, 0.15s) ease;
   z-index: 10;
   outline: none;
@@ -106,10 +106,10 @@
 
 /* 更新通知消息 */
 .update-message {
-  font-size: var(--font-size-base, 14px);
+  font-size: 13px;
   color: var(--color-text-secondary);
-  margin-bottom: 16px;
-  line-height: 1.6;
+  margin-bottom: 12px;
+  line-height: 1.5;
 }
 
 /* 更新日志 */
@@ -117,20 +117,20 @@
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-md, 8px);
-  padding: var(--spacing-md, 12px);
-  margin-bottom: var(--spacing-lg, 16px);
+  padding: var(--spacing-sm, 8px);
+  margin-bottom: var(--spacing-sm, 8px);
 }
 
 .update-notes h4 {
-  margin: 0 0 var(--spacing-sm, 8px) 0;
-  font-size: var(--font-size-base, 14px);
+  margin: 0 0 var(--spacing-sm, 6px) 0;
+  font-size: 12px;
   font-weight: var(--font-weight-semibold, 600);
   color: var(--color-text);
 }
 
 .update-notes pre {
   margin: 0;
-  font-size: var(--font-size-sm, 12px);
+  font-size: 11px;
   color: var(--color-text-secondary);
   white-space: pre-wrap;
   word-wrap: break-word;
@@ -140,7 +140,7 @@
 /* 更新通知操作按钮组 */
 .update-actions {
   display: flex;
-  gap: var(--spacing-md, 12px);
+  gap: var(--spacing-sm, 8px);
 }
 
 /* 更新通知操作按钮 */
@@ -148,13 +148,12 @@
   flex: 1;
   justify-content: center;
   outline: none !important;
+  padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
+  font-size: 12px;
+  min-height: 28px;
 }
 
-.update-actions .btn:focus {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
+.update-actions .btn:focus,
 .update-actions .btn:focus-visible {
   outline: none !important;
   box-shadow: none !important;
@@ -182,7 +181,7 @@
   top: 20px;
   right: 20px;
   z-index: 10001;
-  width: 380px;
+  width: 200px;
   animation: slideIn 0.3s ease-out;
 }
 
@@ -195,7 +194,7 @@
   border-radius: 12px;
   box-shadow: var(--shadow-xl, 0 8px 32px rgba(0, 0, 0, 0.4));
   border: 1px solid var(--color-border);
-  padding: 20px 24px;
+  padding: 16px;
 }
 
 .progress-content::before {
@@ -217,18 +216,18 @@
 .progress-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 /* 下载进度图标 */
 .progress-icon {
-  font-size: 24px;
+  font-size: 18px;
 }
 
 /* 下载进度标题 */
 .progress-header h4 {
-  font-size: 16px;
+  font-size: 13px;
   font-weight: var(--font-weight-semibold, 600);
   color: var(--color-text);
   margin: 0;
@@ -237,11 +236,11 @@
 /* 下载进度条容器 */
 .progress-bar-container {
   width: 100%;
-  height: 8px;
+  height: 6px;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   overflow: hidden;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 /* 下载进度条填充 */
@@ -256,9 +255,9 @@
 .progress-info {
   display: flex;
   justify-content: space-between;
-  font-size: var(--font-size-sm, 12px);
+  font-size: 11px;
   color: var(--color-text-secondary);
-  gap: 12px;
+  gap: 8px;
 }
 
 /* 下载进度信息文本 */
@@ -317,6 +316,6 @@
 
   .update-body,
   .progress-content {
-    padding: var(--spacing-lg, 16px);
+    padding: var(--spacing-sm, 8px);
   }
 }
