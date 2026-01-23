@@ -41,15 +41,17 @@
   z-index: 1;
 }
 
-/* 更新通知头部 */
-.update-header {
+/* 更新通知主体 */
+.update-body {
+  padding: 24px;
+}
+
+/* 头部信息区域 */
+.update-header-info {
   display: flex;
   align-items: center;
-  padding: 18px 50px 18px 24px;
-  background: linear-gradient(135deg, rgba(77, 163, 255, 0.15), rgba(77, 163, 255, 0.05));
-  border-bottom: 1px solid var(--color-border-light);
   gap: 12px;
-  position: relative;
+  margin-bottom: 16px;
 }
 
 /* 更新图标 */
@@ -59,7 +61,7 @@
 }
 
 /* 更新通知标题 */
-.update-header h3 {
+.update-header-info h3 {
   flex: 1;
   font-size: 18px;
   font-weight: var(--font-weight-semibold, 600);
@@ -69,7 +71,7 @@
 }
 
 /* 更新通知关闭按钮 */
-.update-header .close-btn {
+.update-content .close-btn {
   position: absolute;
   top: 12px;
   right: 12px;
@@ -87,18 +89,19 @@
   border-radius: 6px;
   transition: all var(--transition-fast, 0.15s) ease;
   z-index: 10;
+  outline: none;
 }
 
 /* 更新通知关闭按钮悬停 */
-.update-header .close-btn:hover {
+.update-content .close-btn:hover {
   background-color: rgba(255, 77, 77, 0.12);
   color: var(--color-text);
   transform: rotate(90deg) scale(1.1);
 }
 
-/* 更新通知主体 */
-.update-body {
-  padding: 20px 24px 24px;
+/* 更新通知关闭按钮点击 */
+.update-content .close-btn:active {
+  transform: rotate(90deg) scale(1);
 }
 
 /* 更新通知消息 */
@@ -144,6 +147,17 @@
 .update-actions .btn {
   flex: 1;
   justify-content: center;
+  outline: none !important;
+}
+
+.update-actions .btn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.update-actions .btn:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* 更新通知中的 outline 按钮 hover 效果减弱 */
@@ -168,7 +182,7 @@
   top: 20px;
   right: 20px;
   z-index: 10001;
-  width: 480px;
+  width: 380px;
   animation: slideIn 0.3s ease-out;
 }
 
@@ -301,7 +315,6 @@
     top: 10px;
   }
 
-  .update-header,
   .update-body,
   .progress-content {
     padding: var(--spacing-lg, 16px);

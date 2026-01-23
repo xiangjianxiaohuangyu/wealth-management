@@ -112,14 +112,14 @@ export function UpdateNotification() {
     return (
       <div className={`update-notification ${isVisible ? 'show' : ''}`}>
         <div className="update-content">
-          <div className="update-header">
-            <span className="update-icon">✅</span>
-            <h3>更新已下载</h3>
-            <button className="close-btn" onClick={handleDismissClick}>
-              ✕
-            </button>
-          </div>
+          <button className="close-btn" onClick={handleDismissClick}>
+            ✕
+          </button>
           <div className="update-body">
+            <div className="update-header-info">
+              <span className="update-icon">✅</span>
+              <h3>更新已下载</h3>
+            </div>
             <p className="update-message">
               新版本 v{updateInfo?.version} 已下载完成，重启应用即可安装。
             </p>
@@ -142,14 +142,14 @@ export function UpdateNotification() {
     return (
       <div className={`update-notification ${isVisible ? 'show' : ''}`}>
         <div className="update-content">
-          <div className="update-header">
-            <span className="update-icon">🎉</span>
-            <h3>发现新版本</h3>
-            <button className="close-btn" onClick={handleDismissClick}>
-              ✕
-            </button>
-          </div>
+          <button className="close-btn" onClick={handleDismissClick}>
+            ✕
+          </button>
           <div className="update-body">
+            <div className="update-header-info">
+              <span className="update-icon">🎉</span>
+              <h3>发现新版本</h3>
+            </div>
             <p className="update-message">
               新版本 <strong>v{updateInfo.version}</strong> 已发布
             </p>
