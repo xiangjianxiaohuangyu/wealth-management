@@ -8,7 +8,7 @@ import type { RouteConfig, MenuItem } from '../types/navigation.types'
 /**
  * 懒加载页面组件
  */
-const Dashboard = lazy(() => import('../pages/Dashboard'))
+const WealthOverview = lazy(() => import('../pages/WealthOverview'))
 const Investment = lazy(() => import('../pages/Investment'))
 const Changelog = lazy(() => import('../pages/Changelog'))
 const Settings = lazy(() => import('../pages/Settings'))
@@ -19,7 +19,7 @@ const Settings = lazy(() => import('../pages/Settings'))
 export const routeConfigs: RouteConfig[] = [
   {
     path: '/dashboard',
-    component: Dashboard,
+    component: WealthOverview,
     title: '财富总览',
     meta: {
       description: '查看您的资产、负债和收支情况',
@@ -40,7 +40,7 @@ export const routeConfigs: RouteConfig[] = [
   {
     path: '/changelog',
     component: Changelog,
-    title: '更新日志',
+    title: '开发日志',
     meta: {
       description: '查看应用更新历史',
       icon: '📝',

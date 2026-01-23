@@ -1,325 +1,318 @@
-# 财富管理应用 - 架构文档
+# 财富管理系统 - 架构文档
 
-## 1. 项目概述
+## 目录结构
 
-### 1.1 项目信息
-- **项目名称**: 财富管理 (Wealth Management)
-- **版本**: 0.0.13
-- **技术栈**: Electron + React 19 + TypeScript + Vite + ECharts
-- **仓库**: https://github.com/xiangjianxiaohuangyu/wealth-management
-
-### 1.2 应用特性
-- 跨平台桌面应用（Windows、macOS）
-- 自动更新功能（基于 GitHub Releases）
-- 本地数据存储
-- 响应式设计
-
-## 2. 架构概览
-
-### 2.1 Electron 架构模式
-采用主进程（Main Process）和渲染进程（Renderer Process）分离的架构：
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                     Electron 应用                        │
-├─────────────────────────────────────────────────────────┤
-│                                                          │
-│  ┌────────────────┐              ┌─────────────────┐   │
-│  │   主进程        │              │   渲染进程        │   │
-│  │  (main.js)     │◄────IPC─────►│  (React App)    │   │
-│  │                │              │                 │   │
-│  │ - 窗口管理      │              │ - 用户界面       │   │
-│  │ - IPC 处理器    │              │ - 状态管理       │   │
-│  │ - 自动更新      │              │ - 业务逻辑       │   │
-│  │ - 文件操作      │              │ - 图表渲染       │   │
-│  └────────────────┘              └─────────────────┘   │
-│           ▲                                 ▲           │
-│           │                                 │           │
-│  ┌────────┴─────────────────────────────────┴──────┐  │
-│  │            预加载脚本 (preload.js)               │  │
-│  │            contextBridge 安全桥接                │  │
-│  └────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────┘
-```
-
-### 2.2 技术栈分层
-
-#### 前端层
-- **UI 框架**: React 19.2.0
-- **构建工具**: Vite 7.2.4
-- **语言**: TypeScript 5.9.3
-- **图表库**: ECharts 6.0.0
-- **样式**: CSS (system-ui 字体栈)
-
-#### 桌面层
-- **运行时**: Electron 40.0.0
-- **自动更新**: electron-updater 6.7.3
-- **日志**: electron-log 5.4.3
-- **构建**: electron-builder 26.4.0
-
-## 3. 目录结构
-
-### 3.1 根目录结构
 ```
 wealth-management/
-├── main.js                    # Electron 主进程入口
-├── preload.js                # 预加载脚本
-├── package.json              # 主项目配置
-├── renderer/                 # 渲染进程（React 应用）
-│   ├── src/                  # 源代码
-│   ├── package.json          # 渲染进程配置
-│   └── vite.config.ts        # Vite 配置
-└── release/                  # 构建输出目录
+├── main.js                          # Electron 主进程入口
+├── preload.js                       # 预加载脚本
+├── package.json                     # 项目配置
+├── renderer/                        # React 渲染进程
+│   ├── src/
+│   │   ├── App.tsx                  # 应用根组件
+│   │   ├── App.css                  # 全局样式（#root 等）
+│   │   ├── main.tsx                 # React 渲染入口
+│   │   ├── index.css                # 全局重置样式
+│   │   │
+│   │   ├── styles/                  # 全局样式资源
+│   │   │   └── variables.css        # CSS 变量定义（颜色、间距、字体等）
+│   │   │
+│   │   ├── assets/                  # 静态资源
+│   │   │
+│   │   ├── components/              # 组件库
+│   │   │   ├── common/              # 通用 UI 组件
+│   │   │   │   ├── Button/          # 按钮组件
+│   │   │   │   ├── Card/            # 卡片组件
+│   │   │   │   └── Modal/           # 模态框组件
+│   │   │   │
+│   │   │   ├── layout/              # 布局组件
+│   │   │   │   ├── AppLayout.tsx    # 主布局容器
+│   │   │   │   ├── Sidebar.tsx      # 侧边导航栏
+│   │   │   │   ├── MainContent.tsx  # 主内容区域
+│   │   │   │   ├── *.css            # 各布局组件样式
+│   │   │   │   └── layout.types.ts
+│   │   │   │
+│   │   │   ├── Dashboard/           # 仪表盘业务组件
+│   │   │   │   ├── WealthSummary.tsx         # 财富摘要卡片
+│   │   │   │   ├── AssetAllocation.tsx       # 资产配置图表
+│   │   │   │   ├── RecentTransactions.tsx    # 最近交易列表
+│   │   │   │   ├── *.css            # 各组件样式
+│   │   │   │   └── Dashboard.types.ts
+│   │   │   │
+│   │   │   ├── Investment/          # 投资业务组件
+│   │   │   │   ├── InvestmentCalculator.tsx   # 投资计算器
+│   │   │   │   ├── PortfolioList.tsx         # 投资组合列表
+│   │   │   │   ├── *.css            # 各组件样式
+│   │   │   │   └── Investment.types.ts
+│   │   │   │
+│   │   │   ├── charts/              # 图表组件
+│   │   │   │   ├── LineChart.tsx    # 折线图
+│   │   │   │   ├── PieChart.tsx     # 饼图
+│   │   │   │   ├── Charts.css
+│   │   │   │   ├── charts.types.ts
+│   │   │   │   └── index.ts
+│   │   │   │
+│   │   │   └── update/              # 更新功能组件
+│   │   │       ├── UpdateDialog.tsx
+│   │   │       ├── UpdateNotification.tsx
+│   │   │       ├── *.css
+│   │   │       ├── update.types.ts
+│   │   │       └── index.ts
+│   │   │
+│   │   ├── pages/                   # 页面组件
+│   │   │   ├── Dashboard/           # 财富总览页面
+│   │   │   │   ├── index.tsx
+│   │   │   │   ├── Dashboard.css
+│   │   │   │   └── Dashboard.types.ts
+│   │   │   │
+│   │   │   ├── Investment/          # 投资规划页面
+│   │   │   │   ├── index.tsx
+│   │   │   │   ├── Investment.css
+│   │   │   │   └── Investment.types.ts
+│   │   │   │
+│   │   │   ├── Changelog/           # 更新日志页面
+│   │   │   │   ├── index.tsx
+│   │   │   │   ├── Changelog.css
+│   │   │   │   └── Changelog.types.ts
+│   │   │   │
+│   │   │   └── Settings/            # 设置页面
+│   │   │       ├── index.tsx
+│   │   │       ├── Settings.css
+│   │   │       └── Settings.types.ts
+│   │   │
+│   │   ├── context/                 # React Context
+│   │   │   └── RouterContext.tsx    # 路由上下文
+│   │   │
+│   │   ├── hooks/                   # 自定义 Hooks
+│   │   │   ├── useChartData.ts      # 图表数据管理
+│   │   │   ├── useLocalStorage.ts   # 本地存储
+│   │   │   ├── useNavigation.ts     # 导航管理
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── services/                # 服务层
+│   │   │   ├── data/                # 数据服务
+│   │   │   │   ├── chartDataService.ts
+│   │   │   │   ├── wealthDataService.ts
+│   │   │   │   └── index.ts
+│   │   │   │
+│   │   │   ├── ipc/                 # IPC 通信服务
+│   │   │   │   ├── ipcService.ts
+│   │   │   │   ├── updateService.ts
+│   │   │   │   └── index.ts
+│   │   │   │
+│   │   │   └── storage/             # 存储服务
+│   │   │       ├── localStorage.ts
+│   │   │       └── index.ts
+│   │   │
+│   │   ├── utils/                   # 工具函数
+│   │   │   ├── format/              # 格式化工具
+│   │   │   │   ├── currency.ts      # 货币格式化
+│   │   │   │   ├── date.ts          # 日期格式化
+│   │   │   │   └── index.ts
+│   │   │   ├── constants.ts         # 常量定义
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── types/                   # TypeScript 类型定义
+│   │   │   ├── common.types.ts      # 通用类型
+│   │   │   ├── navigation.types.ts  # 导航类型
+│   │   │   ├── wealth.types.ts      # 财富类型
+│   │   │   └── index.ts
+│   │   │
+│   │   └── electron.d.ts            # Electron 类型声明
+│   │
+│   ├── dist/                        # 构建输出
+│   └── package.json
+│
+└── release/                         # 应用打包输出
 ```
 
-### 3.2 渲染进程目录结构
+## CSS 样式层级分析
+
+### 当前样式层级结构
+
 ```
-renderer/src/
-├── main.tsx                  # React 应用入口
-├── App.tsx                   # 根组件
-├── index.css                 # 全局样式
-│
-├── pages/                    # 页面组件
-│   ├── Dashboard/            # 财富总览
-│   ├── Investment/           # 投资规划
-│   ├── Changelog/            # 更新日志
-│   └── Settings/             # 设置
-│
-├── components/               # 可复用组件
-│   ├── layout/               # 布局组件
-│   ├── common/               # 通用组件
-│   └── charts/               # 图表组件
-│
-├── services/                 # 业务逻辑层
-│   ├── ipc/                  # IPC 通信
-│   ├── data/                 # 数据处理
-│   └── storage/              # 数据存储
-│
-├── hooks/                    # 自定义 Hooks
-├── utils/                    # 工具函数
-├── types/                    # 类型定义
-├── router/                   # 路由配置
-├── assets/                   # 静态资源
-└── styles/                   # 全局样式
-```
+全局层级
+├── index.css                    # 基础重置 + body 样式
+└── styles/variables.css         # CSS 变量系统（玻璃态主题）
 
-## 4. 核心模块
+应用层级
+└── App.css                      # #root 容器样式
 
-### 4.1 主进程 (main.js)
+布局层级
+├── AppLayout.css               # 主布局容器
+├── Sidebar.css                 # 侧边栏样式
+└── MainContent.css             # 主内容区样式
 
-#### 窗口管理
-```javascript
-// 窗口配置
-- 尺寸: 1400x900（最小 1200x700）
-- 背景色: #f5f7fa
-- 标题: 财富管理 - Wealth Management
-- 开发环境: 加载 http://localhost:5173
-- 生产环境: 加载 renderer/dist/index.html
+组件层级
+├── common/                     # 通用组件样式
+│   ├── Button.css
+│   ├── Card.css
+│   └── Modal.css
+├── charts/Charts.css           # 图表组件样式
+└── update/                     # 更新组件样式
+
+业务组件层级
+├── Dashboard/                  # 仪表盘组件样式
+│   ├── WealthSummary.css
+│   ├── AssetAllocation.css
+│   └── RecentTransactions.css
+└── Investment/                 # 投资组件样式
+
+页面层级
+├── Dashboard/Dashboard.css     # 财富总览页面
+├── Investment/Investment.css   # 投资规划页面
+├── Changelog/Changelog.css     # 更新日志页面
+└── Settings/Settings.css       # 设置页面
 ```
 
-#### IPC 通信处理器
-| 通道名 | 类型 | 功能描述 |
-|--------|------|----------|
-| `save-plan-to-file` | invoke | 保存计划到本地文件 |
-| `get-saved-plans` | invoke | 获取已保存的计划列表 |
-| `load-plan-from-file` | invoke | 加载指定计划 |
-| `get-plans-directory` | invoke | 获取计划目录路径 |
-| `delete-plan-file` | invoke | 删除计划文件 |
-| `get-app-version` | invoke | 获取应用版本号 |
-| `read-project-file` | invoke | 读取项目文件 |
-| `check-for-updates` | on/send | 检查更新 |
-| `download-update` | on/send | 下载更新 |
-| `install-update` | on/send | 安装更新 |
+### 样式层级问题与建议
 
-#### 自动更新机制
-- **更新源**: GitHub Releases
-- **更新策略**: 手动触发（不自动下载）
-- **事件通知**: update-available, update-download-progress, update-downloaded
+#### ✅ 优点
 
-### 4.2 预加载脚本 (preload.js)
+1. **统一的 CSS 变量系统**
+   - 所有设计令牌集中在 `variables.css`
+   - 完整的玻璃态主题颜色、间距、字体定义
+   - 便于主题切换和维护
 
-#### 安全暴露的 API
-```typescript
-window.electron = {
-  // 事件监听
-  on: (channel: string, callback: Function) => void
-  removeListener: (channel: string, callback: Function) => void
+2. **BEM 命名规范**
+   - 组件样式采用 BEM (Block__Element--Modifier)
+   - 避免样式冲突，提高可维护性
 
-  // 发送消息
-  send: (channel: string, ...args: any[]) => void
+3. **组件样式隔离**
+   - 每个组件都有独立的 CSS 文件
+   - 样式文件与组件文件同名，易于查找
 
-  // 调用主进程方法
-  invoke: (channel: string, ...args: any[]) => Promise<any>
+#### ⚠️ 问题与改进建议
+
+**1. 全局样式重复定义**
+
+问题：`index.css`、`App.css` 和 `variables.css` 中都有全局样式
+
+建议职责划分：
+- `index.css` - 全局重置 + 基础样式（box-sizing, html, body）
+- `App.css` - 应用容器样式（#root 容器布局）
+- `variables.css` - 纯 CSS 变量定义（不包含具体样式规则）
+
+**2. 缺少全局工具类文件**
+
+问题：工具类与变量定义混在 `variables.css` 中，不便于扩展
+
+建议：创建 `styles/utilities.css`，按功能分类（间距、文字、布局等）
+
+**3. 公共样式未提取**
+
+问题：玻璃态背景、滚动条样式、卡片阴影在多处重复定义
+
+建议：创建 `styles/common.css` 提取公共样式类
+
+```css
+/* 示例：玻璃态容器 */
+.glass-container {
+  background: var(--color-bg-elevated);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--color-border);
+}
+
+/* 示例：自定义滚动条 */
+.custom-scrollbar {
+  overflow-y: auto;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar);
+  border-radius: 4px;
 }
 ```
 
-#### 白名单机制
-- **可监听事件**: update-*, check-for-updates
-- **可发送消息**: download-update, install-update
-- **可调用方法**: get-*, save-*, load-*, delete-*
+## 可复用的公用组件建议
 
-### 4.3 渲染进程
+### 当前已有但可推广的组件
 
-#### 主要组件
-1. **App.tsx**: 应用根组件
-2. **UpdateDialog.tsx**: 更新对话框（已实现）
-3. **布局组件**: AppLayout, Sidebar, MainContent（待实现）
-4. **页面组件**: Dashboard, Investment, Changelog, Settings（待实现）
+#### 1. Card 组件（已存在，需推广）
+- 推广到：Investment、Settings、Changelog 页面
+- 理由：统一的卡片样式和交互，支持标题、副标题、操作区
 
-## 5. IPC 通信流程
+#### 2. Button 组件（已存在）
+- 检查所有页面是否都使用 Button 组件
+- 理由：统一按钮样式和交互，支持多种变体和尺寸
 
-### 5.1 单向通信（主进程 → 渲染进程）
-```javascript
-// 主进程
-mainWindow.webContents.send('update-available', updateInfo)
+### 建议新增的公用组件
 
-// 渲染进程
-window.electron.on('update-available', (event, info) => {
-  // 处理更新信息
-})
-```
+#### 1. List/ListItem 组件 ⭐⭐⭐⭐⭐
+**使用场景：** RecentTransactions、PortfolioList、Changelog、Settings
 
-### 5.2 双向通信（invoke/handle 模式）
-```typescript
-// 渲染进程
-const version = await window.electron.invoke('get-app-version')
+**复用价值：** 多个页面都有列表展示需求，统一列表项样式和交互
 
-// 主进程
-ipcMain.handle('get-app-version', () => {
-  return app.getVersion()
-})
-```
+#### 2. StatCard 组件 ⭐⭐⭐⭐
+**使用场景：** WealthSummary 统计卡片、投资收益统计
 
-### 5.3 更新流程示例
-```
-1. 主进程检测更新
-   ↓ send('update-available')
-2. 渲染进程显示对话框
-   ↓ user clicks download
-3. send('download-update')
-   ↓
-4. 主进程下载更新
-   ↓ send('update-download-progress')
-5. 渲染进程更新进度条
-   ↓ download complete
-6. send('update-downloaded')
-   ↓ user clicks install
-7. send('install-update')
-   ↓
-8. 主进程安装并重启
-```
+**复用价值：** 统一的数值展示卡片，支持趋势指示、图标
 
-## 6. 数据存储
+#### 3. EmptyState 组件 ⭐⭐⭐⭐
+**使用场景：** 无数据时的空状态展示
 
-### 6.1 本地文件存储
-- **位置**: 用户数据目录 /plans
-- **格式**: JSON
-- **功能**: 保存、加载、删除投资计划
+**复用价值：** 提升用户体验，统一的空状态设计
 
-### 6.2 数据结构
-```typescript
-interface Plan {
-  id: string
-  name: string
-  createdAt: string
-  updatedAt: string
-  data: any
-}
-```
+#### 4. Table 组件 ⭐⭐⭐⭐⭐
+**使用场景：** 交易记录表格、投资组合明细表格
 
-## 7. 开发工作流
+**复用价值：** 数据展示是核心功能，支持排序、分页等高级功能
 
-### 7.1 开发环境
-```bash
-# 启动开发服务器
-npm run dev
+#### 5. Badge/Tag 组件 ⭐⭐⭐
+**使用场景：** 交易类型标签、资产类别标签、状态标签
 
-# 渲染进程热重载
-# Vite HMR 自动刷新
-```
+**复用价值：** 轻量级标签组件，统一颜色语义
 
-### 7.2 构建
-```bash
-# Windows 构建
-npm run build:win
+#### 6. InputGroup/FormItem 组件 ⭐⭐⭐⭐
+**使用场景：** 设置页面表单、数据录入表单
 
-# macOS 构建
-npm run build:mac
+**复用价值：** 表单是常见交互，统一表单样式和验证
 
-# 完整发布流程
-npm run release
-```
+### 公用组件优先级
 
-### 7.3 版本管理
-```bash
-# 补丁版本 (0.0.13 → 0.0.14)
-npm run bump
+**高优先级（立即实施）：**
+1. List/ListItem - 多页面都有列表需求
+2. Table - 数据展示核心组件
+3. StatCard - 统一数值展示
 
-# 次要版本 (0.0.13 → 0.1.0)
-npm run bump:minor
+**中优先级（近期实施）：**
+4. EmptyState - 提升用户体验
+5. Badge/Tag - 标签展示需求
+6. InputGroup - 表单组件统一
 
-# 主要版本 (0.0.13 → 1.0.0)
-npm run bump:major
-```
+## 架构优点
 
-## 8. 安全考虑
+1. **清晰的分层架构** - 组件层、页面层、服务层分离明确
+2. **类型安全** - 完整的 TypeScript 类型定义
+3. **模块化设计** - 组件高度模块化，按功能划分
+4. **统一的设计系统** - CSS 变量化的设计令牌，玻璃态主题统一
+5. **代码分割** - 路由级别的懒加载，优化性能
 
-### 8.1 IPC 安全
-- 使用 contextBridge 隔离上下文
-- 白名单机制限制可访问的通道
-- contextIsolation: true（启用）
+## 改进建议
 
-### 8.2 数据安全
-- 本地数据存储在用户目录
-- JSON 格式易于查看和编辑
-- 无敏感信息硬编码
+### 短期（1-2周）
+1. 样式组织优化 - 创建 utilities.css 和 common.css
+2. 组件复用 - 推广 Card、Button，创建 List/ListItem
+3. 文档完善 - 添加组件使用文档
 
-## 9. 性能优化
+### 中期（1-2月）
+1. 组件库建设 - 实现 Table、StatCard、EmptyState
+2. 测试覆盖 - 添加单元测试和集成测试
+3. 性能优化 - 组件级代码分割
 
-### 9.1 构建优化
-- Vite 快速冷启动
-- 代码分割（动态导入）
-- 生产环境压缩
+### 长期（3-6月）
+1. 状态管理 - 引入 Redux 或 Zustand
+2. 主题系统 - 多主题支持
+3. 国际化 - i18n 支持
 
-### 9.2 运行时优化
-- 懒加载页面组件
-- 图表按需渲染
-- 防抖/节流用户输入
+## 总结
 
-## 10. 已实现功能
+当前架构整体设计良好，具有清晰的分层和模块化设计。主要需要改进：
 
-✅ Electron 窗口创建和管理
-✅ IPC 通信框架
-✅ 自动更新机制
-✅ 版本信息获取
-✅ 文件存储功能（计划管理）
-✅ 更新对话框 UI
+1. **CSS 样式组织** - 明确职责边界，提取公共样式
+2. **组件复用** - 创建更多公用组件，减少重复代码
+3. **文档完善** - 添加组件使用文档和示例
 
-## 11. 待实现功能
-
-❌ 应用主布局（侧边栏 + 内容区）
-❌ 页面导航系统
-❌ 财富总览页面
-❌ 投资规划页面
-❌ 更新日志页面
-❌ 设置页面
-❌ 图表组件（饼图、折线图等）
-❌ 数据可视化
-❌ 样式美化
-❌ 用户交互功能
-
-## 12. 技术债务和改进方向
-
-### 12.1 当前限制
-- 大多数组件文件为空
-- 无状态管理（考虑添加 Zustand 或 Redux Toolkit）
-- 无错误边界
-- 无单元测试
-
-### 12.2 改进建议
-- 添加状态管理库
-- 实现错误边界和日志记录
-- 添加单元测试和集成测试
-- 优化性能（虚拟滚动、懒加载）
-- 添加主题系统（亮/暗模式）
-- 国际化支持
+通过实施这些改进，可以进一步提升项目的可维护性和开发效率。

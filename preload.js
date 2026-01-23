@@ -44,5 +44,15 @@ contextBridge.exposeInMainWorld('electron', {
       return ipcRenderer.invoke(channel, ...args)
     }
     return Promise.reject(new Error(`Invalid channel: ${channel}`))
+  },
+  // 读取项目文件的便捷方法
+  readFile: (filename) => {
+    return ipcRenderer.invoke('read-project-file', filename).then(result => {
+      if (result.success) {
+        return result.content
+      } else {
+        throw new Error(result.error || '读取文件失败')
+      }
+    })
   }
 })

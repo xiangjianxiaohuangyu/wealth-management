@@ -5,7 +5,7 @@
  */
 
 import { Card } from '../common/Card'
-import type { StatCard } from '../../pages/Dashboard/Dashboard.types'
+import type { StatCard } from '../../pages/WealthOverview/Dashboard.types'
 import { formatCurrency } from '../../utils/format/currency'
 import './WealthSummary.css'
 

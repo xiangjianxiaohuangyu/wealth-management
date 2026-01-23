@@ -13,7 +13,7 @@ import './AppLayout.css'
  * 路由组件映射
  */
 const routeComponents = {
-  '/dashboard': lazy(() => import('../../pages/Dashboard')),
+  '/dashboard': lazy(() => import('../../pages/WealthOverview')),
   '/investment': lazy(() => import('../../pages/Investment')),
   '/changelog': lazy(() => import('../../pages/Changelog')),
   '/settings': lazy(() => import('../../pages/Settings'))

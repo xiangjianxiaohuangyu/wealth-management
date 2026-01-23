@@ -172,14 +172,26 @@ ipcMain.handle('get-app-version', async () => {
 
 // 读取项目目录中的文件（用于更新日志等）
 ipcMain.handle('read-project-file', async (_event, fileName) => {
-  const projectRoot = path.join(__dirname, '../..');
+  // 开发环境：main.js 在项目根目录，直接使用 __dirname
+  // 生产环境：main.js 在 resources/app 目录，需要向上两级
+  let projectRoot;
+  if (isDev) {
+    projectRoot = __dirname;
+  } else {
+    projectRoot = path.join(__dirname, '../..');
+  }
+
   const filePath = path.join(projectRoot, fileName);
+  console.log('Reading file:', filePath);
+  console.log('File exists:', fs.existsSync(filePath));
 
   try {
     if (fs.existsSync(filePath)) {
       const content = fs.readFileSync(filePath, 'utf-8');
+      console.log('File content length:', content.length);
       return { success: true, content };
     } else {
+      console.error('File not found:', filePath);
       return { success: false, error: '文件不存在' };
     }
   } catch (error) {
