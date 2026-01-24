@@ -27,11 +27,11 @@
   font-size: 10px !important;
 }
 
-/* 增大更新对话框按钮尺寸 */
-.update-dialog__footer .btn {
-  min-height: 42px;
-  padding: 12px 24px;
-  font-size: 15px;
+/* 增大更新对话框按钮尺寸 - 提高选择器优先级 */
+.update-dialog__footer .btn.btn--medium {
+  min-height: 42px !important;
+  padding: 12px 24px !important;
+  font-size: 15px !important;
 }
 
 /* 更新对话框 - 保持固定最小尺寸 */
