@@ -171,3 +171,83 @@ export function validateTotalAmount(
   const total = calculateTotalPlannedAmount(assets, excludeId)
   return total <= totalAmount
 }
+
+/**
+ * 验证比例总和
+ * @param assets - 资产配置列表
+ * @param excludeId - 排除的资产ID（编辑时使用）
+ * @returns 验证结果：是否有效、最大可用比例
+ *
+ * @example
+ * ```ts
+ * validatePlannedPercentage([
+ *   { id: '1', plannedPercentage: 30 },
+ *   { id: '2', plannedPercentage: 20 }
+ * ]) // { valid: true, maxAvailable: 50 }
+ *
+ * validatePlannedPercentage([
+ *   { id: '1', plannedPercentage: 60 },
+ *   { id: '2', plannedPercentage: 50 }
+ * ]) // { valid: false, maxAvailable: 40 }
+ * ```
+ */
+export function validatePlannedPercentage(
+  assets: AssetAllocationItem[],
+  excludeId?: string
+): { valid: boolean; maxAvailable: number } {
+  const currentTotal = calculateTotalPercentage(assets, excludeId)
+  const maxAvailable = Math.max(0, 100 - currentTotal)
+
+  return {
+    valid: currentTotal <= 100,
+    maxAvailable
+  }
+}
+
+/**
+ * 验证单个资产的比例
+ * @param percentage - 待验证的比例
+ * @param assets - 资产配置列表
+ * @param currentId - 当前资产ID（编辑时使用）
+ * @returns 验证结果：是否有效、调整后的比例、提示消息
+ *
+ * @example
+ * ```ts
+ * validateAssetPercentage(30, [
+ *   { id: '1', plannedPercentage: 40 },
+ *   { id: '2', plannedPercentage: 20 }
+ * ], '3')
+ * // { valid: true, adjustedPercentage: 30, message: '' }
+ *
+ * validateAssetPercentage(50, [
+ *   { id: '1', plannedPercentage: 40 },
+ *   { id: '2', plannedPercentage: 20 }
+ * ], '3')
+ * // { valid: false, adjustedPercentage: 40, message: '比例总和不能超过100%...' }
+ * ```
+ */
+export function validateAssetPercentage(
+  percentage: number,
+  assets: AssetAllocationItem[],
+  currentId?: string
+): {
+  valid: boolean
+  adjustedPercentage: number
+  message: string
+} {
+  const { valid, maxAvailable } = validatePlannedPercentage(assets, currentId)
+
+  if (percentage > maxAvailable) {
+    return {
+      valid: false,
+      adjustedPercentage: maxAvailable,
+      message: `比例总和不能超过100%，已自动调整为最大可用值 ${maxAvailable.toFixed(1)}%`
+    }
+  }
+
+  return {
+    valid: true,
+    adjustedPercentage: percentage,
+    message: ''
+  }
+}

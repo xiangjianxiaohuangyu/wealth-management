@@ -1,0 +1,38 @@
+/**
+ * 投资组合图表组件样式
+ */
+
+.portfolio-charts {
+  width: 100%;
+  padding: var(--spacing-lg, 16px);
+  border-bottom: 1px solid var(--color-border-light, rgba(255, 255, 255, 0.1));
+}
+
+.portfolio-charts__container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl, 24px);
+  width: 100%;
+}
+
+.portfolio-charts__chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.portfolio-charts__title {
+  font-size: var(--font-size-sm, 12px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text, #2d3436);
+  margin-bottom: var(--spacing-md, 12px);
+  text-align: center;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .portfolio-charts__container {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg, 16px);
+  }
+}

@@ -28,6 +28,8 @@ export interface AssetAllocationItem {
   plannedAmount: number
   /** 实际金额 */
   actualAmount: number
+  /** 实际比例（百分比，0-100） */
+  actualPercentage: number
   /** 操作建议 */
   suggestion: OperationSuggestion
   /** 建议金额差异 */

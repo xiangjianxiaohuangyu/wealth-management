@@ -8,7 +8,8 @@
       "Bash(npm run check:*)",
       "Bash(npm run)",
       "Bash(npm run build:*)",
-      "Bash(del:*)"
+      "Bash(del:*)",
+      "Bash(if not exist \"e:\\\\Project\\\\Private_Project\\\\wealth-management\\\\renderer\\\\src\\\\utils\\\\calculation\" mkdir \"e:\\\\Project\\\\Private_Project\\\\wealth-management\\\\renderer\\\\src\\\\utils\\\\calculation\")"
     ]
   }
 }
