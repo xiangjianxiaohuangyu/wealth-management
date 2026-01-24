@@ -1,0 +1,287 @@
+/**
+ * 资产配置表格样式
+ * 玻璃态效果
+ * 使用 Grid 布局替代表格
+ */
+
+/* 总投资金额卡片 */
+.total-investment-card {
+  margin-bottom: var(--spacing-lg, 16px);
+}
+
+/* 增强液态玻璃效果 */
+.total-investment-card.card {
+  background: rgba(77, 163, 255, 0.12) !important;
+  backdrop-filter: blur(40px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
+
+  border: 1px solid rgba(77, 163, 255, 0.3) !important;
+  box-shadow:
+    0 8px 32px rgba(77, 163, 255, 0.15),
+    0 2px 8px rgba(77, 163, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(77, 163, 255, 0.1) !important;
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* 顶部高光线 */
+.total-investment-card.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(77, 163, 255, 0.4) 20%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(77, 163, 255, 0.4) 80%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+
+.total-investment-card__content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0px;
+}
+
+.total-investment-card__label {
+  font-size: 18px;
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+/* 投资组合表格卡片 */
+.asset-allocation-table {
+  margin-bottom: var(--spacing-xl, 24px);
+}
+
+.asset-allocation-table__wrapper {
+  background: var(--color-bg-elevated);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: var(--border-radius-md, 8px);
+  border: var(--glass-border);
+  overflow: hidden;
+}
+
+/* 表头 */
+.asset-allocation-table__header {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1.2fr 0.8fr;
+  gap: var(--spacing-md, 12px);
+  padding: var(--spacing-md, 12px);
+  background: rgba(77, 163, 255, 0.08);
+  border-bottom: var(--glass-border);
+}
+
+.asset-allocation-table__header-cell {
+  font-size: var(--font-size-sm, 12px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text);
+}
+
+/* 资产列表 */
+.asset-allocation-table__list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 资产行 */
+.asset-allocation-table__row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1.2fr 0.8fr;
+  gap: var(--spacing-md, 12px);
+  padding: var(--spacing-lg, 16px) var(--spacing-md, 12px);
+  border-bottom: 1px solid var(--color-border-light);
+  align-items: center;
+}
+
+.asset-allocation-table__row:last-child {
+  border-bottom: none;
+}
+
+/* 单元格 */
+.asset-allocation-table__cell {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+}
+
+/* 输入框基础样式 */
+.asset-allocation-table__input {
+  width: 100%;
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
+
+  font-size: var(--font-size-sm, 12px);
+  color: var(--color-text);
+
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm, 4px);
+
+  transition: all var(--transition-fast, 0.15s) ease;
+}
+
+.asset-allocation-table__input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.asset-allocation-table__input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.asset-allocation-table__input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+/* 固定宽度输入框 - 用于比例、金额 */
+.asset-allocation-table__input--fixed {
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
+}
+
+.asset-allocation-table__input-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.asset-allocation-table__input-wrapper .asset-allocation-table__input {
+  padding-right: 30px;
+}
+
+.asset-allocation-table__suffix {
+  position: absolute;
+  right: var(--spacing-sm, 8px);
+  font-size: var(--font-size-xs, 11px);
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+/* 占比情况 */
+.asset-allocation-table__allocation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 12px);
+  min-width: 80px;
+}
+
+.asset-allocation-table__allocation-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 4px);
+}
+
+.asset-allocation-table__allocation-line {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs, 4px);
+}
+
+.asset-allocation-table__allocation-label {
+  font-size: var(--font-size-sm, 12px);
+  color: var(--color-text-secondary);
+}
+
+.asset-allocation-table__allocation-value {
+  font-size: var(--font-size-sm, 12px);
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+/* 操作按钮区域 */
+.asset-allocation-table__actions {
+  padding: var(--spacing-md, 12px);
+  border-top: var(--glass-border);
+  display: flex;
+  justify-content: center;
+}
+
+/* 总比例提示 */
+.asset-allocation-table__summary {
+  padding: var(--spacing-md, 12px);
+  text-align: center;
+  font-size: var(--font-size-sm, 12px);
+  color: var(--color-text-secondary);
+  border-top: 1px solid var(--color-border-light);
+  background: rgba(0, 184, 148, 0.05);
+}
+
+.asset-allocation-table__summary--error {
+  color: var(--color-danger);
+  background: rgba(214, 48, 49, 0.1);
+}
+
+/* 删除按钮 */
+.asset-allocation-table__delete-btn {
+  font-size: var(--font-size-base, 14px);
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+/* 投资模式选择器样式 */
+.investment-mode-selector {
+  display: flex;
+  gap: var(--spacing-md, 12px);
+}
+
+.investment-mode-selector__button {
+  flex: 1;
+  min-width: 80px;
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
+  font-size: var(--font-size-sm, 12px);
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm, 4px);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.investment-mode-selector__button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--color-primary);
+}
+
+.investment-mode-selector__button--active {
+  background: rgba(77, 163, 255, 0.2);
+  border-color: rgba(77, 163, 255, 0.4);
+  color: #4da3ff;
+}
+
+.investment-mode-selector__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 响应式 */
+@media (max-width: 1024px) {
+  .asset-allocation-table__wrapper {
+    overflow-x: auto;
+  }
+
+  .asset-allocation-table__header,
+  .asset-allocation-table__row {
+    min-width: 1000px;
+  }
+}

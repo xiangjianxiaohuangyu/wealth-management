@@ -1,0 +1,52 @@
+/**
+ * 操作建议组件样式
+ * 玻璃态效果
+ * 两行布局：状态文本 + 金额
+ */
+
+.operation-suggestion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
+  border-radius: var(--border-radius-md, 8px);
+  font-weight: var(--font-weight-semibold, 600);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all var(--transition-fast, 0.15s) ease;
+  text-align: center;
+}
+
+.operation-suggestion__status {
+  font-size: var(--font-size-base, 14px);
+  line-height: 1.4;
+}
+
+.operation-suggestion__amount {
+  font-size: var(--font-size-sm, 12px);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+/* 需补仓 - 蓝色 */
+.operation-suggestion--need-buy {
+  background: rgba(77, 163, 255, 0.2);
+  color: #4da3ff;
+  border: 1px solid rgba(77, 163, 255, 0.4);
+}
+
+/* 需减持 - 红色 */
+.operation-suggestion--need-sell {
+  background: rgba(214, 48, 49, 0.2);
+  color: #d63031;
+  border: 1px solid rgba(214, 48, 49, 0.4);
+}
+
+/* 已平衡 - 绿色 */
+.operation-suggestion--balanced {
+  background: rgba(0, 184, 148, 0.2);
+  color: #00b894;
+  border: 1px solid rgba(0, 184, 148, 0.4);
+}

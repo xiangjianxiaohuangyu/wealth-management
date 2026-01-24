@@ -1,0 +1,64 @@
+/**
+ * 总投资金额输入组件样式
+ * 玻璃态效果
+ */
+
+.total-investment-input__wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: none;
+}
+
+.total-investment-input__field {
+  width: 100%;
+  /* padding: var(--spacing-md, 12px) var(--spacing-xl, 24px)
+              var(--spacing-md, 12px) var(--spacing-md, 12px); */
+
+  padding: 12px 24px 12px 12px;
+  padding-right: 50px; /* 为符号留空间 */
+
+  font-size: var(--font-size-xl, 18px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text);
+  text-align: left; /* 确保左对齐 */
+
+  background: var(--color-bg-elevated);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+
+  border: var(--glass-border);
+  border-radius: var(--border-radius-md, 8px);
+
+  transition: border-color var(--transition-base, 0.2s) ease,
+              box-shadow var(--transition-base, 0.2s) ease,
+              background-color var(--transition-base, 0.2s) ease;
+  /* 移除 width 过渡以避免跳动 */
+}
+
+.total-investment-input__field:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(77, 163, 255, 0.1);
+}
+
+.total-investment-input__field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.total-investment-input__field::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.total-investment-input__symbol {
+  position: absolute;
+  right: var(--spacing-md, 12px);
+
+  font-size: var(--font-size-xl, 18px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-primary);
+
+  pointer-events: none;
+}
