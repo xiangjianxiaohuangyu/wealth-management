@@ -235,7 +235,7 @@ export function validateAssetPercentage(
   adjustedPercentage: number
   message: string
 } {
-  const { valid, maxAvailable } = validatePlannedPercentage(assets, currentId)
+  const { maxAvailable } = validatePlannedPercentage(assets, currentId)
 
   if (percentage > maxAvailable) {
     return {
