@@ -1,0 +1,67 @@
+/**
+ * 图表设置模态框样式
+ */
+
+.chart-settings-modal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 12px);
+}
+
+.chart-settings-option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 12px);
+  padding: var(--spacing-md, 12px);
+  cursor: pointer;
+  border-radius: var(--border-radius-md, 8px);
+  transition: background var(--transition-fast, 0.15s) ease;
+  font-size: var(--font-size-base, 14px);
+  color: var(--color-text, #2d3436);
+  user-select: none;
+}
+
+.chart-settings-option:hover {
+  background: rgba(77, 163, 255, 0.08);
+}
+
+.chart-settings-option input[type="checkbox"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary, #4da3ff);
+}
+
+.chart-settings-option span {
+  cursor: pointer;
+  flex: 1;
+}
+
+.chart-settings-modal__btn {
+  padding: var(--spacing-sm, 8px) var(--spacing-lg, 16px);
+  border: none;
+  border-radius: var(--border-radius-sm, 4px);
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+}
+
+.chart-settings-modal__btn--cancel {
+  background: var(--color-bg-elevated);
+  color: var(--color-text, #2d3436);
+  border: 1px solid var(--color-border, #dfe6e9);
+}
+
+.chart-settings-modal__btn--cancel:hover {
+  background: var(--color-bg-hover, #e8e8ea);
+}
+
+.chart-settings-modal__btn--confirm {
+  background: var(--color-primary, #6c5ce7);
+  color: var(--color-white, #ffffff);
+}
+
+.chart-settings-modal__btn--confirm:hover {
+  background: var(--color-primary-hover, #5b4cc4);
+}

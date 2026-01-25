@@ -138,6 +138,10 @@ export function AssetDetailModal({
   const adjustmentTotal = calculateAdjustmentTotal()
   const finalValue = calculateFinalValue()
 
+  // 根据资产类型显示不同的标签
+  const isNotTotalAsset = assetType !== 'total-asset'
+  const adjustmentLabel = isNotTotalAsset ? '补充记录' : '月度记录'
+
   return (
     <Modal
       isOpen={isOpen}
@@ -150,7 +154,7 @@ export function AssetDetailModal({
         {/* 总览卡片 */}
         <div className="asset-detail-modal__summary">
           <div className="asset-detail-modal__summary-item">
-            <span className="asset-detail-modal__summary-label">基础值（月度记录）</span>
+            <span className="asset-detail-modal__summary-label">基础值（月度记录来源）</span>
             <span className="asset-detail-modal__summary-value">
               {formatCurrency(baseValue, 'CNY')}
             </span>
@@ -215,7 +219,7 @@ export function AssetDetailModal({
             className="asset-detail-modal__section-title asset-detail-modal__section-title--clickable"
             onClick={() => setCollapsedSections({ ...collapsedSections, adjustments: !collapsedSections.adjustments })}
           >
-            {collapsedSections.adjustments ? '▶' : '▼'} 月度记录
+            {collapsedSections.adjustments ? '▶' : '▼'} {adjustmentLabel}
           </h4>
           {!collapsedSections.adjustments && (
             <div className="asset-detail-modal__adjustments">
@@ -253,7 +257,7 @@ export function AssetDetailModal({
 
         {/* 添加新调整 */}
         <div className="asset-detail-modal__section">
-          <h4 className="asset-detail-modal__section-title">添加月度记录</h4>
+          <h4 className="asset-detail-modal__section-title">添加{adjustmentLabel}</h4>
           <div className="asset-detail-modal__add-form">
             <div className="asset-detail-modal__form-row">
               <label className="asset-detail-modal__form-label">金额</label>
@@ -290,7 +294,7 @@ export function AssetDetailModal({
               onClick={handleAddAdjustment}
               disabled={!newAmount}
             >
-              添加月度记录
+              添加{adjustmentLabel}
             </button>
           </div>
         </div>

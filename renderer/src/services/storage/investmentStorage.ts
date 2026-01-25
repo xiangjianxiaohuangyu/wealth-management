@@ -56,6 +56,18 @@ export const investmentStorage = {
   },
 
   /**
+   * 保存资产列表（不包含总金额，因为总金额来自资产跟踪）
+   */
+  saveAssets(assets: AssetAllocationItem[]): boolean {
+    const data = this.getData()
+    return this.setData({
+      totalAmount: data?.totalAmount || 0,
+      assets,
+      lastUpdated: new Date().toISOString()
+    })
+  },
+
+  /**
    * 获取总投资金额
    */
   getTotalAmount(): number {

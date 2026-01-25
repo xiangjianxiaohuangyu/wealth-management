@@ -12,13 +12,13 @@ export const APP_INFO = {
   /** 应用名称 */
   NAME: '财富管理',
   /** 应用版本 */
-  VERSION: '0.0.16',
+  VERSION: '1.0.0',
   /** 应用描述 */
   DESCRIPTION: '个人财富管理应用',
   /** 作者 */
-  AUTHOR: 'Your Name',
+  AUTHOR: 'Zane',
   /** 主页 */
-  HOMEPAGE: 'https://github.com/yourusername/wealth-management'
+  HOMEPAGE: 'https://github.com/xiangjianxiaohuangyu/wealth-management'
 } as const
 
 /**

@@ -123,3 +123,17 @@ export interface AssetAdjustment {
   /** 创建时间 */
   createdAt: string
 }
+
+/**
+ * 图表设置
+ */
+export interface ChartSettings {
+  /** 是否显示总资产 */
+  totalAssets: boolean
+  /** 是否显示投资金额 */
+  investment: boolean
+  /** 是否显示存款 */
+  savings: boolean
+  /** 是否显示固定资产 */
+  fixedAssets: boolean
+}

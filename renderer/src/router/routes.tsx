@@ -29,22 +29,22 @@ export const routeConfigs: RouteConfig[] = [
     }
   },
   {
-    path: '/investment',
-    component: Investment,
-    title: '投资规划',
-    meta: {
-      description: '管理投资组合和计算投资回报',
-      icon: '📋',
-      order: 2
-    }
-  },
-  {
     path: '/asset-tracking',
     component: AssetTracking,
     title: '资产跟踪',
     meta: {
       description: '记录和追踪每月资产变化',
       icon: '📈',
+      order: 2
+    }
+  },
+  {
+    path: '/investment',
+    component: Investment,
+    title: '投资规划',
+    meta: {
+      description: '管理投资组合和计算投资回报',
+      icon: '📋',
       order: 3
     }
   },

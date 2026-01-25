@@ -57,6 +57,16 @@
   font-weight: var(--font-weight-semibold, 600);
   color: var(--color-text);
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.total-investment-card__label-hint {
+  font-size: 14px;
+  font-weight: var(--font-weight-normal, 400);
+  color: var(--color-text-secondary);
+  font-style: italic;
 }
 
 /* 投资组合表格卡片 */

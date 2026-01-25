@@ -182,6 +182,42 @@
   accent-color: var(--color-primary, #4da3ff);
 }
 
+/* 图表设置模态框样式 */
+.chart-settings-modal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 12px);
+  padding: var(--spacing-sm, 8px) 0;
+}
+
+.chart-settings-option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 12px);
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
+  cursor: pointer;
+  border-radius: var(--border-radius-sm, 4px);
+  transition: background var(--transition-fast, 0.15s) ease;
+  font-size: var(--font-size-base, 14px);
+  color: var(--color-text, #2d3436);
+  user-select: none;
+}
+
+.chart-settings-option:hover {
+  background: rgba(77, 163, 255, 0.08);
+}
+
+.chart-settings-option input[type="checkbox"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary, #4da3ff);
+}
+
+.chart-settings-option span {
+  cursor: pointer;
+}
+
 /* 响应式 */
 @media (max-width: 768px) {
   .asset-tracking {

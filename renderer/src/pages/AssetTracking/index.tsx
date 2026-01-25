@@ -4,7 +4,7 @@
  * 记录和追踪每月资产变化
  */
 
-import { useState, useMemo, useEffect, useRef } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Card } from '../../components/common/Card'
 import { Button } from '../../components/common/Button'
 import { LineChart } from '../../components/charts'
@@ -12,6 +12,7 @@ import { ConfirmDialog } from '../../components/Investment/ConfirmDialog'
 import { MonthlyRecordForm } from '../../components/AssetTracking/MonthlyRecordForm'
 import { AssetRecordTable } from '../../components/AssetTracking/AssetRecordTable'
 import { AssetStatsCards } from '../../components/AssetTracking/AssetStatsCards'
+import { ChartSettingsModal } from '../../components/AssetTracking/ChartSettingsModal'
 import { assetTrackingStorage } from '../../services/storage/assetTrackingStorage'
 import { calculateCumulativeAssets } from '../../services/data/assetTrackingService'
 import { CHART_COLORS } from '../../utils/constants'
@@ -24,7 +25,7 @@ export default function AssetTracking() {
   const [editingRecord, setEditingRecord] = useState<MonthlyAssetRecord | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [recordToDelete, setRecordToDelete] = useState<string | null>(null)
-  const [showChartSettings, setShowChartSettings] = useState(false)
+  const [chartSettingsOpen, setChartSettingsOpen] = useState(false)
 
   // 图表显示设置
   const [chartSettings, setChartSettings] = useState({
@@ -33,25 +34,6 @@ export default function AssetTracking() {
     savings: true,
     fixedAssets: true
   })
-
-  const settingsRef = useRef<HTMLDivElement>(null)
-
-  // 点击外部关闭设置菜单
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
-        setShowChartSettings(false)
-      }
-    }
-
-    if (showChartSettings) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [showChartSettings])
 
   // 加载数据
   useEffect(() => {
@@ -72,7 +54,7 @@ export default function AssetTracking() {
 
     const data: any[] = []
 
-    // 根据设置添加数据线
+    // 总资产
     if (chartSettings.totalAssets) {
       data.push({
         name: '总资产',
@@ -92,6 +74,7 @@ export default function AssetTracking() {
       })
     }
 
+    // 投资金额
     if (chartSettings.investment) {
       data.push({
         name: '投资金额',
@@ -101,6 +84,7 @@ export default function AssetTracking() {
       })
     }
 
+    // 存款
     if (chartSettings.savings) {
       data.push({
         name: '存款',
@@ -110,6 +94,7 @@ export default function AssetTracking() {
       })
     }
 
+    // 固定资产
     if (chartSettings.fixedAssets) {
       data.push({
         name: '固定资产',
@@ -130,7 +115,7 @@ export default function AssetTracking() {
     }
 
     return data
-  }, [records, chartSettings.totalAssets, chartSettings.investment, chartSettings.savings, chartSettings.fixedAssets])
+  }, [records, chartSettings])
 
   // 添加新记录
   const handleAddRecord = (data: Omit<MonthlyAssetRecord, 'id' | 'createdAt' | 'updatedAt'>) => {
@@ -201,54 +186,13 @@ export default function AssetTracking() {
         title="资产趋势"
         className="asset-tracking__chart-card"
         extra={
-          <div className="asset-tracking__chart-settings" ref={settingsRef}>
-            <button
-              className="asset-tracking__settings-btn"
-              onClick={() => setShowChartSettings(!showChartSettings)}
-              title="图表设置"
-            >
-              ⚙️
-            </button>
-            {showChartSettings && (
-              <div
-                className="asset-tracking__settings-dropdown"
-                onMouseDown={(e) => e.stopPropagation()}
-              >
-                <label className="asset-tracking__settings-option">
-                  <input
-                    type="checkbox"
-                    checked={chartSettings.totalAssets}
-                    onChange={(e) => setChartSettings({ ...chartSettings, totalAssets: e.target.checked })}
-                  />
-                  <span>总资产</span>
-                </label>
-                <label className="asset-tracking__settings-option">
-                  <input
-                    type="checkbox"
-                    checked={chartSettings.investment}
-                    onChange={(e) => setChartSettings({ ...chartSettings, investment: e.target.checked })}
-                  />
-                  <span>投资金额</span>
-                </label>
-                <label className="asset-tracking__settings-option">
-                  <input
-                    type="checkbox"
-                    checked={chartSettings.savings}
-                    onChange={(e) => setChartSettings({ ...chartSettings, savings: e.target.checked })}
-                  />
-                  <span>存款</span>
-                </label>
-                <label className="asset-tracking__settings-option">
-                  <input
-                    type="checkbox"
-                    checked={chartSettings.fixedAssets}
-                    onChange={(e) => setChartSettings({ ...chartSettings, fixedAssets: e.target.checked })}
-                  />
-                  <span>固定资产</span>
-                </label>
-              </div>
-            )}
-          </div>
+          <button
+            className="asset-tracking__settings-btn"
+            onClick={() => setChartSettingsOpen(true)}
+            title="图表设置"
+          >
+            ⚙️
+          </button>
         }
       >
         <LineChart
@@ -300,6 +244,14 @@ export default function AssetTracking() {
         message="确定要删除这条记录吗？此操作无法撤销。"
         confirmText="删除"
         type="danger"
+      />
+
+      {/* 图表设置弹窗 */}
+      <ChartSettingsModal
+        isOpen={chartSettingsOpen}
+        onClose={() => setChartSettingsOpen(false)}
+        chartSettings={chartSettings}
+        onChartSettingsChange={setChartSettings}
       />
     </div>
   )
