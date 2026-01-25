@@ -142,11 +142,10 @@
   gap: 12px;
 }
 
-/* 更新通知操作按钮 - 增大尺寸 */
-.update-actions .btn {
-  flex: 1;
-  justify-content: center;
-  outline: none !important;
+/* 更新通知操作按钮 - 增大尺寸，使用更高优先级覆盖 Button 组件默认样式 */
+.update-actions .btn.btn--medium,
+.update-actions .btn.btn--small,
+.update-actions .btn.btn--large {
   padding: 14px 24px !important;
   font-size: 15px !important;
   min-height: 48px !important;
