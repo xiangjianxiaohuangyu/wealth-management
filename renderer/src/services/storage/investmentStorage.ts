@@ -4,7 +4,7 @@
  * 用于保存和加载投资规划数据
  */
 
-import { storage, STORAGE_KEYS } from './localStorage'
+import { storage } from './localStorage'
 import type { AssetAllocationItem } from '../../types/investment.types'
 
 /**

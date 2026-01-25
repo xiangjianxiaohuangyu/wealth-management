@@ -166,7 +166,6 @@ export function PieChart({
         top: 'center',
         style: {
           text: centerText,
-          textAlign: 'center',
           fill: '#ffffff',
           fontSize: 20,
           fontWeight: 600
