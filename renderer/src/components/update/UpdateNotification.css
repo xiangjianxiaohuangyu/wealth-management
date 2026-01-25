@@ -4,23 +4,23 @@
 
 /* ========== 更新通知样式 ========== */
 
-/* 更新通知容器 */
+/* 更新通知容器 - 增大尺寸 */
 .update-notification {
   position: fixed;
   top: 20px;
   right: 20px;
   z-index: 10001;
-  max-width: 450px;
+  max-width: 550px;
   animation: slideIn 0.3s ease-out;
 }
 
-/* 更新通知内容 */
+/* 更新通知内容 - 增大尺寸 */
 .update-content {
   position: relative;
   background: var(--color-bg-elevated);
   backdrop-filter: blur(40px) saturate(180%);
   -webkit-backdrop-filter: blur(40px) saturate(180%);
-  border-radius: 12px;
+  border-radius: 14px;
   box-shadow: var(--shadow-xl, 0 8px 32px rgba(0, 0, 0, 0.4));
   border: 1px solid var(--color-border);
   overflow: visible;
@@ -41,52 +41,52 @@
   z-index: 1;
 }
 
-/* 更新通知主体 */
+/* 更新通知主体 - 增大内边距 */
 .update-body {
-  padding: 24px;
+  padding: 28px;
 }
 
-/* 头部信息区域 */
+/* 头部信息区域 - 增大间距 */
 .update-header-info {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 14px;
+  margin-bottom: 16px;
 }
 
-/* 更新图标 */
+/* 更新图标 - 增大尺寸 */
 .update-icon {
-  font-size: 28px;
+  font-size: 32px;
   flex-shrink: 0;
 }
 
-/* 更新通知标题 */
+/* 更新通知标题 - 增大字体 */
 .update-header-info h3 {
   flex: 1;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: var(--font-weight-semibold, 600);
   color: var(--color-text);
   margin: 0;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* 更新通知关闭按钮 */
+/* 更新通知关闭按钮 - 增大尺寸 */
 .update-content .close-btn {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 14px;
+  right: 14px;
   background: transparent;
   border: none;
-  font-size: 24px;
+  font-size: 28px;
   color: var(--color-text-secondary);
   cursor: pointer;
   padding: 0;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: 6px;
   transition: all var(--transition-fast, 0.2s) ease;
   z-index: 10;
   outline: none;
@@ -142,14 +142,14 @@
   gap: 12px;
 }
 
-/* 更新通知操作按钮 */
+/* 更新通知操作按钮 - 增大尺寸 */
 .update-actions .btn {
   flex: 1;
   justify-content: center;
   outline: none !important;
-  padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-  font-size: 13px;
-  min-height: 32px;
+  padding: 14px 24px !important;
+  font-size: 15px !important;
+  min-height: 48px !important;
 }
 
 .update-actions .btn:focus,
@@ -290,6 +290,19 @@
   }
 }
 
+/* 淡出动画 - 用于最新版本通知 */
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 /* 显示状态 */
 .update-notification.show,
 .download-progress-notification.show {
@@ -300,6 +313,22 @@
 .update-notification:not(.show),
 .download-progress-notification:not(.show) {
   animation: slideOut 0.3s ease-out forwards;
+}
+
+/* 最新版本通知 - 3秒后自动淡出 */
+.update-notification.latest-version.show {
+  animation: slideIn 0.3s ease-out, fadeOut 3s ease-in 0.3s forwards;
+}
+
+/* 最新版本通知隐藏状态 */
+.update-notification.latest-version:not(.show) {
+  animation: none;
+  opacity: 0;
+}
+
+/* 无操作按钮的通知内容样式 */
+.update-content--no-action {
+  padding-right: 28px;
 }
 
 /* ========== 响应式 ========== */

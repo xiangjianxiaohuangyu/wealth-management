@@ -13,6 +13,7 @@ export function UpdateNotification() {
   const [isDownloaded, setIsDownloaded] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [isDownloading, setIsDownloading] = useState(false)
+  const [showLatestVersion, setShowLatestVersion] = useState(false)
 
   // 监听更新事件
   useEffect(() => {
@@ -24,6 +25,8 @@ export function UpdateNotification() {
 
     const handleUpdateNotAvailable = (_event: any, info: any) => {
       console.log('已是最新版本:', info.version)
+      setShowLatestVersion(true)
+      setIsVisible(true)
     }
 
     const handleDownloadProgress = (_event: any, progress: DownloadProgress) => {
@@ -81,7 +84,32 @@ export function UpdateNotification() {
       setDownloadProgress(null)
       setIsDownloaded(false)
       setIsDownloading(false)
+      setShowLatestVersion(false)
     }, 300)
+  }
+
+  // 已是最新版本通知
+  if (showLatestVersion && isVisible && !isDownloaded && !isDownloading && !updateInfo) {
+    // 3秒后自动隐藏
+    setTimeout(() => {
+      setIsVisible(false)
+      setTimeout(() => {
+        setShowLatestVersion(false)
+      }, 300)
+    }, 3000)
+
+    return (
+      <div className={`update-notification latest-version ${isVisible ? 'show' : ''}`}>
+        <div className="update-content update-content--no-action">
+          <div className="update-body">
+            <div className="update-header-info">
+              <span className="update-icon">✓</span>
+              <h3>已是最新版本</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   // 下载进度通知
@@ -128,9 +156,6 @@ export function UpdateNotification() {
               <span className="update-icon">✅</span>
               <h3>更新已下载</h3>
             </div>
-            <p className="update-message">
-              重启应用即可安装。
-            </p>
             <div className="update-actions">
               <Button variant="outline" onClick={handleDismissClick}>
                 稍后重启
