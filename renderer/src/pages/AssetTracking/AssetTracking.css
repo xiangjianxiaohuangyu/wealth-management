@@ -1,0 +1,201 @@
+/**
+ * 资产跟踪页面样式
+ */
+
+.asset-tracking {
+  padding: var(--spacing-xl, 20px);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.asset-tracking__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl, 24px);
+}
+
+.asset-tracking__title {
+  font-size: 28px;
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text, #2d3436);
+  margin: 0;
+}
+
+.asset-tracking__chart-card {
+  margin-bottom: var(--spacing-lg, 24px);
+}
+
+.asset-tracking__table-card {
+  margin-bottom: var(--spacing-lg, 24px);
+}
+
+/* 资产趋势卡片 - 使用与资产统计卡片相同的液态玻璃效果 */
+.asset-tracking__chart-card.card {
+  background: rgba(77, 163, 255, 0.12) !important;
+  backdrop-filter: blur(40px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
+  border: 1px solid rgba(77, 163, 255, 0.3) !important;
+  box-shadow:
+    0 8px 32px rgba(77, 163, 255, 0.15),
+    0 2px 8px rgba(77, 163, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(77, 163, 255, 0.1) !important;
+}
+
+/* 资产趋势卡片顶部高光线 */
+.asset-tracking__chart-card.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(77, 163, 255, 0.4) 20%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(77, 163, 255, 0.4) 80%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+
+/* 月度记录表格卡片也使用相同样式 */
+.asset-tracking__table-card.card {
+  background: rgba(77, 163, 255, 0.12) !important;
+  backdrop-filter: blur(40px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
+  border: 1px solid rgba(77, 163, 255, 0.3) !important;
+  box-shadow:
+    0 8px 32px rgba(77, 163, 255, 0.15),
+    0 2px 8px rgba(77, 163, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(77, 163, 255, 0.1) !important;
+}
+
+.asset-tracking__table-card.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(77, 163, 255, 0.4) 20%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(77, 163, 255, 0.4) 80%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+
+/* 图表设置 */
+.asset-tracking__chart-settings {
+  position: relative;
+  display: inline-block;
+  z-index: 1000;
+}
+
+/* 允许设置菜单突破卡片边界 */
+.asset-tracking__chart-card {
+  overflow: visible;
+}
+
+.asset-tracking__chart-card .card {
+  overflow: visible;
+}
+
+.asset-tracking__settings-btn {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--border-radius-sm, 4px);
+  transition: background var(--transition-fast, 0.15s) ease;
+  line-height: 1;
+  outline: none;
+}
+
+.asset-tracking__settings-btn:hover {
+  background: rgba(77, 163, 255, 0.1);
+}
+
+.asset-tracking__settings-btn:focus {
+  outline: none;
+}
+
+.asset-tracking__settings-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: var(--spacing-sm, 8px);
+  background: var(--color-bg-elevated);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md, 8px);
+  box-shadow: var(--shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.2));
+  padding: var(--spacing-sm, 8px);
+  min-width: 120px;
+  z-index: 1001;
+}
+
+.asset-tracking__settings-option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+  padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
+  cursor: pointer;
+  border-radius: var(--border-radius-sm, 4px);
+  transition: background var(--transition-fast, 0.15s) ease;
+  font-size: var(--font-size-sm, 12px);
+  color: var(--color-text, #2d3436);
+  user-select: none;
+}
+
+/* 阻止点击选项时关闭菜单 */
+.asset-tracking__settings-option label {
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+}
+
+.asset-tracking__settings-option label:active {
+  pointer-events: auto;
+}
+
+.asset-tracking__settings-option:hover {
+  background: rgba(77, 163, 255, 0.08);
+}
+
+.asset-tracking__settings-option input[type="checkbox"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary, #4da3ff);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .asset-tracking {
+    padding: var(--spacing-md, 16px);
+  }
+
+  .asset-tracking__header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-md, 16px);
+  }
+
+  .asset-tracking__title {
+    font-size: 24px;
+    text-align: center;
+  }
+}

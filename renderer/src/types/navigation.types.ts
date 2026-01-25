@@ -10,6 +10,7 @@ import type { ReactNode } from 'react'
 export type RoutePath =
   | '/dashboard'
   | '/investment'
+  | '/asset-tracking'
   | '/changelog'
   | '/settings'
 

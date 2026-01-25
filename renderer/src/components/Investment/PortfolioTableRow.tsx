@@ -148,16 +148,23 @@ export function PortfolioTableRow({
             onKeyDown={handleKeyDown}
             placeholder="资产名称"
           />
-          <div className="portfolio-table__color-selector">
-            {CHART_COLORS.map((color) => (
+          <div className="portfolio-table__color-picker-wrapper">
+            <input
+              type="color"
+              className="portfolio-table__color-input"
+              value={tempAsset.color || CHART_COLORS[allAssets.findIndex(a => a.id === asset.id) % CHART_COLORS.length]}
+              onChange={(e) => setTempAsset({ ...tempAsset, color: e.target.value })}
+              title="选择颜色"
+            />
+            {tempAsset.color && (
               <button
-                key={color}
-                className={`portfolio-table__color-option ${tempAsset.color === color ? 'portfolio-table__color-option--selected' : ''}`}
-                style={{ backgroundColor: color }}
-                onClick={() => setTempAsset({ ...tempAsset, color: tempAsset.color === color ? undefined : color })}
-                title={color}
-              />
-            ))}
+                className="portfolio-table__color-clear"
+                onClick={() => setTempAsset({ ...tempAsset, color: undefined })}
+                title="清除颜色，使用默认"
+              >
+                ×
+              </button>
+            )}
           </div>
         </div>
 

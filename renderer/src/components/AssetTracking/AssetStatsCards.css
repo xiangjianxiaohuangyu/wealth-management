@@ -1,0 +1,151 @@
+/**
+ * 资产统计卡片组件样式 - 液态玻璃设计（与投资规划保持一致）
+ */
+
+.asset-stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md, 16px);
+  margin-bottom: var(--spacing-lg, 24px);
+}
+
+/* 覆盖 Card 组件的默认样式，使用投资规划的液态玻璃风格 */
+.asset-stats-cards .asset-stats-card.card,
+.asset-stats-cards .asset-stats-card {
+  background: rgba(77, 163, 255, 0.12) !important;
+  backdrop-filter: blur(40px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
+  border-radius: var(--border-radius-md, 8px) !important;
+  border: 1px solid rgba(77, 163, 255, 0.3) !important;
+  box-shadow:
+    0 8px 32px rgba(77, 163, 255, 0.15),
+    0 2px 8px rgba(77, 163, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(77, 163, 255, 0.1) !important;
+  transition: all var(--transition-base, 0.2s) ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl, 28px) !important;
+  min-height: 160px;
+}
+
+/* 确保 Card 的 body 也支持液态玻璃风格 */
+.asset-stats-cards .asset-stats-card .card__body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+}
+
+/* 顶部高光线 */
+.asset-stats-cards .asset-stats-card::after,
+.asset-stats-cards .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(77, 163, 255, 0.4) 20%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(77, 163, 255, 0.4) 80%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+
+.asset-stats-card__icon {
+  font-size: 48px;
+  line-height: 1;
+  margin-bottom: var(--spacing-md, 12px);
+}
+
+.asset-stats-card__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+}
+
+.asset-stats-card__title {
+  font-size: var(--font-size-lg, 18px);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text-secondary, #636e72);
+  text-align: center;
+}
+
+.asset-stats-card__value {
+  font-size: 24px;
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--color-text, #2d3436);
+  white-space: nowrap;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+  justify-content: center;
+}
+
+/* 编辑按钮 - 放置在数字后面，无背景，更小尺寸 */
+.asset-stats-card__edit-btn {
+  background: transparent;
+  border: none;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--color-text-secondary, #636e72);
+  transition: all var(--transition-fast, 0.15s) ease;
+  outline: none;
+  flex-shrink: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+}
+
+.asset-stats-card__edit-btn:hover {
+  color: var(--color-primary, #4da3ff);
+  transform: scale(1.15);
+}
+
+.asset-stats-card__edit-btn:active {
+  transform: scale(1);
+}
+
+/* 颜色变体 - 左边框（使用更强的选择器） */
+.asset-stats-cards .asset-stats-card--success {
+  border-left: 4px solid #00b894 !important;
+}
+
+.asset-stats-cards .asset-stats-card--primary {
+  border-left: 4px solid #0984e3 !important;
+}
+
+.asset-stats-cards .asset-stats-card--info {
+  border-left: 4px solid #00cec9 !important;
+}
+
+.asset-stats-cards .asset-stats-card--warning {
+  border-left: 4px solid #fdcb6e !important;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .asset-stats-cards {
+    grid-template-columns: 1fr;
+  }
+}

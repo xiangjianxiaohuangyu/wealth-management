@@ -218,16 +218,43 @@ export function CreateAssetModal({
         {/* 颜色选择 */}
         <div className="create-asset-modal__field">
           <label className="create-asset-modal__label">资产颜色</label>
-          <div className="create-asset-modal__color-picker">
-            {CHART_COLORS.map((color) => (
-              <button
-                key={color}
-                className={`create-asset-modal__color-option ${selectedColor === color ? 'create-asset-modal__color-option--selected' : ''}`}
-                style={{ backgroundColor: color }}
-                onClick={() => setSelectedColor(selectedColor === color ? undefined : color)}
-                title={color}
-              />
-            ))}
+          <div className="create-asset-modal__color-section">
+            <div className="create-asset-modal__color-picker-wrapper">
+              <div className="create-asset-modal__color-preview">
+                <input
+                  type="color"
+                  className="create-asset-modal__color-input"
+                  value={selectedColor || CHART_COLORS[0]}
+                  onChange={(e) => setSelectedColor(e.target.value)}
+                  title="选择自定义颜色"
+                />
+                <span className="create-asset-modal__color-value">
+                  {selectedColor || CHART_COLORS[0]}
+                </span>
+              </div>
+              {selectedColor && (
+                <button
+                  className="create-asset-modal__color-clear"
+                  onClick={() => setSelectedColor(undefined)}
+                  title="使用默认颜色"
+                >
+                  使用默认颜色
+                </button>
+              )}
+            </div>
+
+            <div className="create-asset-modal__quick-colors">
+              <span className="create-asset-modal__quick-colors-label">快捷选择：</span>
+              {CHART_COLORS.map((color) => (
+                <button
+                  key={color}
+                  className={`create-asset-modal__quick-color-option ${selectedColor === color ? 'create-asset-modal__quick-color-option--selected' : ''}`}
+                  style={{ backgroundColor: color }}
+                  onClick={() => setSelectedColor(color)}
+                  title={color}
+                />
+              ))}
+            </div>
           </div>
         </div>
 

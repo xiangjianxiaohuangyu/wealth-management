@@ -57,12 +57,38 @@ export function InvestmentCalculator() {
     return [principalData, totalAmountData]
   }, [calculatedResult])
 
+  // 自定义 tooltip 格式化器
+  const tooltipFormatter = ((params: any) => {
+    let result = `${params[0].axisValue}<br/>`
+
+    // 找到累计本金和总金额
+    let principalValue = 0
+    let totalAmountValue = 0
+
+    params.forEach((param: any) => {
+      const formattedValue = formatCurrency(param.value, 'CNY')
+      result += `${param.marker}${param.seriesName}: ${formattedValue}<br/>`
+
+      if (param.seriesName === '累计本金') {
+        principalValue = param.value
+      } else if (param.seriesName === '总金额') {
+        totalAmountValue = param.value
+      }
+    })
+
+    // 计算并显示投资收益
+    const investmentReturn = totalAmountValue - principalValue
+    const returnFormatted = formatCurrency(investmentReturn, 'CNY')
+    result += `<span style="color: ${investmentReturn >= 0 ? '#00b894' : '#d63031'}">● 投资收益: ${returnFormatted}</span>`
+
+    return result
+  })
+
   return (
     <Card title="投资计算器 - 慢慢变富" className="investment-calculator">
       <div className="investment-calculator__content">
-        {/* 输入表单 */}
+        {/* 输入表单 - 四个输入框在同一行 */}
         <div className="investment-calculator__form">
-          {/* 第一行：初始本金和每月投入 */}
           <div className="investment-calculator__row">
             <div className="investment-calculator__field">
               <label htmlFor="principal">初始本金</label>
@@ -87,10 +113,7 @@ export function InvestmentCalculator() {
                 step="100"
               />
             </div>
-          </div>
 
-          {/* 第二行：年化收益率和投资年限 */}
-          <div className="investment-calculator__row">
             <div className="investment-calculator__field">
               <label htmlFor="return">年化收益率 (%)</label>
               <input
@@ -117,23 +140,24 @@ export function InvestmentCalculator() {
               />
             </div>
           </div>
-
-          {/* 线性图表 */}
-          {calculatedResult && (
-            <div className="investment-calculator__chart">
-              <LineChart
-                data={lineChartData}
-                height={350}
-                showLegend={true}
-                showArea={false}
-                showPoints={true}
-                title="本金与总金额趋势"
-              />
-            </div>
-          )}
         </div>
 
-        {/* 计算结果 */}
+        {/* 线性图表 - 占据一整行 */}
+        {calculatedResult && (
+          <div className="investment-calculator__chart">
+            <LineChart
+              data={lineChartData}
+              height={350}
+              showLegend={true}
+              showArea={false}
+              showPoints={true}
+              title="本金与总金额趋势"
+              tooltipFormatter={tooltipFormatter}
+            />
+          </div>
+        )}
+
+        {/* 计算结果 - 占据一整行 */}
         {calculatedResult && (
           <div className="investment-calculator__result">
             <h3>计算结果</h3>

@@ -240,32 +240,69 @@
   padding: var(--spacing-sm, 8px) 0;
 }
 
-.portfolio-table__color-selector {
+/* 颜色选择器包装器 */
+.portfolio-table__color-picker-wrapper {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 4px;
   justify-content: center;
-  max-width: 120px;
 }
 
-.portfolio-table__color-option {
+/* 原生颜色选择器 */
+.portfolio-table__color-input {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 2px solid var(--color-border, rgba(255, 255, 255, 0.2));
+  border-radius: 50%;
+  cursor: pointer;
+  background: none;
+  transition: all var(--transition-fast, 0.15s) ease;
+}
+
+/* 自定义颜色预览 */
+.portfolio-table__color-input::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.portfolio-table__color-input::-webkit-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+.portfolio-table__color-input:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.portfolio-table__color-input:focus {
+  outline: none;
+  border-color: var(--color-primary, #4da3ff);
+  box-shadow: 0 0 0 2px rgba(77, 163, 255, 0.1);
+}
+
+/* 清除颜色按钮 */
+.portfolio-table__color-clear {
   width: 18px;
   height: 18px;
+  padding: 0;
+  border: none;
   border-radius: 50%;
-  border: 2px solid transparent;
+  background: rgba(214, 48, 49, 0.15);
+  color: #d63031;
+  font-size: 14px;
+  font-weight: bold;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all var(--transition-fast, 0.15s) ease;
-  flex-shrink: 0;
+  line-height: 1;
 }
 
-.portfolio-table__color-option:hover {
-  transform: scale(1.15);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-.portfolio-table__color-option--selected {
-  border-color: var(--color-text, #2d3436);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+.portfolio-table__color-clear:hover {
+  background: rgba(214, 48, 49, 0.25);
+  transform: scale(1.1);
 }
 
 /* 颜色指示器样式 */

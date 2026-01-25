@@ -1,0 +1,134 @@
+/**
+ * 资产记录表格组件样式
+ */
+
+.asset-record-table {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--border-radius-md, 8px);
+}
+
+.asset-record-table__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm, 13px);
+}
+
+.asset-record-table__table th,
+.asset-record-table__table td {
+  padding: var(--spacing-sm, 12px) var(--spacing-md, 16px);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border-light, #dfe6e9);
+}
+
+.asset-record-table__table th {
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text, #2d3436);
+  font-size: var(--font-size-sm, 13px);
+  background-color: rgba(77, 163, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.asset-record-table__table td {
+  font-size: var(--font-size-sm, 13px);
+  color: var(--color-text, #2d3436);
+}
+
+.asset-record-table__table tr:last-child td {
+  border-bottom: none;
+}
+
+.asset-record-table__table tr:hover {
+  background-color: rgba(77, 163, 255, 0.05);
+}
+
+.asset-record-table__positive {
+  color: #00b894;
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.asset-record-table__notes {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-secondary, #636e72);
+  cursor: help;
+}
+
+.asset-record-table__notes:hover {
+  color: var(--color-text, #2d3436);
+}
+
+.asset-record-table__btn {
+  padding: var(--spacing-xs, 6px) var(--spacing-sm, 12px);
+  border: none;
+  border-radius: var(--border-radius-sm, 4px);
+  font-size: var(--font-size-xs, 12px);
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+  margin-right: var(--spacing-xs, 8px);
+  transition: all 0.2s;
+}
+
+.asset-record-table__btn:last-child {
+  margin-right: 0;
+}
+
+.asset-record-table__btn--edit {
+  background-color: rgba(9, 132, 227, 0.1);
+  color: #0984e3;
+}
+
+.asset-record-table__btn--edit:hover {
+  background-color: rgba(9, 132, 227, 0.2);
+}
+
+.asset-record-table__btn--delete {
+  background-color: rgba(214, 48, 49, 0.1);
+  color: #d63031;
+}
+
+.asset-record-table__btn--delete:hover {
+  background-color: rgba(214, 48, 49, 0.2);
+}
+
+.asset-record-table__empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.asset-record-table__empty-icon {
+  font-size: 64px;
+  margin-bottom: var(--spacing-md, 16px);
+  opacity: 0.5;
+}
+
+.asset-record-table__empty-text {
+  font-size: var(--font-size-lg, 18px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text, #2d3436);
+  margin-bottom: var(--spacing-xs, 8px);
+}
+
+.asset-record-table__empty-hint {
+  font-size: var(--font-size-base, 14px);
+  color: var(--color-text-secondary, #636e72);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .asset-record-table {
+    font-size: var(--font-size-xs, 12px);
+  }
+
+  .asset-record-table__table th,
+  .asset-record-table__table td {
+    padding: var(--spacing-xs, 8px) var(--spacing-sm, 12px);
+  }
+
+  .asset-record-table__notes {
+    max-width: 100px;
+  }
+}

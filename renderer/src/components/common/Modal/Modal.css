@@ -72,21 +72,20 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* 关闭按钮 - 优化样式 */
+/* 关闭按钮 - 正方形框体 */
 .modal__close {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-sm, 4px);
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--color-text-secondary);
   transition: all var(--transition-fast, 0.15s) ease;
-  outline: none;
   line-height: 1;
 }
 
@@ -94,11 +93,10 @@
   background: rgba(255, 77, 77, 0.15);
   border-color: rgba(255, 77, 77, 0.3);
   color: var(--color-text);
-  transform: rotate(90deg) scale(1.1);
 }
 
 .modal__close:active {
-  transform: rotate(90deg) scale(1);
+  background: rgba(255, 77, 77, 0.2);
 }
 
 /* 模态框主体 */

@@ -10,6 +10,7 @@ import type { RouteConfig, MenuItem } from '../types/navigation.types'
  */
 const WealthOverview = lazy(() => import('../pages/WealthOverview'))
 const Investment = lazy(() => import('../pages/Investment'))
+const AssetTracking = lazy(() => import('../pages/AssetTracking'))
 const Changelog = lazy(() => import('../pages/Changelog'))
 const Settings = lazy(() => import('../pages/Settings'))
 
@@ -38,13 +39,23 @@ export const routeConfigs: RouteConfig[] = [
     }
   },
   {
+    path: '/asset-tracking',
+    component: AssetTracking,
+    title: '资产跟踪',
+    meta: {
+      description: '记录和追踪每月资产变化',
+      icon: '📈',
+      order: 3
+    }
+  },
+  {
     path: '/changelog',
     component: Changelog,
     title: '开发日志',
     meta: {
       description: '查看应用更新历史',
       icon: '📝',
-      order: 3
+      order: 4
     }
   },
   {
@@ -54,7 +65,7 @@ export const routeConfigs: RouteConfig[] = [
     meta: {
       description: '应用设置和数据管理',
       icon: '⚙️',
-      order: 4
+      order: 5
     }
   }
 ]
