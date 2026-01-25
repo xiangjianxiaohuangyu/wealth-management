@@ -33,16 +33,16 @@ export interface DeviationResult {
 /**
  * 计算偏离度
  *
- * 计算规则：
- * - |实际比例 - 计划比例| ≤ 5% → balanced (已平衡)
- * - 实际比例 < 计划比例 - 5% → need-buy (需补仓)
- * - 实际比例 > 计划比例 + 5% → need-sell (需减持)
+ * 计算规则（基于金额比较）：
+ * - |实际金额 - 计划金额| / 计划金额 ≤ 5% → balanced (已平衡)
+ * - 实际金额 < 计划金额 → need-buy (需补仓)
+ * - 实际金额 > 计划金额 → need-sell (需减持)
  *
  * @param plannedPercentage - 计划比例
  * @param actualPercentage - 实际比例
  * @param plannedAmount - 计划金额
  * @param actualAmount - 实际金额
- * @param threshold - 阈值（默认5%）
+ * @param threshold - 阈值百分比（默认5%）
  * @returns 偏离状态和金额
  */
 export function calculateDeviation(
@@ -52,10 +52,23 @@ export function calculateDeviation(
   actualAmount: number,
   threshold: number = 5
 ): DeviationResult {
-  const percentageDiff = actualPercentage - plannedPercentage
+  // 基于金额计算差异
+  const amountDiff = actualAmount - plannedAmount
+
+  // 如果计划金额为0，认为是已平衡
+  if (plannedAmount === 0) {
+    return {
+      type: 'balanced',
+      percentageDiff: 0,
+      amountDiff: 0
+    }
+  }
+
+  // 计算差异百分比
+  const diffPercentage = (Math.abs(amountDiff) / plannedAmount) * 100
 
   // 检查是否在阈值范围内
-  if (Math.abs(percentageDiff) <= threshold) {
+  if (diffPercentage <= threshold) {
     return {
       type: 'balanced',
       percentageDiff: 0,
@@ -64,19 +77,19 @@ export function calculateDeviation(
   }
 
   // 超过阈值，需要调整
-  if (percentageDiff > 0) {
-    // 实际比例过高，需要减持
+  if (amountDiff > 0) {
+    // 实际金额过多，需要减持
     return {
       type: 'need-sell',
-      percentageDiff,
-      amountDiff: Math.abs(actualAmount - plannedAmount)
+      percentageDiff: actualPercentage - plannedPercentage,
+      amountDiff: Math.abs(amountDiff)
     }
   } else {
-    // 实际比例过低，需要增持
+    // 实际金额不足，需要补仓
     return {
       type: 'need-buy',
-      percentageDiff,
-      amountDiff: Math.abs(plannedAmount - actualAmount)
+      percentageDiff: actualPercentage - plannedPercentage,
+      amountDiff: Math.abs(amountDiff)
     }
   }
 }

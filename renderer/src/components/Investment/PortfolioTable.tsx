@@ -30,6 +30,8 @@ export interface PortfolioTableProps {
   onDelete: (id: string) => void
   /** 添加资产回调 */
   onAddAsset: () => void
+  /** 显示提示消息 */
+  onShowToast?: (message: string, type?: 'info' | 'warning' | 'error') => void
 }
 
 export function PortfolioTable({
@@ -41,12 +43,13 @@ export function PortfolioTable({
   onSave,
   onCancel,
   onDelete,
-  onAddAsset
+  onAddAsset,
+  onShowToast
 }: PortfolioTableProps) {
   return (
     <div className="portfolio-table">
       {/* 图表区域 */}
-      <PortfolioCharts assets={assets} />
+      <PortfolioCharts assets={assets} totalAmount={totalAmount} />
 
       {/* 表头 */}
       <div className="portfolio-table__header">
@@ -73,10 +76,12 @@ export function PortfolioTable({
               isEditing={editingId === asset.id}
               totalAmount={totalAmount}
               totalActualAmount={totalActualAmount}
+              allAssets={assets}
               onEdit={onEdit}
               onSave={onSave}
               onCancel={onCancel}
               onDelete={onDelete}
+              onShowToast={onShowToast}
             />
           ))
         )}

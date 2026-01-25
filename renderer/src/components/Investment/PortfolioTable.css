@@ -10,7 +10,7 @@
 
 .portfolio-table__header {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1.2fr 0.8fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1.2fr 0.8fr;
   gap: var(--spacing-md, 12px);
   padding: var(--spacing-md, 12px);
   margin: -1px -1px 0 -1px; /* 与卡片边缘重合 */
@@ -23,7 +23,7 @@
   border-bottom: 1px solid var(--color-border-light, rgba(255, 255, 255, 0.1));
   border-radius: var(--border-radius-md, 8px) var(--border-radius-md, 8px) 0 0;
   font-weight: var(--font-weight-medium, 500);
-  font-size: var(--font-size-xs, 11px);
+  font-size: var(--font-size-base, 14px);
   color: var(--color-text, #2d3436);
   text-align: center;
 }
@@ -100,7 +100,7 @@
 /* 响应式设计 */
 @media (max-width: 1024px) {
   .portfolio-table__header {
-    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1.2fr 0.8fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1.2fr 0.8fr;
     min-width: 900px;
   }
 

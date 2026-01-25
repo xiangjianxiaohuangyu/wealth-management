@@ -32,6 +32,15 @@
   border: 1px solid var(--color-border, rgba(255, 255, 255, 0.2));
   border-radius: var(--border-radius-sm, 4px);
   transition: all var(--transition-fast, 0.15s) ease;
+  /* 隐藏number输入框的上下箭头 */
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.create-asset-modal__input::-webkit-outer-spin-button,
+.create-asset-modal__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .create-asset-modal__input:focus {
@@ -67,9 +76,22 @@
   color: var(--color-text-secondary, #636e72);
 }
 
+.create-asset-modal__hint--error {
+  color: #d63031;
+}
+
 .create-asset-modal__hint-value {
   font-weight: var(--font-weight-semibold, 600);
   color: var(--color-primary, #4da3ff);
+}
+
+.create-asset-modal__input--error {
+  border-color: #d63031 !important;
+}
+
+.create-asset-modal__input--error:focus {
+  border-color: #d63031 !important;
+  box-shadow: 0 0 0 2px rgba(214, 48, 49, 0.1) !important;
 }
 
 .create-asset-modal__preview {
@@ -131,4 +153,43 @@
 
 .create-asset-modal__btn--disabled:hover {
   background: rgba(149, 165, 166, 0.15);
+}
+
+.create-asset-modal__color-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm, 8px);
+  padding: var(--spacing-sm, 8px) 0;
+}
+
+.create-asset-modal__color-option {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+  position: relative;
+}
+
+.create-asset-modal__color-option:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.create-asset-modal__color-option--selected {
+  border-color: var(--color-text, #2d3436);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.create-asset-modal__color-option--selected::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 }

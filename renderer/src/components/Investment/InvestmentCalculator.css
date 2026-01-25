@@ -15,6 +15,12 @@
 .investment-calculator__form {
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-lg, 16px);
+}
+
+.investment-calculator__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--spacing-md, 12px);
 }
 
@@ -49,6 +55,24 @@
   display: flex;
   gap: var(--spacing-md, 12px);
   margin-top: var(--spacing-sm, 8px);
+}
+
+.investment-calculator__chart {
+  margin-top: var(--spacing-lg, 16px);
+  padding: var(--spacing-md, 12px);
+  background-color: var(--color-bg-elevated, #ffffff);
+  border-radius: var(--border-radius-md, 8px);
+  border: 1px solid var(--color-border, #dfe6e9);
+}
+
+/* 覆盖图表标题颜色为白色 */
+.investment-calculator__chart .chart text {
+  fill: #ffffff !important;
+}
+
+/* 覆盖图表图例文字颜色 */
+.investment-calculator__chart .chart .echarts-legend text {
+  fill: #ffffff !important;
 }
 
 .investment-calculator__result {
@@ -145,6 +169,10 @@
 /* 响应式 */
 @media (max-width: 768px) {
   .investment-calculator__content {
+    grid-template-columns: 1fr;
+  }
+
+  .investment-calculator__row {
     grid-template-columns: 1fr;
   }
 }

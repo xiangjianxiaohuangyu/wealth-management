@@ -34,6 +34,8 @@ export interface AssetAllocationItem {
   suggestion: OperationSuggestion
   /** 建议金额差异 */
   suggestionAmount: number
+  /** 资产颜色（用于图表显示） */
+  color?: string
 }
 
 /**

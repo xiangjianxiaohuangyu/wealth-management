@@ -1,0 +1,60 @@
+/**
+ * 确认弹窗组件样式
+ */
+
+.confirm-dialog__content {
+  padding: var(--spacing-md, 12px) 0;
+}
+
+.confirm-dialog__message {
+  font-size: var(--font-size-base, 14px);
+  color: var(--color-text, #2d3436);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.confirm-dialog__btn {
+  padding: var(--spacing-sm, 8px) var(--spacing-lg, 16px);
+  font-size: var(--font-size-sm, 12px);
+  font-weight: var(--font-weight-medium, 500);
+  border: none;
+  border-radius: var(--border-radius-sm, 4px);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+}
+
+.confirm-dialog__btn--cancel {
+  background: rgba(149, 165, 166, 0.15);
+  color: #636e72;
+}
+
+.confirm-dialog__btn--cancel:hover {
+  background: rgba(149, 165, 166, 0.25);
+}
+
+.confirm-dialog__btn--confirm {
+  background: rgba(214, 48, 49, 0.15);
+  color: #d63031;
+}
+
+.confirm-dialog__btn--confirm:hover {
+  background: rgba(214, 48, 49, 0.25);
+}
+
+.confirm-dialog__btn--warning {
+  background: rgba(253, 203, 110, 0.15);
+  color: #fdcb6e;
+}
+
+.confirm-dialog__btn--warning:hover {
+  background: rgba(253, 203, 110, 0.25);
+}
+
+.confirm-dialog__btn--info {
+  background: rgba(77, 163, 255, 0.15);
+  color: #4da3ff;
+}
+
+.confirm-dialog__btn--info:hover {
+  background: rgba(77, 163, 255, 0.25);
+}

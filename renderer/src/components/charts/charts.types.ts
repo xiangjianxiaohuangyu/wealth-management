@@ -72,6 +72,8 @@ export interface PieChartProps extends BaseChartProps {
   data: PieDataItem[]
   /** 图表标题 */
   title?: string
+  /** 环形图中间文字（仅环形图有效） */
+  centerText?: string
   /** 是否显示图例 */
   showLegend?: boolean
   /** 是否显示百分比 */

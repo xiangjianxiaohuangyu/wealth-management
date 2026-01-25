@@ -7,11 +7,13 @@
  * - 实时计算预览
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import type { AssetAllocationItem } from '../../types/investment.types'
 import { OperationSuggestion } from './OperationSuggestion'
 import { formatCurrency } from '../../utils/format/currency'
 import { updateAssetCalculations } from '../../utils/calculation/portfolioCalculation'
+import { calculateTotalPercentage } from '../../utils/validation/investmentValidation'
+import { CHART_COLORS } from '../../utils/constants'
 import './PortfolioTableRow.css'
 
 export interface PortfolioTableRowProps {
@@ -23,6 +25,8 @@ export interface PortfolioTableRowProps {
   totalAmount: number
   /** 总实际金额（用于计算实际比例） */
   totalActualAmount: number
+  /** 所有资产列表（用于校验） */
+  allAssets: AssetAllocationItem[]
   /** 编辑按钮点击回调 */
   onEdit: (id: string) => void
   /** 保存回调 */
@@ -31,6 +35,8 @@ export interface PortfolioTableRowProps {
   onCancel: () => void
   /** 删除回调 */
   onDelete: (id: string) => void
+  /** 显示提示消息 */
+  onShowToast?: (message: string, type?: 'info' | 'warning' | 'error') => void
 }
 
 export function PortfolioTableRow({
@@ -38,19 +44,29 @@ export function PortfolioTableRow({
   isEditing,
   totalAmount,
   totalActualAmount,
+  allAssets,
   onEdit,
   onSave,
   onCancel,
-  onDelete
+  onDelete,
+  onShowToast
 }: PortfolioTableRowProps) {
   // 编辑时的临时数据
   const [tempAsset, setTempAsset] = useState<AssetAllocationItem>(asset)
   const [calculatedAsset, setCalculatedAsset] = useState<AssetAllocationItem>(asset)
+  const [percentageError, setPercentageError] = useState('')
+
+  // 计算最大可用比例
+  const maxPercentage = useMemo(() => {
+    const otherTotal = calculateTotalPercentage(allAssets, asset.id)
+    return Math.max(0, 100 - otherTotal)
+  }, [allAssets, asset.id])
 
   // 当 asset 变化或进入/退出编辑模式时，更新临时数据
   useEffect(() => {
     setTempAsset(asset)
     setCalculatedAsset(asset)
+    setPercentageError('')
   }, [asset.id, asset.plannedPercentage, asset.actualAmount, asset.name])
 
   // 实时计算预览（编辑模式）
@@ -69,28 +85,80 @@ export function PortfolioTableRow({
     onSave(asset.id, {
       name: tempAsset.name,
       plannedPercentage: tempAsset.plannedPercentage,
-      actualAmount: tempAsset.actualAmount
+      actualAmount: tempAsset.actualAmount,
+      color: tempAsset.color
     })
   }
 
   const handleCancel = () => {
     setTempAsset(asset)
+    setPercentageError('')
     onCancel()
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.currentTarget.blur()
+    }
+  }
+
+  const handlePercentageChange = (value: string) => {
+    let numValue = parseFloat(value) || 0
+
+    // 自动调整：如果超过最大可用比例，自动设置为最大值
+    if (numValue > maxPercentage) {
+      numValue = maxPercentage
+      setPercentageError('')
+      onShowToast?.(`比例已自动调整为最大可用值 ${maxPercentage.toFixed(1)}%`, 'warning')
+    } else {
+      setPercentageError('')
+    }
+
+    setTempAsset({
+      ...tempAsset,
+      plannedPercentage: numValue
+    })
+  }
+
+  const handleActualAmountChange = (value: string) => {
+    let numValue = parseFloat(value) || 0
+
+    // 如果第一位是0且长度大于1，自动去掉前面的0
+    if (value.startsWith('0') && value.length > 1 && !value.startsWith('0.')) {
+      numValue = parseFloat(value.replace(/^0+/, '')) || 0
+    }
+
+    setTempAsset({
+      ...tempAsset,
+      actualAmount: numValue
+    })
   }
 
   if (isEditing) {
     // 编辑模式
     return (
       <div className="portfolio-table__row portfolio-table__row--editing">
-        {/* 资产名称 */}
-        <div className="portfolio-table__cell">
+        {/* 资产名称和颜色 */}
+        <div className="portfolio-table__cell portfolio-table__cell--with-color">
           <input
             type="text"
             className="portfolio-table__input"
             value={tempAsset.name}
             onChange={e => setTempAsset({ ...tempAsset, name: e.target.value })}
+            onKeyDown={handleKeyDown}
             placeholder="资产名称"
           />
+          <div className="portfolio-table__color-selector">
+            {CHART_COLORS.map((color) => (
+              <button
+                key={color}
+                className={`portfolio-table__color-option ${tempAsset.color === color ? 'portfolio-table__color-option--selected' : ''}`}
+                style={{ backgroundColor: color }}
+                onClick={() => setTempAsset({ ...tempAsset, color: tempAsset.color === color ? undefined : color })}
+                title={color}
+              />
+            ))}
+          </div>
         </div>
 
         {/* 计划比例 */}
@@ -98,20 +166,19 @@ export function PortfolioTableRow({
           <div className="portfolio-table__input-wrapper">
             <input
               type="number"
-              className="portfolio-table__input"
+              className={`portfolio-table__input ${percentageError ? 'portfolio-table__input--error' : ''}`}
               min="0"
               max="100"
               step="0.1"
               value={tempAsset.plannedPercentage}
-              onChange={e =>
-                setTempAsset({
-                  ...tempAsset,
-                  plannedPercentage: parseFloat(e.target.value) || 0
-                })
-              }
+              onChange={e => handlePercentageChange(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <span className="portfolio-table__suffix">%</span>
           </div>
+          {percentageError && (
+            <div className="portfolio-table__error">{percentageError}</div>
+          )}
         </div>
 
         {/* 计划金额 - 自动计算 */}
@@ -130,12 +197,8 @@ export function PortfolioTableRow({
               min="0"
               step="100"
               value={tempAsset.actualAmount}
-              onChange={e =>
-                setTempAsset({
-                  ...tempAsset,
-                  actualAmount: parseFloat(e.target.value) || 0
-                })
-              }
+              onChange={e => handleActualAmountChange(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <span className="portfolio-table__suffix">￥</span>
           </div>
@@ -180,7 +243,16 @@ export function PortfolioTableRow({
     <div className="portfolio-table__row">
       {/* 资产名称 */}
       <div className="portfolio-table__cell portfolio-table__cell--name">
-        <span className="portfolio-table__value">{asset.name}</span>
+        <div className="portfolio-table__name-with-color">
+          {asset.color && (
+            <span
+              className="portfolio-table__color-indicator"
+              style={{ backgroundColor: asset.color }}
+              title={asset.color}
+            />
+          )}
+          <span className="portfolio-table__value">{asset.name}</span>
+        </div>
       </div>
 
       {/* 计划比例 */}

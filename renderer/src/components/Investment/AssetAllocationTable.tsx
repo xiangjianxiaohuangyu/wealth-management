@@ -5,13 +5,15 @@
  * - 显示总投资金额输入
  * - 支持千分位格式化
  * - 投资组合管理
+ * - 数据持久化
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card } from '../common/Card'
 import { TotalInvestmentInput } from './TotalInvestmentInput'
 import { PortfolioCard } from './PortfolioCard'
 import type { AssetAllocationItem } from '../../types/investment.types'
+import { investmentStorage } from '../../services/storage/investmentStorage'
 import './AssetAllocationTable.css'
 
 interface TotalInvestmentProps {
@@ -27,6 +29,27 @@ export function AssetAllocationTable({
 }: TotalInvestmentProps) {
   const [totalAmount, setTotalAmount] = useState(initialAmount)
   const [assets, setAssets] = useState<AssetAllocationItem[]>([])
+
+  // 初始化：从localStorage加载数据
+  useEffect(() => {
+    const savedTotalAmount = investmentStorage.getTotalAmount()
+    const savedAssets = investmentStorage.getAssets()
+
+    if (savedTotalAmount > 0) {
+      setTotalAmount(savedTotalAmount)
+    }
+
+    if (savedAssets.length > 0) {
+      setAssets(savedAssets)
+    }
+  }, [])
+
+  // 保存数据到localStorage
+  useEffect(() => {
+    if (totalAmount > 0 || assets.length > 0) {
+      investmentStorage.saveInvestment(totalAmount, assets)
+    }
+  }, [totalAmount, assets])
 
   // 总投资金额变化
   const handleTotalAmountChange = (value: number) => {

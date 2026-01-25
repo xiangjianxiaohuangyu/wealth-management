@@ -7,7 +7,7 @@
  * - 3秒后自动淡出
  */
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './ValidationToast.css'
 
 export interface ValidationToastProps {
@@ -30,20 +30,36 @@ export function ValidationToast({
   duration = 3000,
   onClose
 }: ValidationToastProps) {
+  const [isHiding, setIsHiding] = useState(false)
+
   useEffect(() => {
-    if (show && duration > 0) {
-      const timer = setTimeout(() => {
-        onClose?.()
-      }, duration)
+    if (show) {
+      setIsHiding(false)
 
-      return () => clearTimeout(timer)
+      if (duration > 0) {
+        const hideTimer = setTimeout(() => {
+          setIsHiding(true)
+        }, duration)
+
+        return () => clearTimeout(hideTimer)
+      }
     }
-  }, [show, duration, onClose])
+  }, [show, duration])
 
-  if (!show) return null
+  useEffect(() => {
+    if (isHiding) {
+      const closeTimer = setTimeout(() => {
+        onClose?.()
+      }, 300) // 等待淡出动画完成
+
+      return () => clearTimeout(closeTimer)
+    }
+  }, [isHiding, onClose])
+
+  if (!show && !isHiding) return null
 
   return (
-    <div className={`validation-toast validation-toast--${type} ${show ? 'show' : ''}`}>
+    <div className={`validation-toast validation-toast--${type} ${show && !isHiding ? 'show' : ''} ${isHiding ? 'hiding' : ''}`}>
       <div className="validation-toast__icon">
         {type === 'error' ? '⚠️' : 'ℹ️'}
       </div>

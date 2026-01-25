@@ -13,23 +13,41 @@ import './PortfolioCharts.css'
 export interface PortfolioChartsProps {
   /** 资产列表 */
   assets: AssetAllocationItem[]
+  /** 总投资金额 */
+  totalAmount: number
 }
 
-export function PortfolioCharts({ assets }: PortfolioChartsProps) {
+export function PortfolioCharts({ assets, totalAmount }: PortfolioChartsProps) {
+  // 计算所有资产的计划比例总和
+  const totalPlannedPercentage = assets.reduce((sum, asset) => sum + asset.plannedPercentage, 0)
+
   // 计划配置数据
   const plannedData = assets
     .filter(asset => asset.plannedAmount > 0)
     .map(asset => ({
       name: asset.name,
-      value: asset.plannedAmount
+      value: asset.plannedAmount,
+      color: asset.color
     }))
 
-  // 实际配置数据
+  // 添加未分配部分
+  if (totalPlannedPercentage < 100 && totalAmount > 0) {
+    const unallocatedPercentage = 100 - totalPlannedPercentage
+    const unallocatedAmount = (unallocatedPercentage * totalAmount) / 100
+    plannedData.push({
+      name: '未分配',
+      value: unallocatedAmount,
+      color: '#b2bec3' // 灰色
+    })
+  }
+
+  // 实际配置数据（基于实际金额）
   const actualData = assets
     .filter(asset => asset.actualAmount > 0)
     .map(asset => ({
       name: asset.name,
-      value: asset.actualAmount
+      value: asset.actualAmount,
+      color: asset.color
     }))
 
   const hasData = assets.length > 0
@@ -39,14 +57,14 @@ export function PortfolioCharts({ assets }: PortfolioChartsProps) {
       <div className="portfolio-charts__container">
         {/* 计划配置环形图 */}
         <div className="portfolio-charts__chart">
-          <h3 className="portfolio-charts__title">计划配置</h3>
           <PieChart
             data={plannedData}
+            centerText="计划配置"
             donut={true}
-            radius={['45%', '75%']}
-            height={220}
-            showLegend={true}
-            showPercentage={true}
+            radius={['40%', '75%']}
+            height={300}
+            showLegend={false}
+            showPercentage={false}
             empty={!hasData}
             emptyText="暂无计划配置"
           />
@@ -54,14 +72,14 @@ export function PortfolioCharts({ assets }: PortfolioChartsProps) {
 
         {/* 实际配置环形图 */}
         <div className="portfolio-charts__chart">
-          <h3 className="portfolio-charts__title">实际配置</h3>
           <PieChart
             data={actualData}
+            centerText="实际配置"
             donut={true}
-            radius={['45%', '75%']}
-            height={220}
-            showLegend={true}
-            showPercentage={true}
+            radius={['40%', '75%']}
+            height={300}
+            showLegend={false}
+            showPercentage={false}
             empty={!hasData}
             emptyText="暂无实际配置"
           />

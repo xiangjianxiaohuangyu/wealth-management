@@ -13,6 +13,7 @@ import { Card } from '../common/Card'
 import { PortfolioTable } from './PortfolioTable'
 import { CreateAssetModal } from './CreateAssetModal'
 import { ValidationToast } from './ValidationToast'
+import { ConfirmDialog } from './ConfirmDialog'
 import type { AssetAllocationItem } from '../../types/investment.types'
 import { updateAllAssetsCalculations } from '../../utils/calculation/portfolioCalculation'
 import { validateAssetPercentage, calculateTotalPercentage } from '../../utils/validation/investmentValidation'
@@ -31,6 +32,8 @@ export interface PortfolioCardProps {
 export function PortfolioCard({ totalAmount, assets, onAssetsChange }: PortfolioCardProps) {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [deletingAssetId, setDeletingAssetId] = useState<string | null>(null)
   const [validation, setValidation] = useState<{
     show: boolean
     message: string
@@ -52,13 +55,18 @@ export function PortfolioCard({ totalAmount, assets, onAssetsChange }: Portfolio
     setValidation({ show: true, message, type })
   }, [])
 
+  // 显示提示消息（用于传递给子组件）
+  const handleShowToast = useCallback((message: string, type?: 'info' | 'warning' | 'error') => {
+    showValidation(message, type === 'error' ? 'error' : 'warning')
+  }, [showValidation])
+
   // 隐藏验证提示
   const hideValidation = useCallback(() => {
     setValidation(prev => ({ ...prev, show: false }))
   }, [])
 
   // 添加新资产
-  const handleAddAsset = useCallback((name: string, percentage: number) => {
+  const handleAddAsset = useCallback((name: string, percentage: number, actualAmount: number = 0, color?: string) => {
     // 验证比例
     const result = validateAssetPercentage(percentage, assets)
 
@@ -73,10 +81,11 @@ export function PortfolioCard({ totalAmount, assets, onAssetsChange }: Portfolio
       mode: 'percentage',
       plannedPercentage: result.adjustedPercentage,
       plannedAmount: (result.adjustedPercentage * totalAmount) / 100,
-      actualAmount: 0,
+      actualAmount: actualAmount,
       actualPercentage: 0,
       suggestion: 'balanced',
-      suggestionAmount: 0
+      suggestionAmount: 0,
+      color
     }
 
     // 更新列表
@@ -119,10 +128,27 @@ export function PortfolioCard({ totalAmount, assets, onAssetsChange }: Portfolio
 
   // 删除资产
   const handleDeleteAsset = useCallback((id: string) => {
-    const updatedAssets = assets.filter(asset => asset.id !== id)
+    setDeletingAssetId(id)
+    setIsDeleteDialogOpen(true)
+  }, [])
+
+  // 确认删除
+  const handleConfirmDelete = useCallback(() => {
+    if (!deletingAssetId) return
+
+    const updatedAssets = assets.filter(asset => asset.id !== deletingAssetId)
     const recalculatedAssets = updateAllAssetsCalculations(updatedAssets, totalAmount)
     onAssetsChange(recalculatedAssets)
-  }, [assets, totalAmount, onAssetsChange])
+
+    setIsDeleteDialogOpen(false)
+    setDeletingAssetId(null)
+  }, [assets, totalAmount, onAssetsChange, deletingAssetId])
+
+  // 取消删除
+  const handleCancelDelete = useCallback(() => {
+    setIsDeleteDialogOpen(false)
+    setDeletingAssetId(null)
+  }, [])
 
   // 进入编辑模式
   const handleStartEdit = useCallback((id: string) => {
@@ -156,6 +182,7 @@ export function PortfolioCard({ totalAmount, assets, onAssetsChange }: Portfolio
           onCancel={handleCancelEdit}
           onDelete={handleDeleteAsset}
           onAddAsset={() => setIsCreateModalOpen(true)}
+          onShowToast={handleShowToast}
         />
       </Card>
 
@@ -174,6 +201,18 @@ export function PortfolioCard({ totalAmount, assets, onAssetsChange }: Portfolio
         message={validation.message}
         type={validation.type}
         onClose={hideValidation}
+      />
+
+      {/* 删除确认弹窗 */}
+      <ConfirmDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        title="确认删除"
+        message={`确定要删除资产"${deletingAssetId ? assets.find(a => a.id === deletingAssetId)?.name : ''}"吗？此操作不可恢复。`}
+        confirmText="确认删除"
+        cancelText="取消"
+        type="danger"
       />
     </>
   )

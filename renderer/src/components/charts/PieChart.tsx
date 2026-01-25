@@ -13,6 +13,7 @@ import './Charts.css'
 export function PieChart({
   data = [],
   title,
+  centerText,
   showLegend = true,
   showPercentage = true,
   radius = ['0%', '70%'],
@@ -132,7 +133,7 @@ export function PieChart({
           label: {
             show: true,
             formatter: showPercentage ? '{b}: {d}%' : '{b}',
-            fontSize: 12
+            fontSize: 14
           },
           emphasis: {
             label: {
@@ -157,7 +158,20 @@ export function PieChart({
             }
           }))
         }
-      ]
+      ],
+      // 环形图中间文字
+      graphic: donut && centerText ? [{
+        type: 'text',
+        left: 'center',
+        top: 'center',
+        style: {
+          text: centerText,
+          textAlign: 'center',
+          fill: '#ffffff',
+          fontSize: 20,
+          fontWeight: 600
+        }
+      }] : undefined
     }
 
     chart.setOption(option, true)

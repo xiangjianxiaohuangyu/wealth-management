@@ -39,6 +39,12 @@
   pointer-events: auto;
 }
 
+.validation-toast.hiding {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.3s ease;
+}
+
 .validation-toast--warning {
   background: rgba(253, 203, 110, 0.15);
   border-color: rgba(253, 203, 110, 0.3);
