@@ -8,7 +8,7 @@ import type { Theme, Language, Currency } from '../../types/common.types'
 import { assetTrackingStorage } from './assetTrackingStorage'
 import { investmentStorage } from './investmentStorage'
 import { calculatorStorage } from './calculatorStorage'
-import { APP_INFO } from '../../utils/constants'
+import { dataVersionService } from './dataVersionService'
 
 /**
  * 存储键名
@@ -151,76 +151,33 @@ export const settingsStorage = {
  */
 export const userDataStorage = {
   /**
-   * 导出所有应用数据
+   * 导出所有应用数据（带版本控制）
    */
   exportData(): string {
-    const exportData = {
-      version: APP_INFO.VERSION,
-      exportDate: new Date().toISOString(),
-      data: {
-        // 应用设置
-        settings: settingsStorage.getAllSettings(),
-
-        // 资产跟踪数据
-        assetTracking: assetTrackingStorage.getData(),
-
-        // 投资规划数据
-        investment: {
-          assets: investmentStorage.getAssets(),
-          totalAmount: investmentStorage.getTotalAmount()
-        },
-
-        // 计算器数据
-        calculator: {
-          params: calculatorStorage.getParams()
-        }
-      }
-    }
-    return JSON.stringify(exportData, null, 2)
+    return dataVersionService.exportData()
   },
 
   /**
-   * 导入应用数据
+   * 导入应用数据（带版本检查和迁移）
    */
-  importData(jsonString: string): { success: boolean; error?: string } {
-    try {
-      const imported = JSON.parse(jsonString)
+  importData(jsonString: string): { success: boolean; error?: string; migrated?: boolean } {
+    // 首先尝试使用版本感知的导入
+    const result = dataVersionService.importData(jsonString)
 
-      // 验证数据格式
-      if (!imported.data || typeof imported.data !== 'object') {
-        return { success: false, error: '数据格式无效：缺少 data 字段' }
-      }
+    if (result.success) {
+      return result
+    }
 
-      const { data } = imported
+    // 如果版本感知的导入失败，尝试使用旧的导入方式（兼容旧格式数据）
+    const legacyResult = dataVersionService.importLegacyData(jsonString)
 
-      // 导入应用设置
-      if (data.settings) {
-        settingsStorage.setAllSettings(data.settings)
-      }
+    if (legacyResult.success) {
+      return { success: true, migrated: false }
+    }
 
-      // 导入资产跟踪数据
-      if (data.assetTracking) {
-        assetTrackingStorage.setData(data.assetTracking)
-      }
-
-      // 导入投资规划数据
-      if (data.investment) {
-        if (data.investment.assets) {
-          investmentStorage.saveAssets(data.investment.assets)
-        }
-      }
-
-      // 导入计算器数据
-      if (data.calculator && data.calculator.params) {
-        calculatorStorage.saveParams(data.calculator.params)
-      }
-
-      return { success: true }
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : '数据格式错误或已损坏'
-      }
+    return {
+      success: false,
+      error: result.error || legacyResult.error || '数据导入失败'
     }
   },
 

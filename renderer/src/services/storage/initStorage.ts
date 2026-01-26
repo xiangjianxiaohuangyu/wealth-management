@@ -72,31 +72,30 @@ const DEFAULT_ASSET_RECORDS: MonthlyAssetRecord[] = []
  * 初始化所有存储数据
  */
 export const initStorage = {
-  /** 是否已初始化 */
-  STORAGE_KEY: 'wealth_app_initialized',
+  /** 投资规划数据的存储键 */
+  INVESTMENT_STORAGE_KEY: 'wealth_investment_data',
 
   /**
-   * 检查是否已初始化
+   * 检查本地是否有持久化数据
    */
-  isInitialized(): boolean {
-    const storage = window.localStorage
-    return storage.getItem(this.STORAGE_KEY) === 'true'
+  hasLocalData(): boolean {
+    try {
+      const storage = window.localStorage
+      // 检查是否有投资规划数据
+      const investmentData = storage.getItem(this.INVESTMENT_STORAGE_KEY)
+      return investmentData !== null && investmentData !== ''
+    } catch {
+      return false
+    }
   },
 
   /**
-   * 标记为已初始化
-   */
-  markAsInitialized(): void {
-    const storage = window.localStorage
-    storage.setItem(this.STORAGE_KEY, 'true')
-  },
-
-  /**
-   * 初始化默认数据
+   * 初始化默认数据（仅当本地没有数据时）
    */
   initializeDefaultData(): void {
-    // 如果已经初始化过，不再重复初始化
-    if (this.isInitialized()) {
+    // 如果本地已有数据，不再初始化
+    if (this.hasLocalData()) {
+      console.log('📂 检测到本地数据，跳过初始化')
       return
     }
 
@@ -111,10 +110,7 @@ export const initStorage = {
         lastUpdated: new Date().toISOString()
       })
 
-      // 标记为已初始化
-      this.markAsInitialized()
-
-      console.log('✅ 应用数据初始化成功')
+      console.log('✅ 应用数据初始化成功（首次启动）')
     } catch (error) {
       console.error('❌ 应用数据初始化失败:', error)
     }
@@ -132,9 +128,6 @@ export const initStorage = {
       fixedAssetAdjustments: [],
       lastUpdated: new Date().toISOString()
     })
-
-    // 不标记为已初始化，以便可以再次初始化
-    window.localStorage.removeItem(this.STORAGE_KEY)
 
     console.log('🔄 数据已重置为默认值')
   }
