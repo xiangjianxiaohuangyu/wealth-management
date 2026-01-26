@@ -6,7 +6,6 @@
 
 import { investmentStorage } from './investmentStorage'
 import { assetTrackingStorage } from './assetTrackingStorage'
-import { calculatorStorage } from './calculatorStorage'
 import type { AssetAllocationItem } from '../../types/investment.types'
 import type { MonthlyAssetRecord } from '../../types/assetTracking.types'
 
@@ -108,7 +107,6 @@ export const initStorage = {
       // 初始化资产跟踪数据
       assetTrackingStorage.setData({
         records: DEFAULT_ASSET_RECORDS,
-        adjustments: [],
         fixedAssetAdjustments: [],
         lastUpdated: new Date().toISOString()
       })
@@ -131,7 +129,6 @@ export const initStorage = {
 
     assetTrackingStorage.setData({
       records: DEFAULT_ASSET_RECORDS,
-      adjustments: [],
       fixedAssetAdjustments: [],
       lastUpdated: new Date().toISOString()
     })

@@ -232,7 +232,6 @@ export const userDataStorage = {
       // 清除资产跟踪数据
       assetTrackingStorage.setData({
         records: [],
-        adjustments: [],
         fixedAssetAdjustments: [],
         lastUpdated: new Date().toISOString()
       })

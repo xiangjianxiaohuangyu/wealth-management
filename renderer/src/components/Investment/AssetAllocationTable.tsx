@@ -8,7 +8,7 @@
  * - 自动监听资产跟踪数据变化并更新
  */
 
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Card } from '../common/Card'
 import { TotalInvestmentInput } from './TotalInvestmentInput'
 import { PortfolioCard } from './PortfolioCard'
