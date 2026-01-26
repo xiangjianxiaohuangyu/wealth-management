@@ -41,6 +41,7 @@ export function ConfirmDialog({
       isOpen={isOpen}
       onClose={onClose}
       title={title}
+      closeOnOverlayClick={false}
       footer={
         <>
           <button className="confirm-dialog__btn confirm-dialog__btn--cancel" onClick={onClose}>

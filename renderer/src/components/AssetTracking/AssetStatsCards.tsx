@@ -16,9 +16,11 @@ import './AssetStatsCards.css'
 export interface AssetStatsCardsProps {
   records: MonthlyAssetRecord[]
   onAssetUpdated: () => void
+  /** 是否显示编辑按钮，默认为 true */
+  showEditButton?: boolean
 }
 
-export function AssetStatsCards({ records, onAssetUpdated }: AssetStatsCardsProps) {
+export function AssetStatsCards({ records, onAssetUpdated, showEditButton = true }: AssetStatsCardsProps) {
   const [detailModalOpen, setDetailModalOpen] = useState(false)
   const [selectedAssetType, setSelectedAssetType] = useState<'total-asset' | 'investment' | 'savings' | 'fixed-asset'>('total-asset')
   const [forceAnimationKey, setForceAnimationKey] = useState(0)
@@ -143,7 +145,7 @@ export function AssetStatsCards({ records, onAssetUpdated }: AssetStatsCardsProp
               <div className="asset-stats-card__title">{stat.title}</div>
               <div className="asset-stats-card__value">
                 {stat.value}
-                {stat.key !== 'total-asset' && (
+                {showEditButton && stat.key !== 'total-asset' && (
                   <button
                     className="asset-stats-card__edit-btn"
                     onClick={() => handleOpenDetail(stat.key as typeof selectedAssetType)}

@@ -2,16 +2,6 @@
  * Dashboard 页面类型定义
  */
 
-import type { WealthSummary } from '../../types/wealth.types'
-
-/**
- * Dashboard 页面属性
- */
-export interface DashboardProps {
-  /** 财富摘要数据 */
-  wealthSummary?: WealthSummary
-}
-
 /**
  * 统计卡片数据
  */

@@ -12,7 +12,7 @@ export const APP_INFO = {
   /** 应用名称 */
   NAME: '财富管理',
   /** 应用版本 */
-  VERSION: '1.0.0',
+  VERSION: '0.3.2',
   /** 应用描述 */
   DESCRIPTION: '个人财富管理应用',
   /** 作者 */

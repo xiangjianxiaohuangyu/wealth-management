@@ -1,103 +1,167 @@
 /**
  * 财富总览页面
+ *
+ * 显示：
+ * 1. 四张统计卡片（总资产、投资金额、存款、固定资产）
+ * 2. 资产趋势曲线图
+ * 3. 两张环形图（计划配置、实际配置）
  */
 
-import { useMemo } from 'react'
-import { WealthSummary } from '../../components/Dashboard/WealthSummary'
-import { AssetAllocation } from '../../components/Dashboard/AssetAllocation'
-import { RecentTransactions } from '../../components/Dashboard/RecentTransactions'
+import { useState, useEffect, useMemo } from 'react'
+import { Card } from '../../components/common/Card'
 import { LineChart } from '../../components/charts'
-import type { DashboardProps } from './Dashboard.types'
-import { generateWealthSummary } from '../../services/data/wealthDataService'
+import { AssetStatsCards } from '../../components/AssetTracking/AssetStatsCards'
+import { PortfolioCharts } from '../../components/Investment/PortfolioCharts'
+import { assetTrackingStorage } from '../../services/storage/assetTrackingStorage'
+import { calculateCumulativeAssets } from '../../services/data/assetTrackingService'
+import { investmentStorage } from '../../services/storage/investmentStorage'
+import { updateAllAssetsCalculations } from '../../utils/calculation/portfolioCalculation'
 import { CHART_COLORS } from '../../utils/constants'
+import type { MonthlyAssetRecord } from '../../types/assetTracking.types'
+import type { AssetAllocationItem } from '../../types/investment.types'
 import './Dashboard.css'
 
-// 示例数据（实际应用中应从存储或 API 获取）
-const mockAssets = [
-  { id: '1', name: '现金', category: 'cash' as const, value: 50000, currency: 'CNY' as const, createdAt: '2024-01-01', updatedAt: '2024-01-01' },
-  { id: '2', name: '股票投资', category: 'stock' as const, value: 150000, currency: 'CNY' as const, createdAt: '2024-01-01', updatedAt: '2024-01-01' },
-  { id: '3', name: '基金', category: 'fund' as const, value: 80000, currency: 'CNY' as const, createdAt: '2024-01-01', updatedAt: '2024-01-01' },
-  { id: '4', name: '加密货币', category: 'crypto' as const, value: 30000, currency: 'CNY' as const, createdAt: '2024-01-01', updatedAt: '2024-01-01' }
-]
+export default function Dashboard() {
+  const [records, setRecords] = useState<MonthlyAssetRecord[]>([])
+  const [assets, setAssets] = useState<AssetAllocationItem[]>([])
 
-const mockLiabilities = [
-  { id: '1', name: '房贷', category: 'mortgage' as const, amount: 500000, currency: 'CNY' as const, createdAt: '2024-01-01', updatedAt: '2024-01-01' },
-  { id: '2', name: '信用卡', category: 'credit_card' as const, amount: 10000, currency: 'CNY' as const, createdAt: '2024-01-01', updatedAt: '2024-01-01' }
-]
-
-const mockTransactions = [
-  { id: '1', type: 'income' as const, category: 'salary' as const, amount: 15000, currency: 'CNY' as const, date: '2024-01-15', description: '1月工资', createdAt: '2024-01-15', updatedAt: '2024-01-15' },
-  { id: '2', type: 'expense' as const, category: 'food' as const, amount: 2000, currency: 'CNY' as const, date: '2024-01-14', description: '餐饮支出', createdAt: '2024-01-14', updatedAt: '2024-01-14' },
-  { id: '3', type: 'expense' as const, category: 'shopping' as const, amount: 3000, currency: 'CNY' as const, date: '2024-01-13', description: '购物', createdAt: '2024-01-13', updatedAt: '2024-01-13' },
-  { id: '4', type: 'income' as const, category: 'bonus' as const, amount: 5000, currency: 'CNY' as const, date: '2024-01-10', description: '项目奖金', createdAt: '2024-01-10', updatedAt: '2024-01-10' },
-  { id: '5', type: 'expense' as const, category: 'transport' as const, amount: 500, currency: 'CNY' as const, date: '2024-01-09', description: '交通费', createdAt: '2024-01-09', updatedAt: '2024-01-09' }
-]
-
-export default function Dashboard({ wealthSummary }: DashboardProps) {
-  // 使用示例数据生成财富摘要
-  const summary = useMemo(() => {
-    return wealthSummary || generateWealthSummary(mockAssets, mockLiabilities, mockTransactions)
-  }, [wealthSummary])
-
-  // 模拟收支趋势数据
-  const trendData = useMemo(() => {
-    return [
-      {
-        name: '收入',
-        data: [
-          { x: '2024-07', y: 15000 },
-          { x: '2024-08', y: 15500 },
-          { x: '2024-09', y: 16000 },
-          { x: '2024-10', y: 15000 },
-          { x: '2024-11', y: 16500 },
-          { x: '2024-12', y: 17000 }
-        ],
-        color: CHART_COLORS[1]
-      },
-      {
-        name: '支出',
-        data: [
-          { x: '2024-07', y: 8000 },
-          { x: '2024-08', y: 8500 },
-          { x: '2024-09', y: 9000 },
-          { x: '2024-10', y: 7500 },
-          { x: '2024-11', y: 9500 },
-          { x: '2024-12', y: 10000 }
-        ],
-        color: CHART_COLORS[3]
-      }
-    ]
+  // 加载资产跟踪数据
+  useEffect(() => {
+    const loadRecords = () => {
+      const allRecords = assetTrackingStorage.getAllRecords()
+      setRecords(allRecords)
+    }
+    loadRecords()
   }, [])
+
+  // 加载投资规划数据
+  useEffect(() => {
+    const loadAssets = () => {
+      const savedAssets = investmentStorage.getAssets()
+      // 重新计算所有资产
+      const recalculatedAssets = updateAllAssetsCalculations(
+        savedAssets,
+        investmentStorage.getTotalAmount()
+      )
+      setAssets(recalculatedAssets)
+    }
+    loadAssets()
+  }, [])
+
+  // 计算总资产金额（用于环形图）
+  const totalAmount = useMemo(() => {
+    const baseSavings = records.reduce((sum, r) => sum + r.savings, 0)
+    const baseInvestment = records.reduce((sum, r) => sum + r.investment, 0)
+    const allAdjustments = assetTrackingStorage.getAllAdjustments()
+
+    const fixedAssetAdjustments = allAdjustments.filter(a => a.type === 'fixed-asset')
+    const fixedAssets = fixedAssetAdjustments.reduce((sum, adj) => sum + adj.amount, 0)
+
+    const totalAssetAdjustments = allAdjustments
+      .filter(a => a.type === 'total-asset')
+      .reduce((sum, adj) => sum + adj.amount, 0)
+
+    const investmentAdjustments = allAdjustments
+      .filter(a => a.type === 'investment')
+      .reduce((sum, adj) => sum + adj.amount, 0)
+
+    const savingsAdjustments = allAdjustments
+      .filter(a => a.type === 'savings')
+      .reduce((sum, adj) => sum + adj.amount, 0)
+
+    return baseSavings + savingsAdjustments + baseInvestment + investmentAdjustments + totalAssetAdjustments + fixedAssets
+  }, [records])
+
+  // 计算累计资产数据（用于折线图）
+  const chartData = useMemo(() => {
+    const cumulativeData = calculateCumulativeAssets(records)
+    const allAdjustments = assetTrackingStorage.getAllAdjustments()
+
+    const fixedAssetAdjustments = allAdjustments.filter(a => a.type === 'fixed-asset')
+
+    const data: any[] = []
+
+    // 总资产
+    data.push({
+      name: '总资产',
+      data: cumulativeData.map(d => {
+        const totalFixedAssets = fixedAssetAdjustments
+          .filter(adj => {
+            const adjDate = new Date(adj.date)
+            const currentDate = new Date(d.month)
+            return adjDate <= currentDate
+          })
+          .reduce((sum, adj) => sum + adj.amount, 0)
+        return { x: d.month, y: d.totalAssets + totalFixedAssets }
+      }),
+      color: CHART_COLORS[3],
+      smooth: true
+    })
+
+    // 投资金额
+    data.push({
+      name: '投资金额',
+      data: cumulativeData.map(d => ({ x: d.month, y: d.cumulativeInvestment })),
+      color: CHART_COLORS[0],
+      smooth: true
+    })
+
+    // 存款
+    data.push({
+      name: '存款',
+      data: cumulativeData.map(d => ({ x: d.month, y: d.cumulativeSavings })),
+      color: CHART_COLORS[2],
+      smooth: true
+    })
+
+    // 固定资产
+    data.push({
+      name: '固定资产',
+      data: cumulativeData.map(d => {
+        const totalFixedAssets = fixedAssetAdjustments
+          .filter(adj => {
+            const adjDate = new Date(adj.date)
+            const currentDate = new Date(d.month)
+            return adjDate <= currentDate
+          })
+          .reduce((sum, adj) => sum + adj.amount, 0)
+        return { x: d.month, y: totalFixedAssets }
+      }),
+      color: CHART_COLORS[1],
+      smooth: true
+    })
+
+    return data
+  }, [records])
+
+  // 资产更新后的回调
+  const handleAssetUpdated = () => {
+    setRecords(assetTrackingStorage.getAllRecords())
+  }
 
   return (
     <div className="dashboard">
       <h1 className="dashboard__title">财富总览</h1>
 
-      {/* 财富摘要卡片 */}
-      <WealthSummary
-        totalAssets={summary.netWorth.totalAssets}
-        totalLiabilities={summary.netWorth.totalLiabilities}
-        netWorth={summary.netWorth.netWorth}
-        currency={summary.netWorth.currency}
-      />
+      {/* 四张统计卡片 */}
+      <AssetStatsCards records={records} onAssetUpdated={handleAssetUpdated} showEditButton={false} />
 
-      {/* 资产配置和收支趋势 */}
-      <div className="dashboard__grid">
-        <AssetAllocation data={summary.assetAllocation} />
+      {/* 资产趋势曲线图 */}
+      <Card title="资产趋势" className="dashboard__trend-chart">
+        <LineChart
+          data={chartData}
+          showLegend
+          showArea
+          showPoints
+          height={400}
+          yAxisFormatter={(value) => `¥${(value / 10000).toFixed(1)}万`}
+        />
+      </Card>
 
-        <div className="dashboard__chart">
-          <LineChart
-            data={trendData}
-            title="收支趋势"
-            showLegend
-            showArea
-            height={300}
-          />
-        </div>
-      </div>
-
-      {/* 最近交易 */}
-      <RecentTransactions transactions={summary.recentTransactions} />
+      {/* 两张环形图 */}
+      <Card title="投资配置" className="dashboard__portfolio-charts">
+        <PortfolioCharts assets={assets} totalAmount={totalAmount} />
+      </Card>
     </div>
   )
 }

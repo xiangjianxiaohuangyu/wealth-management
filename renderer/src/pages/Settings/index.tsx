@@ -49,14 +49,19 @@ export default function Settings() {
 
   // 导出数据
   const handleExportData = () => {
-    const data = userDataStorage.exportData()
-    const blob = new Blob([data], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `wealth-management-backup-${new Date().toISOString().split('T')[0]}.json`
-    a.click()
-    URL.revokeObjectURL(url)
+    try {
+      const data = userDataStorage.exportData()
+      const blob = new Blob([data], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `wealth-management-backup-${new Date().toISOString().split('T')[0]}.json`
+      a.click()
+      URL.revokeObjectURL(url)
+      // 不显示成功提示，因为用户能看到浏览器的下载对话框
+    } catch (error) {
+      alert(`❌ 导出失败：${error instanceof Error ? error.message : '未知错误'}`)
+    }
   }
 
   // 导入数据
@@ -71,9 +76,13 @@ export default function Settings() {
         reader.onload = (event) => {
           const result = userDataStorage.importData(event.target?.result as string)
           if (result.success) {
-            alert('数据导入成功')
+            alert('数据导入成功！页面将重新加载以应用新数据。')
+            // 重新加载页面以应用新数据
+            setTimeout(() => {
+              window.location.reload()
+            }, 1000)
           } else {
-            alert(result.error || '导入失败')
+            alert(`导入失败：${result.error || '未知错误'}`)
           }
         }
         reader.readAsText(file)
@@ -84,9 +93,26 @@ export default function Settings() {
 
   // 清除数据
   const handleClearData = () => {
-    if (confirm('确定要清除所有数据吗？此操作不可恢复。')) {
-      userDataStorage.clearUserData()
-      alert('数据已清除')
+    const confirmed = confirm(
+      '⚠️ 警告：此操作将清除所有应用数据！\n\n' +
+      '包括：\n' +
+      '• 资产跟踪的所有记录\n' +
+      '• 投资规划的配置\n' +
+      '• 计算器参数\n\n' +
+      '此操作不可恢复，确定要继续吗？'
+    )
+
+    if (confirmed) {
+      const result = userDataStorage.clearAllData()
+      if (result.success) {
+        alert('✅ 数据已清除！页面将重新加载。')
+        // 重新加载页面以应用更改
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
+      } else {
+        alert(`❌ 清除失败：${result.error || '未知错误'}`)
+      }
     }
   }
 
@@ -185,7 +211,11 @@ export default function Settings() {
           <div className="settings__section-content-inner">
             <div className="settings__section">
               <p className="settings__hint">
-                您可以导出数据进行备份，或从备份文件中恢复数据。
+                <strong>数据备份说明：</strong><br />
+                导出功能会保存所有应用数据，包括资产跟踪记录、投资规划配置、计算器参数和应用设置。<br />
+                导入功能可以从备份文件恢复所有数据。<br />
+                <br />
+                <strong>⚠️ 注意：</strong>导入数据会覆盖当前所有数据，请谨慎操作。
               </p>
 
               <div className="settings__actions">

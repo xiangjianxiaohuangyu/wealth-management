@@ -132,7 +132,7 @@ export function PieChart({
           avoidLabelOverlap: false,
           label: {
             show: true,
-            formatter: showPercentage ? '{b}: {d}%' : '{b}',
+            formatter: showPercentage ? '{b}\n{d}%' : '{b}',
             fontSize: 14
           },
           emphasis: {

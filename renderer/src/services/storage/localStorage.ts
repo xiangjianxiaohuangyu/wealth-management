@@ -5,6 +5,10 @@
  */
 
 import type { Theme, Language, Currency } from '../../types/common.types'
+import { assetTrackingStorage } from './assetTrackingStorage'
+import { investmentStorage } from './investmentStorage'
+import { calculatorStorage } from './calculatorStorage'
+import { APP_INFO } from '../../utils/constants'
 
 /**
  * 存储键名
@@ -146,35 +150,110 @@ export const settingsStorage = {
  * 用户数据操作
  */
 export const userDataStorage = {
-  /** 获取用户数据 */
-  getUserData() {
-    return storage.get(STORAGE_KEYS.USER_DATA)
-  },
-
-  /** 保存用户数据 */
-  setUserData(data: any): boolean {
-    return storage.set(STORAGE_KEYS.USER_DATA, data)
-  },
-
-  /** 删除用户数据 */
-  clearUserData(): boolean {
-    return storage.remove(STORAGE_KEYS.USER_DATA)
-  },
-
-  /** 导出用户数据 */
+  /**
+   * 导出所有应用数据
+   */
   exportData(): string {
-    const data = this.getUserData()
-    return JSON.stringify(data, null, 2)
+    const exportData = {
+      version: APP_INFO.VERSION,
+      exportDate: new Date().toISOString(),
+      data: {
+        // 应用设置
+        settings: settingsStorage.getAllSettings(),
+
+        // 资产跟踪数据
+        assetTracking: assetTrackingStorage.getData(),
+
+        // 投资规划数据
+        investment: {
+          assets: investmentStorage.getAssets(),
+          totalAmount: investmentStorage.getTotalAmount()
+        },
+
+        // 计算器数据
+        calculator: {
+          params: calculatorStorage.getParams()
+        }
+      }
+    }
+    return JSON.stringify(exportData, null, 2)
   },
 
-  /** 导入用户数据 */
+  /**
+   * 导入应用数据
+   */
   importData(jsonString: string): { success: boolean; error?: string } {
     try {
-      const data = JSON.parse(jsonString)
-      this.setUserData(data)
+      const imported = JSON.parse(jsonString)
+
+      // 验证数据格式
+      if (!imported.data || typeof imported.data !== 'object') {
+        return { success: false, error: '数据格式无效：缺少 data 字段' }
+      }
+
+      const { data } = imported
+
+      // 导入应用设置
+      if (data.settings) {
+        settingsStorage.setAllSettings(data.settings)
+      }
+
+      // 导入资产跟踪数据
+      if (data.assetTracking) {
+        assetTrackingStorage.setData(data.assetTracking)
+      }
+
+      // 导入投资规划数据
+      if (data.investment) {
+        if (data.investment.assets) {
+          investmentStorage.saveAssets(data.investment.assets)
+        }
+      }
+
+      // 导入计算器数据
+      if (data.calculator && data.calculator.params) {
+        calculatorStorage.saveParams(data.calculator.params)
+      }
+
       return { success: true }
     } catch (error) {
-      return { success: false, error: '数据格式错误' }
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : '数据格式错误或已损坏'
+      }
+    }
+  },
+
+  /**
+   * 清除所有应用数据
+   */
+  clearAllData(): { success: boolean; error?: string } {
+    try {
+      // 清除资产跟踪数据
+      assetTrackingStorage.setData({
+        records: [],
+        adjustments: [],
+        fixedAssetAdjustments: [],
+        lastUpdated: new Date().toISOString()
+      })
+
+      // 清除投资规划数据
+      investmentStorage.saveAssets([])
+
+      // 清除计算器数据
+      calculatorStorage.saveParams({
+        principal: 0,
+        monthlyContribution: 0,
+        annualReturn: 5,
+        years: 10
+      })
+
+      return { success: true }
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : '清除数据失败'
+      }
     }
   }
 }

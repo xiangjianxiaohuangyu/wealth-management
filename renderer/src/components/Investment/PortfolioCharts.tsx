@@ -64,7 +64,7 @@ export function PortfolioCharts({ assets, totalAmount }: PortfolioChartsProps) {
             radius={['40%', '75%']}
             height={300}
             showLegend={false}
-            showPercentage={false}
+            showPercentage={true}
             empty={!hasData}
             emptyText="暂无计划配置"
           />
@@ -79,7 +79,7 @@ export function PortfolioCharts({ assets, totalAmount }: PortfolioChartsProps) {
             radius={['40%', '75%']}
             height={300}
             showLegend={false}
-            showPercentage={false}
+            showPercentage={true}
             empty={!hasData}
             emptyText="暂无实际配置"
           />

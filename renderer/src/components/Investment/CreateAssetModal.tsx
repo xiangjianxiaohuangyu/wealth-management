@@ -146,6 +146,7 @@ export function CreateAssetModal({
       isOpen={isOpen}
       onClose={onClose}
       title="创建新资产"
+      closeOnOverlayClick={false}
       footer={
         <>
           <button className="create-asset-modal__btn create-asset-modal__btn--cancel" onClick={onClose}>

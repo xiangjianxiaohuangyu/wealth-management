@@ -146,7 +146,7 @@ export function LineChart({
         textStyle: {
           fontSize: 16,
           fontWeight: 600,
-          color: '#2d3436'
+          color: '#ffffff'
         }
       } : undefined,
       tooltip: {
