@@ -1,0 +1,146 @@
+/**
+ * 投资记录表格组件样式
+ */
+
+.investment-record-table {
+  width: 100%;
+}
+
+.investment-record-table__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm, 14px);
+}
+
+.investment-record-table__table th {
+  background-color: rgba(77, 163, 255, 0.08);
+  backdrop-filter: blur(10px);
+  padding: 12px 8px;
+  text-align: left;
+  font-weight: var(--font-weight-medium, 500);
+  color: #ffffff;
+  border-bottom: 1px solid rgba(77, 163, 255, 0.2);
+}
+
+.investment-record-table__table td {
+  padding: 8px;
+  border-bottom: 1px solid rgba(77, 163, 255, 0.1);
+}
+
+.investment-record-table__table tr:hover {
+  background-color: rgba(77, 163, 255, 0.05);
+}
+
+.investment-record-table__table tr:last-child td {
+  border-bottom: none;
+}
+
+/* 输入框样式 */
+.investment-record-table__input {
+  width: 100%;
+  min-width: 60px;
+  padding: 6px 8px;
+  border: 1px solid var(--color-border, #dfe6e9);
+  border-radius: var(--border-radius-sm, 6px);
+  background-color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text-primary, #2d3436);
+  font-size: var(--font-size-sm, 14px);
+  transition: all 0.2s ease;
+  /* 隐藏number输入框的上下箭头 */
+  -moz-appearance: textfield;
+}
+
+/* 隐藏number输入框的上下箭头 (Chrome, Safari, Edge, Opera) */
+.investment-record-table__input::-webkit-outer-spin-button,
+.investment-record-table__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 隐藏number输入框的上下箭头 (Firefox) */
+.investment-record-table__input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.investment-record-table__input:focus {
+  outline: none;
+  border-color: var(--color-primary, #0984e3);
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+}
+
+.investment-record-table__input:hover {
+  border-color: var(--color-primary, #0984e3);
+}
+
+/* 规划金额显示 */
+.investment-record-table__planned-amount {
+  color: var(--color-primary, #0984e3);
+  font-weight: var(--font-weight-medium, 500);
+  min-width: 100px;
+}
+
+/* 按钮样式 */
+.investment-record-table__btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: var(--border-radius-sm, 6px);
+  font-size: var(--font-size-sm, 14px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.investment-record-table__btn--delete {
+  background-color: rgba(255, 71, 87, 0.1);
+  color: #ff4757;
+}
+
+.investment-record-table__btn--delete:hover {
+  background-color: rgba(255, 71, 87, 0.2);
+}
+
+.investment-record-table__btn--delete:active {
+  transform: scale(0.98);
+}
+
+/* 空状态样式 */
+.investment-record-table__empty {
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--color-text-secondary, #636e72);
+}
+
+.investment-record-table__empty-text {
+  font-size: var(--font-size-base, 16px);
+  font-weight: var(--font-weight-medium, 500);
+  margin-bottom: 8px;
+}
+
+.investment-record-table__empty-hint {
+  font-size: var(--font-size-sm, 14px);
+  color: var(--color-text-tertiary, #b2bec3);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .investment-record-table__table {
+    font-size: 12px;
+  }
+
+  .investment-record-table__table th,
+  .investment-record-table__table td {
+    padding: 8px 4px;
+  }
+
+  .investment-record-table__input {
+    min-width: 60px;
+    padding: 4px 6px;
+    font-size: 12px;
+  }
+
+  .investment-record-table__btn {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}

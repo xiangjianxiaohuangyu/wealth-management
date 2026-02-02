@@ -11,7 +11,8 @@
       "Bash(del:*)",
       "Bash(if not exist \"e:\\\\Project\\\\Private_Project\\\\wealth-management\\\\renderer\\\\src\\\\utils\\\\calculation\" mkdir \"e:\\\\Project\\\\Private_Project\\\\wealth-management\\\\renderer\\\\src\\\\utils\\\\calculation\")",
       "Bash(node:*)",
-      "Bash(npm run dev)"
+      "Bash(npm run dev)",
+      "Bash(npm run release:minor:*)"
     ]
   }
 }

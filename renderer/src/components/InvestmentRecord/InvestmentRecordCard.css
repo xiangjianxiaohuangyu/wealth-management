@@ -1,0 +1,159 @@
+/**
+ * 投资记录卡片组件样式
+ */
+
+/* 蓝色玻璃态卡片样式 */
+.investment-record-card.card {
+  background: rgba(77, 163, 255, 0.12) !important;
+  backdrop-filter: blur(40px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
+  border: 1px solid rgba(77, 163, 255, 0.3) !important;
+  box-shadow:
+    0 8px 32px rgba(77, 163, 255, 0.15),
+    0 2px 8px rgba(77, 163, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(77, 163, 255, 0.1) !important;
+  border-radius: var(--border-radius-lg, 12px);
+  padding: 20px;
+  flex: 1 1 calc(50% - 12px);
+  min-width: 400px;
+  max-width: 600px;
+  transition: all 0.3s ease;
+}
+
+.investment-record-card.card:hover {
+  box-shadow:
+    0 12px 40px rgba(77, 163, 255, 0.2),
+    0 4px 12px rgba(77, 163, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(77, 163, 255, 0.1) !important;
+}
+
+/* 卡片头部 */
+.investment-record-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+/* 折叠按钮 - 已隐藏 */
+.investment-record-card__collapse-btn {
+  display: none;
+}
+
+/* 名称输入框 */
+.investment-record-card__name-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid rgba(77, 163, 255, 0.3);
+  border-radius: var(--border-radius-md, 8px);
+  background-color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text-primary, #2d3436);
+  font-size: var(--font-size-lg, 18px);
+  font-weight: var(--font-weight-semibold, 600);
+  transition: all 0.2s ease;
+}
+
+.investment-record-card__name-input:focus {
+  outline: none;
+  border-color: var(--color-primary, #0984e3);
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+}
+
+.investment-record-card__name-input:hover {
+  border-color: var(--color-primary, #0984e3);
+}
+
+.investment-record-card__name-input::placeholder {
+  color: var(--color-text-tertiary, #b2bec3);
+  font-weight: var(--font-weight-normal, 400);
+}
+
+/* 名称文本（折叠状态显示） */
+.investment-record-card__name-text {
+  flex: 1;
+  padding: 8px 12px;
+  color: #ffffff;
+  font-size: var(--font-size-lg, 18px);
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+/* 操作按钮区域 */
+.investment-record-card__actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* 按钮样式 */
+.investment-record-card__btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--border-radius-md, 8px);
+  font-size: var(--font-size-sm, 14px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: var(--font-weight-medium, 500);
+  white-space: nowrap;
+}
+
+.investment-record-card__btn--add {
+  background-color: rgba(9, 132, 227, 0.15);
+  color: var(--color-primary, #0984e3);
+  border: 1px solid rgba(9, 132, 227, 0.3);
+}
+
+.investment-record-card__btn--add:hover {
+  background-color: rgba(9, 132, 227, 0.25);
+  transform: translateY(-1px);
+}
+
+.investment-record-card__btn--add:active {
+  transform: translateY(0);
+}
+
+.investment-record-card__btn--delete {
+  background-color: rgba(255, 71, 87, 0.1);
+  color: #ff4757;
+  border: 1px solid rgba(255, 71, 87, 0.2);
+}
+
+.investment-record-card__btn--delete:hover {
+  background-color: rgba(255, 71, 87, 0.2);
+  transform: translateY(-1px);
+}
+
+.investment-record-card__btn--delete:active {
+  transform: translateY(0);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .investment-record-card.card {
+    flex: 1 1 100%;
+    min-width: 100%;
+    max-width: 100%;
+    padding: 16px;
+  }
+
+  .investment-record-card__header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .investment-record-card__name-input {
+    font-size: var(--font-size-base, 16px);
+  }
+
+  .investment-record-card__actions {
+    justify-content: flex-end;
+  }
+
+  .investment-record-card__btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
