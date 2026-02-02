@@ -52,10 +52,10 @@ export function ChartSettingsModal({
         <label className="chart-settings-option">
           <input
             type="checkbox"
-            checked={chartSettings.totalAssets}
-            onChange={() => handleToggle('totalAssets')}
+            checked={chartSettings.totalIncome}
+            onChange={() => handleToggle('totalIncome')}
           />
-          <span>总资产</span>
+          <span>总收入</span>
         </label>
         <label className="chart-settings-option">
           <input

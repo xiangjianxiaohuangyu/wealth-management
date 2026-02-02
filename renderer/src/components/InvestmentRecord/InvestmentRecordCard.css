@@ -38,6 +38,30 @@
   gap: 12px;
 }
 
+/* 标题区域（包含名称输入框和进度徽章） */
+.investment-record-card__title-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+/* 进度徽章 */
+.investment-record-card__progress-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: var(--font-size-sm, 14px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: white;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
 /* 折叠按钮 - 已隐藏 */
 .investment-record-card__collapse-btn {
   display: none;

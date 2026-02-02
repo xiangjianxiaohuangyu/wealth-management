@@ -29,7 +29,7 @@ export default function AssetTracking() {
 
   // 图表显示设置
   const [chartSettings, setChartSettings] = useState({
-    totalAssets: true,
+    totalIncome: true,
     investment: true,
     savings: true,
     fixedAssets: true
@@ -54,20 +54,19 @@ export default function AssetTracking() {
 
     const data: any[] = []
 
-    // 总资产
-    if (chartSettings.totalAssets) {
+    // 总收入
+    if (chartSettings.totalIncome) {
       data.push({
-        name: '总资产',
+        name: '总收入',
         data: cumulativeData.map(d => {
-          // 计算到当前月份为止的固定资产总和
-          const totalFixedAssets = fixedAssetAdjustments
-            .filter(adj => {
-              const adjDate = new Date(adj.date)
-              const currentDate = new Date(d.month)
-              return adjDate <= currentDate
+          // 计算到当前月份为止的总收入
+          const totalIncome = records
+            .filter(r => {
+              const recordDate = `${r.year}-${String(r.month).padStart(2, '0')}`
+              return recordDate <= d.month
             })
-            .reduce((sum, adj) => sum + adj.amount, 0)
-          return { x: d.month, y: d.totalAssets + totalFixedAssets }
+            .reduce((sum, r) => sum + r.totalIncome, 0)
+          return { x: d.month, y: totalIncome }
         }),
         color: CHART_COLORS[3],
         smooth: true

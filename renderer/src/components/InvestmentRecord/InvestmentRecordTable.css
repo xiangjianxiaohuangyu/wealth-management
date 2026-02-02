@@ -143,4 +143,61 @@
     padding: 4px 8px;
     font-size: 12px;
   }
+
+  .investment-record-table__error-message {
+    font-size: 10px;
+  }
+}
+
+/* ========== 错误状态样式 ========== */
+
+/* 错误输入框 */
+.investment-record-table__input--error {
+  border-color: #ff4757 !important;
+  background-color: rgba(255, 71, 87, 0.05) !important;
+}
+
+.investment-record-table__input--error:focus {
+  border-color: #ff4757 !important;
+  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1) !important;
+}
+
+/* 错误提示消息 */
+.investment-record-table__error-message {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #ff4757;
+  line-height: 1.4;
+  min-height: 15px;
+}
+
+/* 表格单元格调整（为错误消息留出空间） */
+.investment-record-table__table td {
+  vertical-align: top;
+}
+
+/* ========== 行进度指示器 ========== */
+
+/* 金额与进度条容器 */
+.investment-record-table__amount-with-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* 行进度条容器 */
+.investment-record-table__row-progress {
+  width: 100%;
+  height: 3px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* 行进度条 */
+.investment-record-table__row-progress-bar {
+  height: 100%;
+  background: var(--color-primary, #0984e3);
+  border-radius: 2px;
+  transition: width 0.3s ease, background-color 0.3s ease;
 }

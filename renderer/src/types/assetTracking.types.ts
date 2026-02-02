@@ -128,8 +128,8 @@ export interface AssetAdjustment {
  * 图表设置
  */
 export interface ChartSettings {
-  /** 是否显示总资产 */
-  totalAssets: boolean
+  /** 是否显示总收入 */
+  totalIncome: boolean
   /** 是否显示投资金额 */
   investment: boolean
   /** 是否显示存款 */

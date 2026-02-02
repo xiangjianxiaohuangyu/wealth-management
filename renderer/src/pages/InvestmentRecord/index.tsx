@@ -4,21 +4,25 @@
  * 记录和管理各类投资资产的详细信息
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { investmentRecordStorage } from '../../services/storage/investmentRecordStorage'
 import { assetTrackingStorage } from '../../services/storage/assetTrackingStorage'
 import { InvestmentRecordCard } from '../../components/InvestmentRecord/InvestmentRecordCard'
+import { StatisticsPanel } from '../../components/InvestmentRecord/StatisticsPanel'
+import { ImportDialog } from '../../components/InvestmentRecord/ImportDialog'
 import { ConfirmDialog } from '../../components/Investment/ConfirmDialog'
 import { Card } from '../../components/common/Card/Card'
 import { formatCurrency } from '../../utils/format/currency'
-import type { InvestmentRecordCard as InvestmentRecordCardType, InvestmentRecordRow, InvestmentRecordRowUpdate } from '../../types/investmentRecord.types'
+import type { InvestmentRecordCard as InvestmentRecordCardType, InvestmentRecordRow, InvestmentRecordRowUpdate, InvestmentRecordData } from '../../types/investmentRecord.types'
 import './InvestmentRecord.css'
 
 export default function InvestmentRecord() {
   const [cards, setCards] = useState<InvestmentRecordCardType[]>([])
+  const [totalIncome, setTotalIncome] = useState(0)
   const [totalInvestment, setTotalInvestment] = useState(0)
   const [deleteCardId, setDeleteCardId] = useState<string | null>(null)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showImportDialog, setShowImportDialog] = useState(false)
 
   // 初始化：从 localStorage 加载数据
   useEffect(() => {
@@ -26,7 +30,13 @@ export default function InvestmentRecord() {
     setCards(loadedCards)
   }, [])
 
-  // 从资产跟踪获取总投资金额
+  // 从资产跟踪获取总收入（所有月度记录的总收入之和）
+  const getTotalIncome = (): number => {
+    const records = assetTrackingStorage.getAllRecords()
+    return records.reduce((sum, r) => sum + r.totalIncome, 0)
+  }
+
+  // 从资产跟踪获取投资金额
   const getTotalInvestment = (): number => {
     const records = assetTrackingStorage.getAllRecords()
     const adjustments = assetTrackingStorage.getAllAdjustments()
@@ -39,14 +49,17 @@ export default function InvestmentRecord() {
     return baseInvestment + investmentAdjustments
   }
 
-  // 实时监听总投资金额变化（每秒检查一次）
+  // 实时监听数据变化（每秒检查一次）
   useEffect(() => {
     const intervalId = setInterval(() => {
-      const newAmount = getTotalInvestment()
-      setTotalInvestment(newAmount)
+      const newIncome = getTotalIncome()
+      const newInvestment = getTotalInvestment()
+      setTotalIncome(newIncome)
+      setTotalInvestment(newInvestment)
     }, 1000)
 
     // 初始化时立即获取一次
+    setTotalIncome(getTotalIncome())
     setTotalInvestment(getTotalInvestment())
 
     return () => clearInterval(intervalId)
@@ -158,29 +171,90 @@ export default function InvestmentRecord() {
     setShowDeleteDialog(false)
   }
 
+  // 导入数据
+  const handleImport = (data: InvestmentRecordData) => {
+    investmentRecordStorage.setData(data)
+    setCards(data.cards)
+    console.log('✅ 数据导入成功！')
+  }
+
+  // 导出数据
+  const handleExport = () => {
+    const data = investmentRecordStorage.getData()
+    if (!data) {
+      alert('没有数据可导出')
+      return
+    }
+
+    const jsonString = JSON.stringify(data, null, 2)
+    const blob = new Blob([jsonString], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `investment-record-${new Date().toISOString().slice(0, 10)}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  // 构造投资记录数据（用于统计面板）
+  const investmentRecordData = useMemo(() => ({
+    cards,
+    lastUpdated: new Date().toISOString()
+  }), [cards])
+
+  // 按行数从多到少排序卡片
+  const sortedCards = useMemo(() => {
+    return [...cards].sort((a, b) => b.rows.length - a.rows.length)
+  }, [cards])
+
   return (
     <div className="investment-record">
       {/* 页面标题区 */}
       <div className="investment-record__header">
         <h1 className="investment-record__title">投资记录</h1>
-        <button
-          className="investment-record__add-btn"
-          onClick={handleAddCard}
-        >
-          + 添加资产
-        </button>
+        <div className="investment-record__actions">
+          <button
+            className="investment-record__action-btn investment-record__action-btn--import"
+            onClick={() => setShowImportDialog(true)}
+          >
+            📥 导入
+          </button>
+          <button
+            className="investment-record__action-btn investment-record__action-btn--export"
+            onClick={handleExport}
+          >
+            📤 导出
+          </button>
+          <button
+            className="investment-record__add-btn"
+            onClick={handleAddCard}
+          >
+            + 添加资产
+          </button>
+        </div>
       </div>
 
-      {/* 总投资金额卡片 */}
+      {/* 总收入卡片 */}
       <Card className="investment-record__total-card">
         <div className="investment-record__total-content">
-          <div className="investment-record__total-icon">📈</div>
+          <div className="investment-record__total-icon">💵</div>
           <div className="investment-record__total-info">
-            <div className="investment-record__total-label">总投资金额</div>
-            <div className="investment-record__total-value">{formatCurrency(totalInvestment, 'CNY')}</div>
+            <div className="investment-record__total-label">总收入</div>
+            <div className="investment-record__total-value">{formatCurrency(totalIncome, 'CNY')}</div>
           </div>
         </div>
       </Card>
+
+      {/* 统计面板 */}
+      {cards.length > 0 && (
+        <StatisticsPanel
+          data={investmentRecordData}
+          totalInvestment={totalInvestment}
+          totalIncome={totalIncome}
+        />
+      )}
 
       {/* 卡片容器 */}
       {cards.length === 0 ? (
@@ -193,11 +267,11 @@ export default function InvestmentRecord() {
         </div>
       ) : (
         <div className="investment-record__cards-container">
-          {cards.map(card => (
+          {sortedCards.map(card => (
             <InvestmentRecordCard
               key={card.id}
               card={card}
-              totalInvestment={totalInvestment}
+              totalInvestment={totalIncome}
               onNameUpdate={handleNameUpdate}
               onAddRow={handleAddRow}
               onRowUpdate={handleRowUpdate}
@@ -218,6 +292,13 @@ export default function InvestmentRecord() {
         type="danger"
         onConfirm={handleConfirmDelete}
         onClose={handleCancelDelete}
+      />
+
+      {/* 导入对话框 */}
+      <ImportDialog
+        isOpen={showImportDialog}
+        onClose={() => setShowImportDialog(false)}
+        onImport={handleImport}
       />
     </div>
   )

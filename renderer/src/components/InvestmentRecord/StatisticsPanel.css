@@ -1,0 +1,132 @@
+/**
+ * 投资记录统计面板样式
+ */
+
+.statistics-panel {
+  background: var(--color-bg-elevated);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border-radius: var(--border-radius-lg, 12px);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-lg, 0 4px 24px rgba(0, 0, 0, 0.15));
+  border: 1px solid var(--color-border);
+}
+
+/* 主要统计信息 */
+.statistics-panel__main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.statistics-panel__item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statistics-panel__label {
+  font-size: var(--font-size-sm, 14px);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-regular, 400);
+}
+
+.statistics-panel__value {
+  font-size: var(--font-size-xl, 20px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text);
+}
+
+.statistics-panel__value--highlight {
+  color: var(--color-primary, #0984e3);
+}
+
+/* 进度条容器 */
+.statistics-panel__progress-container {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+/* 进度条 */
+.statistics-panel__progress-bar {
+  height: 100%;
+  background: var(--color-primary, #0984e3);
+  border-radius: 3px;
+  transition: width 0.4s ease, background-color 0.3s ease;
+}
+
+/* 次要统计信息 */
+.statistics-panel__secondary {
+  display: flex;
+  gap: 32px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+}
+
+.statistics-panel__stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.statistics-panel__stat-label {
+  font-size: var(--font-size-sm, 14px);
+  color: var(--color-text-secondary);
+}
+
+.statistics-panel__stat-value {
+  font-size: var(--font-size-base, 16px);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text);
+}
+
+.statistics-panel__stat-value--good {
+  color: #00b894;
+}
+
+.statistics-panel__checkmark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background-color: #00b894;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .statistics-panel {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .statistics-panel__main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .statistics-panel__value {
+    font-size: var(--font-size-lg, 18px);
+  }
+
+  .statistics-panel__secondary {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .statistics-panel__stat {
+    justify-content: space-between;
+  }
+}

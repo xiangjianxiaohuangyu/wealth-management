@@ -57,10 +57,6 @@ export default function Dashboard() {
     const fixedAssetAdjustments = allAdjustments.filter(a => a.type === 'fixed-asset')
     const fixedAssets = fixedAssetAdjustments.reduce((sum, adj) => sum + adj.amount, 0)
 
-    const totalAssetAdjustments = allAdjustments
-      .filter(a => a.type === 'total-asset')
-      .reduce((sum, adj) => sum + adj.amount, 0)
-
     const investmentAdjustments = allAdjustments
       .filter(a => a.type === 'investment')
       .reduce((sum, adj) => sum + adj.amount, 0)
@@ -69,7 +65,7 @@ export default function Dashboard() {
       .filter(a => a.type === 'savings')
       .reduce((sum, adj) => sum + adj.amount, 0)
 
-    return baseSavings + savingsAdjustments + baseInvestment + investmentAdjustments + totalAssetAdjustments + fixedAssets
+    return baseSavings + savingsAdjustments + baseInvestment + investmentAdjustments + fixedAssets
   }, [records])
 
   // 计算累计资产数据（用于折线图）

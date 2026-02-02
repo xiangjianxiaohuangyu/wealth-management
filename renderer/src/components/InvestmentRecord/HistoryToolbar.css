@@ -1,0 +1,83 @@
+/**
+ * 历史工具栏样式
+ */
+
+.history-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--color-bg-elevated);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border-radius: var(--border-radius-md, 8px);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+.history-toolbar__buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.history-toolbar__btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm, 6px);
+  background-color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text);
+  font-size: var(--font-size-sm, 14px);
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.history-toolbar__btn:hover:not(:disabled) {
+  background-color: var(--color-primary, #0984e3);
+  color: white;
+  border-color: var(--color-primary, #0984e3);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(9, 132, 227, 0.3);
+}
+
+.history-toolbar__btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.history-toolbar__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.history-toolbar__btn-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.history-toolbar__btn-text {
+  line-height: 1;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .history-toolbar {
+    padding: 6px 10px;
+  }
+
+  .history-toolbar__btn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .history-toolbar__btn-icon {
+    font-size: 14px;
+  }
+
+  .history-toolbar__btn-text {
+    display: none;
+  }
+}

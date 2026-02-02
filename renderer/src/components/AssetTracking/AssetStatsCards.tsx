@@ -22,7 +22,7 @@ export interface AssetStatsCardsProps {
 
 export function AssetStatsCards({ records, onAssetUpdated, showEditButton = true }: AssetStatsCardsProps) {
   const [detailModalOpen, setDetailModalOpen] = useState(false)
-  const [selectedAssetType, setSelectedAssetType] = useState<'total-asset' | 'investment' | 'savings' | 'fixed-asset'>('total-asset')
+  const [selectedAssetType, setSelectedAssetType] = useState<'total-income' | 'investment' | 'savings' | 'fixed-asset'>('total-income')
   const [forceAnimationKey, setForceAnimationKey] = useState(0)
 
   // 监听 records 变化，当添加/编辑/删除月度记录时触发动画
@@ -41,14 +41,14 @@ export function AssetStatsCards({ records, onAssetUpdated, showEditButton = true
     }
   }, [recordsHash])
 
+  // 计算总收入（所有月度记录的总收入之和）
+  const baseTotalIncome = records.reduce((sum, r) => sum + r.totalIncome, 0)
+
   // 计算总存款金额（基础值）
   const baseSavings = records.reduce((sum, r) => sum + r.savings, 0)
 
   // 计算总投资金额（基础值）
   const baseInvestment = records.reduce((sum, r) => sum + r.investment, 0)
-
-  // 计算总资产基础值（所有月份的存款+投资总和）
-  const baseTotalAssets = records.reduce((sum, r) => sum + r.savings + r.investment, 0)
 
   // 获取所有调整记录
   const allAdjustments = assetTrackingStorage.getAllAdjustments()
@@ -58,10 +58,6 @@ export function AssetStatsCards({ records, onAssetUpdated, showEditButton = true
   const fixedAssets = fixedAssetAdjustments.reduce((sum, adj) => sum + adj.amount, 0)
 
   // 计算各项资产的调整值
-  const totalAssetAdjustments = allAdjustments
-    .filter(a => a.type === 'total-asset')
-    .reduce((sum, adj) => sum + adj.amount, 0)
-
   const investmentAdjustments = allAdjustments
     .filter(a => a.type === 'investment')
     .reduce((sum, adj) => sum + adj.amount, 0)
@@ -71,26 +67,26 @@ export function AssetStatsCards({ records, onAssetUpdated, showEditButton = true
     .reduce((sum, adj) => sum + adj.amount, 0)
 
   // 最终显示值
-  // 总资产 = 存款 + 投资 + 固定资产 + 总资产调整
-  const finalTotalAssets = baseSavings + savingsAdjustments + baseInvestment + investmentAdjustments + totalAssetAdjustments + fixedAssets
+  // 总收入 = 所有月度记录的总收入之和
+  const finalTotalIncome = baseTotalIncome
   const finalInvestment = baseInvestment + investmentAdjustments
   const finalSavings = baseSavings + savingsAdjustments
 
   // 应用数字动画 - 使用 forceAnimationKey 来强制触发动画
-  const animatedTotalAssets = useNumberAnimation(finalTotalAssets, 1500, forceAnimationKey > 0)
+  const animatedTotalIncome = useNumberAnimation(finalTotalIncome, 1500, forceAnimationKey > 0)
   const animatedInvestment = useNumberAnimation(finalInvestment, 1500, forceAnimationKey > 0)
   const animatedSavings = useNumberAnimation(finalSavings, 1500, forceAnimationKey > 0)
   const animatedFixedAssets = useNumberAnimation(fixedAssets, 1500, forceAnimationKey > 0)
 
   const stats = [
     {
-      key: 'total-asset',
-      title: '总资产',
-      value: formatCurrency(animatedTotalAssets, 'CNY'),
-      icon: '📊',
+      key: 'total-income',
+      title: '总收入',
+      value: formatCurrency(animatedTotalIncome, 'CNY'),
+      icon: '💵',
       color: 'info',
-      baseValue: baseTotalAssets,
-      adjustments: totalAssetAdjustments
+      baseValue: baseTotalIncome,
+      adjustments: 0
     },
     {
       key: 'investment',
@@ -145,7 +141,7 @@ export function AssetStatsCards({ records, onAssetUpdated, showEditButton = true
               <div className="asset-stats-card__title">{stat.title}</div>
               <div className="asset-stats-card__value">
                 {stat.value}
-                {showEditButton && stat.key !== 'total-asset' && (
+                {showEditButton && stat.key !== 'total-income' && (
                   <button
                     className="asset-stats-card__edit-btn"
                     onClick={() => handleOpenDetail(stat.key as typeof selectedAssetType)}

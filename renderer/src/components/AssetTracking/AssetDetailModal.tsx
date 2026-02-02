@@ -14,17 +14,17 @@ import './AssetDetailModal.css'
 export interface AssetDetailModalProps {
   isOpen: boolean
   onClose: () => void
-  assetType: 'total-asset' | 'investment' | 'savings' | 'fixed-asset'
+  assetType: 'total-income' | 'investment' | 'savings' | 'fixed-asset'
   records: MonthlyAssetRecord[]
   onAssetUpdated: () => void
 }
 
 const ASSET_TYPE_CONFIG = {
-  'total-asset': {
-    title: '总资产详情',
-    icon: '📊',
+  'total-income': {
+    title: '总收入详情',
+    icon: '💵',
     color: 'info',
-    description: '所有月度记录的存款与投资总和'
+    description: '所有月度记录的总收入之和'
   },
   'investment': {
     title: '投资金额详情',
@@ -82,8 +82,8 @@ export function AssetDetailModal({
     if (assetType === 'fixed-asset') return 0
 
     return records.reduce((sum, record) => {
-      if (assetType === 'total-asset') {
-        return sum + record.savings + record.investment
+      if (assetType === 'total-income') {
+        return sum + record.totalIncome
       } else if (assetType === 'investment') {
         return sum + record.investment
       } else if (assetType === 'savings') {
@@ -107,6 +107,12 @@ export function AssetDetailModal({
   const handleAddAdjustment = () => {
     const amount = parseFloat(newAmount)
     if (!amount || !newDate) return
+
+    // 总收入不允许手动调整
+    if (assetType === 'total-income') {
+      alert('总收入由月度记录自动计算，不允许手动调整')
+      return
+    }
 
     const success = assetTrackingStorage.addAdjustment({
       type: assetType,
@@ -139,8 +145,8 @@ export function AssetDetailModal({
   const finalValue = calculateFinalValue()
 
   // 根据资产类型显示不同的标签
-  const isNotTotalAsset = assetType !== 'total-asset'
-  const adjustmentLabel = isNotTotalAsset ? '补充记录' : '月度记录'
+  const isNotTotalIncome = assetType !== 'total-income'
+  const adjustmentLabel = isNotTotalIncome ? '补充记录' : '月度记录'
 
   return (
     <Modal
@@ -189,8 +195,8 @@ export function AssetDetailModal({
               ) : (
                 <div className="asset-detail-modal__records-list">
                   {records.map(record => {
-                    const recordValue = assetType === 'total-asset'
-                      ? record.savings + record.investment
+                    const recordValue = assetType === 'total-income'
+                      ? record.totalIncome
                       : assetType === 'investment'
                       ? record.investment
                       : record.savings

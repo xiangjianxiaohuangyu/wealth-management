@@ -14,6 +14,7 @@ export function UpdateNotification() {
   const [isVisible, setIsVisible] = useState(false)
   const [isDownloading, setIsDownloading] = useState(false)
   const [showLatestVersion, setShowLatestVersion] = useState(false)
+  const [updateError, setUpdateError] = useState<string | null>(null)
 
   // 监听更新事件
   useEffect(() => {
@@ -45,8 +46,8 @@ export function UpdateNotification() {
 
     const handleUpdateError = (_event: any, error: any) => {
       console.error('更新错误:', error)
-      alert(`更新失败：${error.message}`)
-      setIsVisible(false)
+      setUpdateError(error.message || '更新失败，请稍后重试')
+      setIsVisible(true)
     }
 
     window.electron?.on?.('update-available', handleUpdateAvailable)
@@ -85,6 +86,7 @@ export function UpdateNotification() {
       setIsDownloaded(false)
       setIsDownloading(false)
       setShowLatestVersion(false)
+      setUpdateError(null)
     }, 300)
   }
 
@@ -191,6 +193,26 @@ export function UpdateNotification() {
                 立即更新
               </Button>
             </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // 更新失败通知
+  if (updateError && isVisible) {
+    return (
+      <div className={`update-notification latest-version ${isVisible ? 'show' : ''}`}>
+        <div className="update-content update-content--no-action">
+          <button className="close-btn" onClick={handleDismissClick}>
+            ✕
+          </button>
+          <div className="update-body">
+            <div className="update-header-info">
+              <span className="update-icon">❌</span>
+              <h3>更新失败</h3>
+            </div>
+            <div className="update-message">{updateError}</div>
           </div>
         </div>
       </div>
