@@ -6,8 +6,10 @@
  * 投资记录行更新数据（不包含只读字段）
  */
 export interface InvestmentRecordRowUpdate {
-  /** 点数/价格 */
-  price?: number
+  /** 起始点 */
+  startPoint?: number
+  /** 终点 */
+  endPoint?: number
   /** 规划比例（%） */
   plannedPercentage?: number
   /** 实际金额 */
@@ -20,8 +22,10 @@ export interface InvestmentRecordRowUpdate {
 export interface InvestmentRecordRow {
   /** 行ID */
   id: string
-  /** 点数/价格 */
-  price: number
+  /** 起始点 */
+  startPoint: number
+  /** 终点 */
+  endPoint: number
   /** 规划比例（%） */
   plannedPercentage: number
   /** 实际金额 */

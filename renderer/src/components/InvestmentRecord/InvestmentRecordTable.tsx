@@ -26,10 +26,17 @@ export function InvestmentRecordTable({
   onRowDelete
 }: InvestmentRecordTableProps) {
 
-  const handlePriceChange = (rowId: string, value: string) => {
-    const price = parseFloat(value) || 0
-    if (price >= 0) {
-      onRowUpdate(rowId, { price })
+  const handleStartPointChange = (rowId: string, value: string) => {
+    const startPoint = parseFloat(value) || 0
+    if (startPoint >= 0) {
+      onRowUpdate(rowId, { startPoint })
+    }
+  }
+
+  const handleEndPointChange = (rowId: string, value: string) => {
+    const endPoint = parseFloat(value) || 0
+    if (endPoint >= 0) {
+      onRowUpdate(rowId, { endPoint })
     }
   }
 
@@ -65,7 +72,8 @@ export function InvestmentRecordTable({
       <table className="investment-record-table__table">
         <thead>
           <tr>
-            <th>点数/价格</th>
+            <th>起始点</th>
+            <th>终点</th>
             <th>规划比例%</th>
             <th>规划金额</th>
             <th>实际金额</th>
@@ -82,8 +90,19 @@ export function InvestmentRecordTable({
                   <input
                     type="number"
                     className="investment-record-table__input"
-                    value={row.price || ''}
-                    onChange={(e) => handlePriceChange(row.id, e.target.value)}
+                    value={row.startPoint || ''}
+                    onChange={(e) => handleStartPointChange(row.id, e.target.value)}
+                    placeholder="0.00"
+                    min="0"
+                    step="0.01"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    className="investment-record-table__input"
+                    value={row.endPoint || ''}
+                    onChange={(e) => handleEndPointChange(row.id, e.target.value)}
                     placeholder="0.00"
                     min="0"
                     step="0.01"

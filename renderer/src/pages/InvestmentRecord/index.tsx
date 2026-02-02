@@ -83,7 +83,8 @@ export default function InvestmentRecord() {
   // 添加行到卡片
   const handleAddRow = (cardId: string) => {
     const defaultRow: Omit<InvestmentRecordRow, 'id' | 'createdAt' | 'updatedAt'> = {
-      price: 0,
+      startPoint: 0,
+      endPoint: 0,
       plannedPercentage: 0,
       actualAmount: 0
     }
