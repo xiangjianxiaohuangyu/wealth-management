@@ -4,14 +4,13 @@
  * 显示单个资产卡片中的记录行列表
  */
 
-import { useState, useMemo, useRef } from 'react'
+import { useState } from 'react'
 import { formatCurrency } from '../../utils/format/currency'
 import type { InvestmentRecordRow, InvestmentRecordRowUpdate } from '../../types/investmentRecord.types'
 import {
   validateStartEndPoint,
   validatePercentage,
-  validateAmount,
-  getRowErrorMessage
+  validateAmount
 } from '../../utils/validation/investmentRecordValidation'
 import './InvestmentRecordTable.css'
 
@@ -24,16 +23,13 @@ export interface InvestmentRecordTableProps {
   onRowUpdate: (rowId: string, updates: InvestmentRecordRowUpdate) => void
   /** 删除行 */
   onRowDelete: (rowId: string) => void
-  /** 卡片ID（用于验证比例总和） */
-  cardId?: string
 }
 
 export function InvestmentRecordTable({
   rows,
   totalInvestment,
   onRowUpdate,
-  onRowDelete,
-  cardId
+  onRowDelete
 }: InvestmentRecordTableProps) {
   // 管理每行的错误状态
   const [rowErrors, setRowErrors] = useState<Record<string, Record<string, string>>>({})

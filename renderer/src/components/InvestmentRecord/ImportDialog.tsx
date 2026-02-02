@@ -18,16 +18,14 @@ export interface ImportDialogProps {
 }
 
 export function ImportDialog({ isOpen, onClose, onImport }: ImportDialogProps) {
-  const [file, setFile] = useState<File | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [previewData, setPreviewData] = useState<InvestmentRecordData | null>(null)
   const [error, setError] = useState<string>('')
   const [isImporting, setIsImporting] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
     if (!selectedFile) {
-      setFile(null)
       setPreviewData(null)
       setError('')
       return
@@ -39,7 +37,6 @@ export function ImportDialog({ isOpen, onClose, onImport }: ImportDialogProps) {
       return
     }
 
-    setFile(selectedFile)
     setError('')
 
     // 读取并预览文件
@@ -99,7 +96,6 @@ export function ImportDialog({ isOpen, onClose, onImport }: ImportDialogProps) {
   }
 
   const handleClose = () => {
-    setFile(null)
     setPreviewData(null)
     setError('')
     if (fileInputRef.current) {
