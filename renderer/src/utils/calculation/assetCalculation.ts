@@ -53,25 +53,19 @@ export function calculateTotalSavings(): number {
 /**
  * 计算总固定资产（从资产跟踪数据）
  *
- * 包括：
- * - 所有月度记录的固定资产总和
- * - 类型为 'fixed-asset' 的调整记录金额总和
+ * 固定资产完全由调整记录管理
  *
  * @returns 总固定资产金额
  */
 export function calculateTotalFixedAssets(): number {
-  const records = assetTrackingStorage.getAllRecords()
   const adjustments = assetTrackingStorage.getAllAdjustments()
-
-  // 计算基础固定资产（从月度记录）
-  const baseAssets = records.reduce((sum, r) => sum + r.fixedAssets, 0)
 
   // 计算固定资产调整金额
   const assetAdjustments = adjustments
     .filter(a => a.type === 'fixed-asset')
     .reduce((sum, adj) => sum + adj.amount, 0)
 
-  return baseAssets + assetAdjustments
+  return assetAdjustments
 }
 
 /**
