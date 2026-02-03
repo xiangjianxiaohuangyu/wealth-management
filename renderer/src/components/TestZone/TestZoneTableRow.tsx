@@ -26,6 +26,8 @@ export interface TestZoneTableRowProps {
   isEditing?: boolean
   /** 投资金额计算方式 */
   calculationMethod?: CalculationMethod
+  /** 拖拽手柄属性 */
+  dragHandleProps?: React.HTMLAttributes<HTMLDivElement>
 }
 
 export function TestZoneTableRow({
@@ -35,7 +37,8 @@ export function TestZoneTableRow({
   onSave,
   onDelete,
   isEditing = false,
-  calculationMethod = 'total-income'
+  calculationMethod = 'total-income',
+  dragHandleProps
 }: TestZoneTableRowProps) {
   // 编辑时的临时数据
   const [tempRow, setTempRow] = useState<TestZoneRow>(row)
@@ -61,10 +64,6 @@ export function TestZoneTableRow({
     }
   }, [tempRow.investmentPercentage, calculationMethod, isCustomAmount, totalIncome, totalInvestment])
 
-  const handleSave = () => {
-    onSave(tempRow)
-  }
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.currentTarget.blur()
@@ -73,30 +72,40 @@ export function TestZoneTableRow({
 
   const handleRangeStartChange = (value: string) => {
     const numValue = parseFloat(value) || 0
-    setTempRow({ ...tempRow, valueRangeStart: numValue })
+    const newRow = { ...tempRow, valueRangeStart: numValue }
+    setTempRow(newRow)
+    onSave(newRow)
   }
 
   const handleRangeEndChange = (value: string) => {
     const numValue = parseFloat(value) || 0
-    setTempRow({ ...tempRow, valueRangeEnd: numValue })
+    const newRow = { ...tempRow, valueRangeEnd: numValue }
+    setTempRow(newRow)
+    onSave(newRow)
   }
 
   const handlePercentageChange = (value: string) => {
     let numValue = parseFloat(value) || 0
     if (numValue < 0) numValue = 0
     if (numValue > 100) numValue = 100
-    setTempRow({ ...tempRow, investmentPercentage: numValue })
+    const newRow = { ...tempRow, investmentPercentage: numValue }
+    setTempRow(newRow)
+    onSave(newRow)
   }
 
   const handleInvestmentAmountChange = (value: string) => {
     const numValue = parseFloat(value) || 0
-    setTempRow({ ...tempRow, investmentAmount: numValue })
+    const newRow = { ...tempRow, investmentAmount: numValue }
+    setTempRow(newRow)
     setIsCustomAmount(true)
+    onSave(newRow)
   }
 
   const handleActualAmountChange = (value: string) => {
     const numValue = parseFloat(value) || 0
-    setTempRow({ ...tempRow, actualAmount: numValue })
+    const newRow = { ...tempRow, actualAmount: numValue }
+    setTempRow(newRow)
+    onSave(newRow)
   }
 
   return (
@@ -199,14 +208,6 @@ export function TestZoneTableRow({
 
       {/* 操作按钮 */}
       <div className="testzone-table__cell testzone-table__actions">
-        {isEditing ? (
-          <button
-            className="testzone-table__action-btn testzone-table__action-btn--save"
-            onClick={handleSave}
-          >
-            保存
-          </button>
-        ) : null}
         {onDelete && (
           <button
             className="testzone-table__action-btn testzone-table__action-btn--delete"
@@ -214,6 +215,14 @@ export function TestZoneTableRow({
           >
             删除
           </button>
+        )}
+        {isEditing && dragHandleProps && (
+          <div
+            className="testzone-table__row-drag-handle"
+            {...dragHandleProps}
+          >
+            <span className="testzone-table__row-drag-handle-icon">⋮⋮</span>
+          </div>
         )}
       </div>
     </div>

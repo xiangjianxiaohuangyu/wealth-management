@@ -1,0 +1,351 @@
+{
+  "cards": [
+    {
+      "id": "card-1770042502518-i57qq1lel",
+      "name": "3-5年国债",
+      "createdAt": "2026-02-02T14:28:22.518Z",
+      "updatedAt": "2026-02-02T14:28:34.544Z",
+      "rows": [
+        {
+          "id": "row-1770042508260-78knzienv",
+          "startPoint": 0,
+          "endPoint": 1,
+          "plannedPercentage": 20,
+          "actualAmount": 8000,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        }
+      ]
+    },
+    {
+      "id": "card-sh50-001",
+      "name": "上证50",
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2026-02-03T11:13:55.339Z",
+      "rows": [
+        {
+          "id": "row-sh50-001",
+          "startPoint": 4100,
+          "endPoint": 4200,
+          "plannedPercentage": 0.5,
+          "actualAmount": 250,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-sh50-002",
+          "startPoint": 4000,
+          "endPoint": 4100,
+          "plannedPercentage": 0.5,
+          "actualAmount": 50,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-sh50-003",
+          "startPoint": 3900,
+          "endPoint": 4000,
+          "plannedPercentage": 0.5,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-sh50-004",
+          "startPoint": 3800,
+          "endPoint": 3900,
+          "plannedPercentage": 0.5,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-sh50-005",
+          "startPoint": 3700,
+          "endPoint": 3800,
+          "plannedPercentage": 1,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-sh50-006",
+          "startPoint": 3600,
+          "endPoint": 3700,
+          "plannedPercentage": 1,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-sh50-007",
+          "startPoint": 3500,
+          "endPoint": 3600,
+          "plannedPercentage": 1,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-sh50-008",
+          "startPoint": 3400,
+          "endPoint": 3500,
+          "plannedPercentage": 1,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-sh50-009",
+          "startPoint": 3300,
+          "endPoint": 3400,
+          "plannedPercentage": 1,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-sh50-010",
+          "startPoint": 3200,
+          "endPoint": 3300,
+          "plannedPercentage": 1,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-sh50-011",
+          "startPoint": 3100,
+          "endPoint": 3200,
+          "plannedPercentage": 1,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-sh50-012",
+          "startPoint": 3000,
+          "endPoint": 3100,
+          "plannedPercentage": 1,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        }
+      ]
+    },
+    {
+      "id": "card-nasdaq-001",
+      "name": "纳斯达克",
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2026-02-02T14:08:09.995Z",
+      "rows": [
+        {
+          "id": "row-nasdaq-001",
+          "startPoint": 23000,
+          "endPoint": 24000,
+          "plannedPercentage": 0.5,
+          "actualAmount": 120,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-nasdaq-002",
+          "startPoint": 22000,
+          "endPoint": 23000,
+          "plannedPercentage": 0.5,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-nasdaq-003",
+          "startPoint": 21000,
+          "endPoint": 22000,
+          "plannedPercentage": 0.5,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-nasdaq-004",
+          "startPoint": 20000,
+          "endPoint": 21000,
+          "plannedPercentage": 0.5,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-nasdaq-005",
+          "startPoint": 19000,
+          "endPoint": 20000,
+          "plannedPercentage": 1,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-nasdaq-006",
+          "startPoint": 18000,
+          "endPoint": 19000,
+          "plannedPercentage": 1,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-nasdaq-007",
+          "startPoint": 17000,
+          "endPoint": 18000,
+          "plannedPercentage": 1,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-nasdaq-008",
+          "startPoint": 16000,
+          "endPoint": 17000,
+          "plannedPercentage": 2,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-nasdaq-009",
+          "startPoint": 15000,
+          "endPoint": 16000,
+          "plannedPercentage": 3,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        }
+      ]
+    },
+    {
+      "id": "card-gold-001",
+      "name": "黄金",
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2026-02-02T14:08:46.416Z",
+      "rows": [
+        {
+          "id": "row-gold-001",
+          "startPoint": 1000,
+          "endPoint": 1100,
+          "plannedPercentage": 0.5,
+          "actualAmount": 100,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-gold-002",
+          "startPoint": 900,
+          "endPoint": 1000,
+          "plannedPercentage": 1,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-gold-003",
+          "startPoint": 800,
+          "endPoint": 900,
+          "plannedPercentage": 1.5,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-gold-004",
+          "startPoint": 700,
+          "endPoint": 800,
+          "plannedPercentage": 2,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-gold-005",
+          "startPoint": 600,
+          "endPoint": 700,
+          "plannedPercentage": 2,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-gold-006",
+          "startPoint": 500,
+          "endPoint": 600,
+          "plannedPercentage": 3,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        }
+      ]
+    },
+    {
+      "id": "card-btc-001",
+      "name": "BTC",
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2026-02-02T14:30:04.024Z",
+      "rows": [
+        {
+          "id": "row-btc-001",
+          "startPoint": 90,
+          "endPoint": 100,
+          "plannedPercentage": 0.5,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-btc-002",
+          "startPoint": 80,
+          "endPoint": 90,
+          "plannedPercentage": 0.5,
+          "actualAmount": 200,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-btc-003",
+          "startPoint": 70,
+          "endPoint": 80,
+          "plannedPercentage": 1,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-btc-004",
+          "startPoint": 60,
+          "endPoint": 70,
+          "plannedPercentage": 2,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-btc-005",
+          "startPoint": 50,
+          "endPoint": 60,
+          "plannedPercentage": 3,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        },
+        {
+          "id": "row-btc-006",
+          "startPoint": 40,
+          "endPoint": 50,
+          "plannedPercentage": 3,
+          "actualAmount": 0,
+          "createdAt": "2026-02-03T11:14:47.492Z",
+          "updatedAt": "2026-02-03T11:14:47.492Z"
+        }
+      ]
+    }
+  ],
+  "lastUpdated": "2026-02-03T11:14:31.801Z"
+}

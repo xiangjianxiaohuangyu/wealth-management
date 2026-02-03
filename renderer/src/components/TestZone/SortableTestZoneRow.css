@@ -1,0 +1,12 @@
+/**
+ * 可排序的测试区表格行组件样式
+ */
+
+.sortable-testzone-row {
+  display: block;
+  width: 100%;
+}
+
+.sortable-testzone-row--dragging {
+  opacity: 0.5;
+}

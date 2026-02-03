@@ -159,6 +159,35 @@
   display: flex;
   gap: var(--spacing-sm, 8px);
   justify-content: center;
+  align-items: center;
+}
+
+/* 行拖拽手柄 */
+.testzone-table__row-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  cursor: grab;
+  color: var(--color-text-secondary, #636e72);
+  transition: all var(--transition-fast, 0.15s) ease;
+  user-select: none;
+}
+
+.testzone-table__row-drag-handle:hover {
+  color: var(--color-primary, #4da3ff);
+  transform: scale(1.1);
+}
+
+.testzone-table__row-drag-handle:active {
+  cursor: grabbing;
+}
+
+.testzone-table__row-drag-handle-icon {
+  font-size: var(--font-size-sm, 12px);
+  line-height: 1;
+  letter-spacing: -2px;
 }
 
 .testzone-table__action-btn {

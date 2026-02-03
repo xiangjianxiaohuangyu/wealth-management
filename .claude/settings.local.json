@@ -26,7 +26,8 @@
       "Bash(dir:*)",
       "Bash(findstr:*)",
       "Bash(npm install:*)",
-      "Bash(npm run compile:renderer:*)"
+      "Bash(npm run compile:renderer:*)",
+      "Bash(git restore:*)"
     ]
   }
 }

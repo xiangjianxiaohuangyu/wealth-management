@@ -8,8 +8,12 @@
  */
 
 import { useState, useEffect } from 'react'
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import type { DragEndEvent } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable'
 import type { TestZoneTable as TestZoneTableType } from '../../types/testzone.types'
-import { TestZoneTableRow } from './TestZoneTableRow'
+import { SortableTestZoneRow } from './SortableTestZoneRow'
+import { ConfirmDialog } from '../Investment/ConfirmDialog'
 import { testZoneStorage } from '../../services/storage/testZoneStorage'
 import { testZoneSettingsStorage } from '../../services/storage/testZoneSettingsStorage'
 import { eventBus } from '../../utils/eventBus'
@@ -40,6 +44,8 @@ export function TestZoneTable({
   const [collapsed, setCollapsed] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [calculationMethod, setCalculationMethod] = useState<CalculationMethod>('total-income')
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [title, setTitle] = useState(table.name)
 
   // 加载计算方式设置
   useEffect(() => {
@@ -57,9 +63,30 @@ export function TestZoneTable({
     }
   }, [])
 
+  // 配置行拖拽传感器
+  const rowSensors = useSensors(
+    useSensor(PointerSensor)
+  )
+
+  // 处理行拖拽结束事件
+  const handleRowDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    if (over && active.id !== over.id) {
+      const oldIndex = rows.findIndex(r => r.id === active.id)
+      const newIndex = rows.findIndex(r => r.id === over.id)
+
+      // 重新排序行
+      const newRows = arrayMove(rows, oldIndex, newIndex)
+      setRows(newRows)
+
+      // 更新存储中的行顺序
+      testZoneStorage.updateTable(table.id, { rows: newRows })
+    }
+  }
+
   const handleSaveRow = (rowId: string, updatedRow: TestZoneTableType['rows'][0]) => {
-    testZoneStorage.updateRow(table.id, rowId, updatedRow)
-    // 更新本地状态
+    // 只更新本地状态，不持久化到存储
+    // 点击"完成"按钮时才持久化所有数据
     setRows(prev => prev.map(r => r.id === rowId ? { ...r, ...updatedRow } : r))
   }
 
@@ -86,9 +113,12 @@ export function TestZoneTable({
   }
 
   const handleDeleteTable = () => {
-    if (confirm(`确定要删除表格"${table.name}"吗？`)) {
-      onDeleteTable(table.id)
-    }
+    setShowDeleteConfirm(true)
+  }
+
+  const handleConfirmDelete = () => {
+    setShowDeleteConfirm(false)
+    onDeleteTable(table.id)
   }
 
   const toggleCollapse = () => {
@@ -96,7 +126,35 @@ export function TestZoneTable({
   }
 
   const toggleEditMode = () => {
+    if (isEditing) {
+      // 完成编辑时，保存所有行数据
+      rows.forEach(row => {
+        testZoneStorage.updateRow(table.id, row.id, row)
+      })
+      // 保存标题
+      if (title.trim() && title !== table.name) {
+        testZoneStorage.updateTable(table.id, { name: title.trim() })
+      }
+    } else {
+      // 进入编辑模式时，标题变为输入框
+      setTitle(table.name)
+    }
     setIsEditing(!isEditing)
+  }
+
+  const handleTitleSave = () => {
+    if (title.trim() && title !== table.name) {
+      testZoneStorage.updateTable(table.id, { name: title.trim() })
+    }
+  }
+
+  const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.currentTarget.blur()
+    } else if (e.key === 'Escape') {
+      setTitle(table.name)
+      e.currentTarget.blur()
+    }
   }
 
   return (
@@ -110,7 +168,21 @@ export function TestZoneTable({
           >
             {collapsed ? '▶' : '▼'}
           </button>
-          <h3 className="testzone-table__title">{table.name}</h3>
+          {isEditing ? (
+            <input
+              type="text"
+              className="testzone-table__title-input"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              onBlur={handleTitleSave}
+              onKeyDown={handleTitleKeyDown}
+              autoFocus
+            />
+          ) : (
+            <h3 className="testzone-table__title">
+              {table.name}
+            </h3>
+          )}
         </div>
         <div className="testzone-table__header-actions">
           <button
@@ -154,18 +226,29 @@ export function TestZoneTable({
                   <p>暂无数据，点击下方"添加行"按钮开始添加</p>
                 </div>
               ) : (
-                rows.map(row => (
-                  <TestZoneTableRow
-                    key={row.id}
-                    row={row}
-                    totalIncome={totalIncome}
-                    totalInvestment={totalInvestment}
-                    onSave={(updatedRow) => handleSaveRow(row.id, updatedRow)}
-                    onDelete={() => handleDeleteRow(row.id)}
-                    isEditing={isEditing}
-                    calculationMethod={calculationMethod}
-                  />
-                ))
+                <DndContext
+                  sensors={rowSensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={handleRowDragEnd}
+                >
+                  <SortableContext
+                    items={rows.map(r => r.id)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    {rows.map(row => (
+                      <SortableTestZoneRow
+                        key={row.id}
+                        row={row}
+                        totalIncome={totalIncome}
+                        totalInvestment={totalInvestment}
+                        onSave={(updatedRow) => handleSaveRow(row.id, updatedRow)}
+                        onDelete={() => handleDeleteRow(row.id)}
+                        isEditing={isEditing}
+                        calculationMethod={calculationMethod}
+                      />
+                    ))}
+                  </SortableContext>
+                </DndContext>
               )}
             </div>
 
@@ -181,6 +264,18 @@ export function TestZoneTable({
           </>
         )}
       </div>
+
+      {/* 删除确认弹窗 */}
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleConfirmDelete}
+        title="删除表格"
+        message={`确定要删除表格"${table.name}"吗？此操作不可恢复。`}
+        confirmText="删除"
+        cancelText="取消"
+        type="danger"
+      />
     </div>
   )
 }

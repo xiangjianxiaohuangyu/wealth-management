@@ -65,6 +65,25 @@
   font-size: var(--font-size-lg, 16px);
   font-weight: var(--font-weight-semibold, 600);
   color: var(--color-text, #2d3436);
+  cursor: text;
+}
+
+.testzone-table__title-input {
+  margin: 0;
+  font-size: var(--font-size-lg, 16px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text, #2d3436);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-primary, #4da3ff);
+  border-radius: var(--border-radius-sm, 4px);
+  padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
+  outline: none;
+  transition: all var(--transition-fast, 0.15s) ease;
+}
+
+.testzone-table__title-input:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(77, 163, 255, 0.6);
 }
 
 .testzone-table__edit-btn {
