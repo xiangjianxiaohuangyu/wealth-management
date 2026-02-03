@@ -37,7 +37,42 @@ export const investmentRecordStorage = {
    */
   getAllCards(): InvestmentRecordCard[] {
     const data = this.getData()
-    return data?.cards || []
+    const cards = data?.cards || []
+
+    // 数据迁移：为旧数据添加 orderIndex 和 cardOrderIndex
+    let needsSave = false
+    const migratedCards = cards.map((card, cardIndex) => {
+      let updatedCard = { ...card }
+
+      // 添加卡片顺序索引
+      if (typeof updatedCard.cardOrderIndex !== 'number') {
+        updatedCard = { ...updatedCard, cardOrderIndex: cardIndex }
+        needsSave = true
+      }
+
+      // 添加行顺序索引
+      const rows = updatedCard.rows.map((row, rowIndex) => {
+        if (typeof row.orderIndex !== 'number') {
+          needsSave = true
+          return { ...row, orderIndex: rowIndex }
+        }
+        return row
+      })
+
+      if (rows !== updatedCard.rows) {
+        updatedCard = { ...updatedCard, rows }
+      }
+
+      return updatedCard
+    })
+
+    // 如果有数据迁移，自动保存
+    if (needsSave) {
+      this.saveCards(migratedCards)
+    }
+
+    // 按 cardOrderIndex 排序后返回
+    return migratedCards.sort((a, b) => a.cardOrderIndex - b.cardOrderIndex)
   },
 
   /**
@@ -53,12 +88,14 @@ export const investmentRecordStorage = {
   /**
    * 添加卡片
    */
-  addCard(card: Omit<InvestmentRecordCard, 'id' | 'createdAt' | 'updatedAt'>): InvestmentRecordCard | null {
+  addCard(card: Omit<InvestmentRecordCard, 'id' | 'createdAt' | 'updatedAt' | 'cardOrderIndex'>): InvestmentRecordCard | null {
     const cards = this.getAllCards()
     const now = new Date().toISOString()
+    const maxOrderIndex = cards.length > 0 ? Math.max(...cards.map(c => c.cardOrderIndex ?? -1)) : -1
     const newCard: InvestmentRecordCard = {
       ...card,
       id: `card-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      cardOrderIndex: maxOrderIndex + 1,
       createdAt: now,
       updatedAt: now
     }
@@ -105,7 +142,7 @@ export const investmentRecordStorage = {
   /**
    * 添加行到卡片
    */
-  addRow(cardId: string, row: Omit<InvestmentRecordRow, 'id' | 'createdAt' | 'updatedAt'>): InvestmentRecordRow | null {
+  addRow(cardId: string, row: Omit<InvestmentRecordRow, 'id' | 'createdAt' | 'updatedAt' | 'orderIndex'>): InvestmentRecordRow | null {
     const cards = this.getAllCards()
     const cardIndex = cards.findIndex(c => c.id === cardId)
 
@@ -114,9 +151,13 @@ export const investmentRecordStorage = {
     }
 
     const now = new Date().toISOString()
+    const maxOrderIndex = cards[cardIndex].rows.length > 0
+      ? Math.max(...cards[cardIndex].rows.map(r => r.orderIndex ?? -1))
+      : -1
     const newRow: InvestmentRecordRow = {
       ...row,
       id: `row-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      orderIndex: maxOrderIndex + 1,
       createdAt: now,
       updatedAt: now
     }
@@ -222,5 +263,70 @@ export const investmentRecordStorage = {
     } catch (error) {
       return { success: false, error: '数据格式错误' }
     }
+  },
+
+  /**
+   * 重新排序卡片
+   */
+  reorderCards(oldIndex: number, newIndex: number): boolean {
+    const cards = this.getAllCards()
+    const reorderedCards = [...cards]
+    const [movedCard] = reorderedCards.splice(oldIndex, 1)
+    reorderedCards.splice(newIndex, 0, movedCard)
+
+    // 更新 cardOrderIndex
+    reorderedCards.forEach((card, index) => {
+      card.cardOrderIndex = index
+      card.updatedAt = new Date().toISOString()
+    })
+
+    return this.saveCards(reorderedCards)
+  },
+
+  /**
+   * 重新排序卡片中的行
+   */
+  reorderRows(cardId: string, oldIndex: number, newIndex: number): boolean {
+    const cards = this.getAllCards()
+    const cardIndex = cards.findIndex(c => c.id === cardId)
+
+    if (cardIndex === -1) {
+      return false
+    }
+
+    const rows = [...cards[cardIndex].rows]
+    const [movedRow] = rows.splice(oldIndex, 1)
+    rows.splice(newIndex, 0, movedRow)
+
+    // 更新 orderIndex
+    rows.forEach((row, index) => {
+      row.orderIndex = index
+      row.updatedAt = new Date().toISOString()
+    })
+
+    cards[cardIndex].rows = rows
+    cards[cardIndex].updatedAt = new Date().toISOString()
+
+    return this.saveCards(cards)
+  },
+
+  /**
+   * 确保卡片有正确的 cardOrderIndex
+   * (用于修复旧数据)
+   */
+  ensureCardOrderIndices(): boolean {
+    const data = this.getData()
+    if (!data?.cards) return false
+
+    const hasOldCards = data.cards.some(card => typeof card.cardOrderIndex !== 'number')
+    if (!hasOldCards) return false
+
+    // 为所有卡片分配索引
+    const cards = data.cards.map((card, index) => ({
+      ...card,
+      cardOrderIndex: typeof card.cardOrderIndex === 'number' ? card.cardOrderIndex : index
+    }))
+
+    return this.saveCards(cards)
   }
 }

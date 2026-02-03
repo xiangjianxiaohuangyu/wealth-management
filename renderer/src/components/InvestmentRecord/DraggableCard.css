@@ -1,0 +1,52 @@
+/**
+ * 可拖拽卡片样式
+ */
+
+.draggable-card {
+  position: relative;
+}
+
+.draggable-card__handle {
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(77, 163, 255, 0.1);
+  border: 1px solid rgba(77, 163, 255, 0.3);
+  border-radius: var(--border-radius-md, 8px);
+  cursor: grab;
+  color: rgba(77, 163, 255, 0.6);
+  transition: all 0.2s ease;
+  opacity: 0;
+}
+
+.draggable-card:hover .draggable-card__handle {
+  opacity: 1;
+}
+
+.draggable-card__handle:hover {
+  background: rgba(77, 163, 255, 0.2);
+  border-color: rgba(77, 163, 255, 0.5);
+  color: rgba(77, 163, 255, 1);
+}
+
+.draggable-card__handle:active {
+  cursor: grabbing;
+  background: rgba(77, 163, 255, 0.3);
+}
+
+.draggable-card__handle-icon {
+  pointer-events: none;
+}
+
+/* 移动端隐藏拖拽手柄，使用触摸拖拽 */
+@media (max-width: 768px) {
+  .draggable-card__handle {
+    display: none;
+  }
+}

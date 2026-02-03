@@ -184,7 +184,7 @@ ipcMain.handle('read-project-file', async (_event, fileName) => {
   }
 
   // 限制在白名单文件列表
-  const allowedFiles = ['changelog.md', 'README.md', 'ARCHITECTURE.md', 'PROJECT_INTRO.md'];
+  const allowedFiles = ['changelog.md', 'changelog_upcoming.md', 'README.md', 'ARCHITECTURE.md', 'PROJECT_INTRO.md'];
   if (!allowedFiles.includes(fileName)) {
     console.error('File not in whitelist:', fileName);
     return { success: false, error: 'File not allowed' };

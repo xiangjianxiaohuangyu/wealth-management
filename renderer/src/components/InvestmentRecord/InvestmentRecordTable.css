@@ -10,21 +10,23 @@
   width: 100%;
   border-collapse: collapse;
   font-size: var(--font-size-sm, 14px);
+  table-layout: fixed;
 }
 
 .investment-record-table__table th {
-  background-color: rgba(77, 163, 255, 0.08);
+  background-color: rgba(77, 163, 255, 0.15);
   backdrop-filter: blur(10px);
   padding: 12px 8px;
-  text-align: left;
+  text-align: center;
   font-weight: var(--font-weight-medium, 500);
   color: #ffffff;
-  border-bottom: 1px solid rgba(77, 163, 255, 0.2);
+  border-bottom: 1px solid rgba(77, 163, 255, 0.3);
 }
 
 .investment-record-table__table td {
   padding: 8px;
-  border-bottom: 1px solid rgba(77, 163, 255, 0.1);
+  border-bottom: 1px solid rgba(77, 163, 255, 0.15);
+  color: #ffffff;
 }
 
 .investment-record-table__table tr:hover {
@@ -75,9 +77,18 @@
 
 /* 规划金额显示 */
 .investment-record-table__planned-amount {
-  color: var(--color-primary, #0984e3);
+  color: rgba(255, 255, 255, 0.9);
   font-weight: var(--font-weight-medium, 500);
   min-width: 100px;
+}
+
+/* 错误提示消息 */
+.investment-record-table__error-message {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #ff4757;
+  line-height: 1.4;
+  min-height: 15px;
 }
 
 /* 按钮样式 */
@@ -92,8 +103,13 @@
 }
 
 .investment-record-table__btn--delete {
-  background-color: rgba(255, 71, 87, 0.1);
-  color: #ff4757;
+  background-color: rgba(255, 71, 87, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(255, 71, 87, 0.4);
+}
+
+.investment-record-table__btn--delete:hover {
+  background-color: rgba(255, 71, 87, 0.3);
 }
 
 .investment-record-table__btn--delete:hover {
@@ -108,18 +124,19 @@
 .investment-record-table__empty {
   padding: 48px 24px;
   text-align: center;
-  color: var(--color-text-secondary, #636e72);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .investment-record-table__empty-text {
   font-size: var(--font-size-base, 16px);
   font-weight: var(--font-weight-medium, 500);
   margin-bottom: 8px;
+  color: #ffffff;
 }
 
 .investment-record-table__empty-hint {
   font-size: var(--font-size-sm, 14px);
-  color: var(--color-text-tertiary, #b2bec3);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* 响应式设计 */
@@ -201,3 +218,107 @@
   border-radius: 2px;
   transition: width 0.3s ease, background-color 0.3s ease;
 }
+
+/* ========== 拖拽相关样式 ========== */
+
+/* 拖拽列样式 */
+.investment-record-table__th--drag,
+.investment-record-table__td--drag {
+  width: 40px;
+  min-width: 40px;
+  text-align: center;
+  padding: 8px 4px;
+}
+
+/* 可拖拽行 */
+.draggable-row {
+  cursor: default;
+}
+
+.draggable-row:hover {
+  background-color: rgba(77, 163, 255, 0.03);
+}
+
+/* 单元格错误状态 */
+.investment-record-table__cell--error {
+  background-color: rgba(255, 71, 87, 0.05);
+}
+
+.investment-record-table__cell--error .editable-cell__display {
+  border-color: rgba(255, 71, 87, 0.3);
+}
+
+/* ========== 价值区间样式 ========== */
+
+/* 价值区间容器 */
+.investment-record-table__value-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* 区间分隔符 */
+.investment-record-table__range-separator {
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+  font-size: 16px;
+  user-select: none;
+}
+
+/* 设置各列宽度 */
+.investment-record-table__table th:nth-child(1),
+.investment-record-table__table td:nth-child(1) {
+  width: 50px; /* 拖拽列 */
+}
+
+.investment-record-table__table th:nth-child(2),
+.investment-record-table__table td:nth-child(2) {
+  width: 220px; /* 价值区间 */
+}
+
+.investment-record-table__table th:nth-child(3),
+.investment-record-table__table td:nth-child(3) {
+  width: 120px; /* 规划比例 */
+}
+
+.investment-record-table__table th:nth-child(4),
+.investment-record-table__table td:nth-child(4) {
+  width: 140px; /* 规划金额 */
+}
+
+.investment-record-table__table th:nth-child(5),
+.investment-record-table__table td:nth-child(5) {
+  width: 160px; /* 实际金额 */
+}
+
+.investment-record-table__table th:nth-child(6),
+.investment-record-table__table td:nth-child(6) {
+  width: 70px; /* 操作 */
+}
+
+/* 非编辑模式时隐藏拖拽列的表头 */
+.investment-record-table__table .investment-record-table__th--drag:empty {
+  display: none;
+}
+
+/* 编辑模式下的输入框对齐 */
+.investment-record-table__table td .editable-cell {
+  display: block;
+}
+
+.investment-record-table__table td .editable-cell__input {
+  width: 100%;
+  min-width: 0;
+}
+
+/* 价值区间输入框优化 */
+.investment-record-table__value-range .editable-cell {
+  flex: 1;
+  min-width: 0;
+}
+
+.investment-record-table__value-range .editable-cell__input {
+  width: 100%;
+}
+

@@ -2,7 +2,7 @@
  * 投资记录卡片组件样式
  */
 
-/* 蓝色玻璃态卡片样式 */
+/* 蓝色玻璃态卡片样式 - 纵向单行布局 */
 .investment-record-card.card {
   background: rgba(77, 163, 255, 0.12) !important;
   backdrop-filter: blur(40px) saturate(200%) !important;
@@ -15,10 +15,10 @@
     inset 0 -1px 0 rgba(77, 163, 255, 0.1) !important;
   border-radius: var(--border-radius-lg, 12px);
   padding: 20px;
-  flex: 1 1 calc(50% - 12px);
-  min-width: 400px;
-  max-width: 600px;
+  width: 100%;
+  max-width: 100%;
   transition: all 0.3s ease;
+  color: #ffffff !important;
 }
 
 .investment-record-card.card:hover {
@@ -32,19 +32,193 @@
 /* 卡片头部 */
 .investment-record-card__header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+  flex-direction: column;
   gap: 12px;
 }
 
-/* 标题区域（包含名称输入框和进度徽章） */
-.investment-record-card__title-section {
+/* 折叠状态的头部 */
+.investment-record-card__header--collapsed {
+  gap: 0;
+}
+
+/* 标题行 */
+.investment-record-card__title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 标题左侧区域 */
+.investment-record-card__title-left {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 12px;
-  position: relative;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* 标题右侧区域 */
+.investment-record-card__header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+/* 折叠按钮 */
+.investment-record-card__collapse-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-radius: var(--border-radius-md, 8px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+  padding: 0;
+}
+
+.investment-record-card__collapse-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.investment-record-card__collapse-btn:active {
+  transform: scale(0.95);
+}
+
+/* 名称文本（只读模式） */
+.investment-record-card__name-text {
+  font-size: var(--font-size-lg, 18px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: #ffffff;
+}
+
+/* 内联股票信息 */
+.investment-record-card__stock-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  font-size: var(--font-size-sm, 14px);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.investment-record-card__stock-code {
+  color: rgba(77, 163, 255, 0.9);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.investment-record-card__separator {
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 2px;
+}
+
+.investment-record-card__latest-price {
+  font-weight: var(--font-weight-semibold, 600);
+  color: #00b894;
+}
+
+.investment-record-card__latest-price.positive {
+  color: #00b894;
+}
+
+/* 编辑模式下的股票信息输入 */
+.investment-record-card__stock-edit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 12px;
+}
+
+.investment-record-card__stock-input,
+.investment-record-card__price-input {
+  padding: 4px 8px;
+  border: 1px solid rgba(77, 163, 255, 0.5);
+  border-radius: var(--border-radius-sm, 6px);
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: var(--font-size-sm, 14px);
+  min-width: 80px;
+  transition: all 0.2s ease;
+}
+
+.investment-record-card__stock-input:focus,
+.investment-record-card__price-input:focus {
+  outline: none;
+  border-color: rgba(77, 163, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 0 2px rgba(77, 163, 255, 0.2);
+}
+
+.investment-record-card__stock-input::placeholder,
+.investment-record-card__price-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* 内联统计信息 */
+.investment-record-card__stats-inline {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: var(--border-radius-md, 8px);
+  font-size: var(--font-size-sm, 14px);
+}
+
+.investment-record-card__stat-item-inline {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.investment-record-card__stat-item-inline .stat-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+}
+
+.investment-record-card__stat-item-inline .stat-value {
+  color: #ffffff;
+  font-weight: var(--font-weight-semibold, 600);
+  font-size: 14px;
+}
+
+.investment-record-card__stat-item-inline.profit .stat-value {
+  color: #00b894;
+}
+
+.investment-record-card__stat-item-inline.loss .stat-value {
+  color: #ff4757;
+}
+
+/* 名称输入框（编辑模式） */
+.investment-record-card__name-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid rgba(77, 163, 255, 0.5);
+  border-radius: var(--border-radius-md, 8px);
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: var(--font-size-lg, 18px);
+  font-weight: var(--font-weight-semibold, 600);
+  transition: all 0.2s ease;
+}
+
+.investment-record-card__name-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.investment-record-card__name-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 
 /* 进度徽章 */
@@ -62,75 +236,128 @@
   transition: all 0.3s ease;
 }
 
-/* 折叠按钮 - 已隐藏 */
-.investment-record-card__collapse-btn {
-  display: none;
+/* 卡片内容区域 */
+.investment-record-card__content {
+  animation: fadeIn 0.3s ease;
 }
 
-/* 名称输入框 */
-.investment-record-card__name-input {
-  flex: 1;
-  padding: 8px 12px;
-  border: 1px solid rgba(77, 163, 255, 0.3);
-  border-radius: var(--border-radius-md, 8px);
-  background-color: rgba(255, 255, 255, 0.8);
-  color: var(--color-text-primary, #2d3436);
-  font-size: var(--font-size-lg, 18px);
-  font-weight: var(--font-weight-semibold, 600);
-  transition: all 0.2s ease;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.investment-record-card__name-input:focus {
-  outline: none;
-  border-color: var(--color-primary, #0984e3);
-  background-color: rgba(255, 255, 255, 1);
-  box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+/* 折叠状态下的卡片 */
+.investment-record-card--collapsed {
+  padding: 12px 20px !important;
 }
 
-.investment-record-card__name-input:hover {
-  border-color: var(--color-primary, #0984e3);
+.investment-record-card--collapsed .investment-record-card__header {
+  gap: 0;
 }
 
-.investment-record-card__name-input::placeholder {
-  color: var(--color-text-tertiary, #b2bec3);
-  font-weight: var(--font-weight-normal, 400);
+.investment-record-card--collapsed .investment-record-card__title-row {
+  gap: 8px;
 }
 
-/* 名称文本（折叠状态显示） */
-.investment-record-card__name-text {
-  flex: 1;
-  padding: 8px 12px;
-  color: #ffffff;
-  font-size: var(--font-size-lg, 18px);
-  font-weight: var(--font-weight-semibold, 600);
+.investment-record-card--collapsed .investment-record-card__title-left {
+  gap: 6px;
+}
+
+.investment-record-card--collapsed .investment-record-card__name-text {
+  font-size: 16px;
+}
+
+.investment-record-card--collapsed .investment-record-card__stock-inline {
+  font-size: 13px;
+  margin-left: 6px;
+}
+
+.investment-record-card--collapsed .investment-record-card__progress-badge {
+  font-size: 12px;
+  padding: 2px 6px;
 }
 
 /* 操作按钮区域 */
 .investment-record-card__actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 /* 按钮样式 */
 .investment-record-card__btn {
-  padding: 8px 16px;
+  padding: 6px 12px;
   border: none;
   border-radius: var(--border-radius-md, 8px);
-  font-size: var(--font-size-sm, 14px);
+  font-size: var(--font-size-sm, 13px);
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: var(--font-weight-medium, 500);
   white-space: nowrap;
+  color: #ffffff;
 }
 
+/* 编辑按钮 */
+.investment-record-card__btn--edit {
+  background-color: rgba(9, 132, 227, 0.3);
+  border: 1px solid rgba(9, 132, 227, 0.5);
+}
+
+.investment-record-card__btn--edit:hover {
+  background-color: rgba(9, 132, 227, 0.5);
+  transform: translateY(-1px);
+}
+
+.investment-record-card__btn--edit:active {
+  transform: translateY(0);
+}
+
+/* 保存按钮 */
+.investment-record-card__btn--save {
+  background-color: rgba(0, 184, 148, 0.3);
+  border: 1px solid rgba(0, 184, 148, 0.5);
+}
+
+.investment-record-card__btn--save:hover {
+  background-color: rgba(0, 184, 148, 0.5);
+  transform: translateY(-1px);
+}
+
+.investment-record-card__btn--save:active {
+  transform: translateY(0);
+}
+
+/* 取消按钮 */
+.investment-record-card__btn--cancel {
+  background-color: rgba(253, 203, 110, 0.3);
+  border: 1px solid rgba(253, 203, 110, 0.5);
+}
+
+.investment-record-card__btn--cancel:hover {
+  background-color: rgba(253, 203, 110, 0.5);
+  transform: translateY(-1px);
+}
+
+.investment-record-card__btn--cancel:active {
+  transform: translateY(0);
+}
+
+/* 添加行按钮 */
 .investment-record-card__btn--add {
-  background-color: rgba(9, 132, 227, 0.15);
-  color: var(--color-primary, #0984e3);
-  border: 1px solid rgba(9, 132, 227, 0.3);
+  background-color: rgba(9, 132, 227, 0.25);
+  border: 1px solid rgba(9, 132, 227, 0.4);
 }
 
 .investment-record-card__btn--add:hover {
-  background-color: rgba(9, 132, 227, 0.25);
+  background-color: rgba(9, 132, 227, 0.4);
   transform: translateY(-1px);
 }
 
@@ -138,14 +365,29 @@
   transform: translateY(0);
 }
 
+/* 批量添加按钮 */
+.investment-record-card__btn--batch {
+  background-color: rgba(0, 184, 148, 0.25);
+  border: 1px solid rgba(0, 184, 148, 0.4);
+}
+
+.investment-record-card__btn--batch:hover {
+  background-color: rgba(0, 184, 148, 0.4);
+  transform: translateY(-1px);
+}
+
+.investment-record-card__btn--batch:active {
+  transform: translateY(0);
+}
+
+/* 删除按钮 */
 .investment-record-card__btn--delete {
-  background-color: rgba(255, 71, 87, 0.1);
-  color: #ff4757;
-  border: 1px solid rgba(255, 71, 87, 0.2);
+  background-color: rgba(255, 71, 87, 0.25);
+  border: 1px solid rgba(255, 71, 87, 0.4);
 }
 
 .investment-record-card__btn--delete:hover {
-  background-color: rgba(255, 71, 87, 0.2);
+  background-color: rgba(255, 71, 87, 0.4);
   transform: translateY(-1px);
 }
 
@@ -153,12 +395,130 @@
   transform: translateY(0);
 }
 
+/* 清空按钮 */
+.investment-record-card__btn--clear {
+  background-color: rgba(253, 203, 110, 0.25);
+  border: 1px solid rgba(253, 203, 110, 0.4);
+}
+
+.investment-record-card__btn--clear:hover {
+  background-color: rgba(253, 203, 110, 0.4);
+  transform: translateY(-1px);
+}
+
+.investment-record-card__btn--clear:active {
+  transform: translateY(0);
+}
+
+/* 复制按钮 */
+.investment-record-card__btn--copy {
+  background-color: rgba(9, 132, 227, 0.25);
+  border: 1px solid rgba(9, 132, 227, 0.4);
+}
+
+.investment-record-card__btn--copy:hover {
+  background-color: rgba(9, 132, 227, 0.4);
+  transform: translateY(-1px);
+}
+
+.investment-record-card__btn--copy:active {
+  transform: translateY(0);
+}
+
+/* ========== 统计信息样式 ========== */
+
+/* 统计信息容器 */
+.investment-record-card__stats {
+  display: flex;
+  gap: 16px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--border-radius-md, 8px);
+  margin: 8px 0;
+}
+
+/* 统计项 */
+.investment-record-card__stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 统计标签 */
+.investment-record-card__stat-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 统计值 */
+.investment-record-card__stat-value {
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold, 600);
+  color: #ffffff;
+}
+
+/* 盈利样式 */
+.investment-record-card__stat-item.profit .investment-record-card__stat-value {
+  color: #00b894;
+}
+
+/* 亏损样式 */
+.investment-record-card__stat-item.loss .investment-record-card__stat-value {
+  color: #ff4757;
+}
+
+/* ========== 进度条样式 ========== */
+
+/* 进度条容器 */
+.investment-record-card__progress-bar {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+/* 进度条填充 */
+.investment-record-card__progress-fill {
+  height: 100%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+  border-radius: 4px;
+}
+
+/* 进度文本 */
+.investment-record-card__progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold, 600);
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ========== 拖拽反馈样式 ========== */
+
+/* 拖拽时的阴影效果 */
+.investment-record-card-wrapper[style*="transform"] {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4) !important;
+  z-index: 1000;
+}
+
+/* 拖拽预览 */
+.investment-record-card-wrapper[style*="transform"] .investment-record-card {
+  border-color: rgba(77, 163, 255, 0.8) !important;
+  box-shadow: 0 20px 60px rgba(77, 163, 255, 0.3) !important;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .investment-record-card.card {
-    flex: 1 1 100%;
-    min-width: 100%;
-    max-width: 100%;
     padding: 16px;
   }
 
@@ -168,12 +528,23 @@
     gap: 12px;
   }
 
-  .investment-record-card__name-input {
-    font-size: var(--font-size-base, 16px);
+  .investment-record-card__title-section {
+    flex-wrap: wrap;
+  }
+
+  .investment-record-card__stock-info {
+    flex-direction: column;
+    padding: 0;
+    gap: 8px;
+  }
+
+  .investment-record-card__stock-field {
+    min-width: 100%;
   }
 
   .investment-record-card__actions {
     justify-content: flex-end;
+    flex-wrap: wrap;
   }
 
   .investment-record-card__btn {

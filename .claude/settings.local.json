@@ -22,7 +22,11 @@
       "Bash(git push:*)",
       "Bash(npm audit:*)",
       "Bash(npx eslint:*)",
-      "Bash(npm run lint)"
+      "Bash(npm run lint)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run compile:renderer:*)"
     ]
   }
 }

@@ -1,0 +1,123 @@
+/**
+ * 批量添加对话框样式
+ */
+
+.batch-add-dialog__content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 8px 0;
+  min-width: 320px;
+}
+
+.batch-add-dialog__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.batch-add-dialog__field label {
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text-primary, #2d3436);
+  font-size: var(--font-size-sm, 14px);
+}
+
+.batch-add-dialog__field input {
+  padding: 10px 12px;
+  border: 1px solid var(--color-border, #dfe6e9);
+  border-radius: var(--border-radius-md, 8px);
+  font-size: var(--font-size-base, 16px);
+  transition: all 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.batch-add-dialog__field input:focus {
+  outline: none;
+  border-color: var(--color-primary, #0984e3);
+  box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+  background-color: rgba(255, 255, 255, 1);
+}
+
+/* 预览区域 */
+.batch-add-dialog__preview {
+  padding: 16px;
+  background: rgba(77, 163, 255, 0.08);
+  border-radius: var(--border-radius-md, 8px);
+  border: 1px solid rgba(77, 163, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.batch-add-dialog__preview-title {
+  margin: 0;
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text-primary, #2d3436);
+  font-size: var(--font-size-sm, 14px);
+}
+
+.batch-add-dialog__preview-desc {
+  margin: 0;
+  font-size: var(--font-size-sm, 14px);
+  color: var(--color-text-secondary, #636e72);
+}
+
+.batch-add-dialog__preview-desc strong {
+  color: var(--color-primary, #0984e3);
+}
+
+.batch-add-dialog__preview-values {
+  margin: 0;
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-primary, #0984e3);
+  font-size: var(--font-size-base, 16px);
+  word-break: break-all;
+}
+
+.batch-add-dialog__total {
+  margin: 4px 0 0 0;
+  font-size: var(--font-size-sm, 14px);
+  color: var(--color-text-secondary, #636e72);
+  padding-top: 8px;
+  border-top: 1px solid rgba(77, 163, 255, 0.2);
+}
+
+.batch-add-dialog__total--warning {
+  color: #ff4757;
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+/* 按钮样式 */
+.batch-add-dialog__btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--border-radius-md, 8px);
+  font-size: var(--font-size-base, 16px);
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.batch-add-dialog__btn--cancel {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--color-text-primary, #2d3436);
+}
+
+.batch-add-dialog__btn--cancel:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.batch-add-dialog__btn--confirm {
+  background: var(--color-primary, #0984e3);
+  color: white;
+}
+
+.batch-add-dialog__btn--confirm:hover {
+  background: #0870c4;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(9, 132, 227, 0.3);
+}
+
+.batch-add-dialog__btn--confirm:active {
+  transform: translateY(0);
+}

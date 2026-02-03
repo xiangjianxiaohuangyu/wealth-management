@@ -81,21 +81,12 @@
   transform: translateY(0);
 }
 
-/* 卡片容器 - 换行布局 */
+/* 卡片容器 - 纵向单行布局 */
 .investment-record__cards-container {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  flex-direction: column;
   gap: 24px;
   padding: 16px 0;
-}
-
-/* 单张卡片时的样式 */
-.investment-record__cards-container > .investment-record-card:only-child {
-  flex: 1 1 100% !important;
-  max-width: 100% !important;
-  min-width: 100% !important;
 }
 
 /* 总投资金额卡片 */

@@ -2,10 +2,17 @@
  * 投资记录表格组件
  *
  * 显示单个资产卡片中的记录行列表
+ * 支持拖拽排序、可编辑单元格、股票代码和点数字段
  */
 
 import { useState } from 'react'
+import { DndContext, closestCenter } from '@dnd-kit/core'
+import type { DragEndEvent } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { formatCurrency } from '../../utils/format/currency'
+import { EditableCell } from './EditableCell'
+import { DraggableRow } from './DraggableRow'
+import { DragHandle } from './DragHandle'
 import type { InvestmentRecordRow, InvestmentRecordRowUpdate } from '../../types/investmentRecord.types'
 import {
   validateStartEndPoint,
@@ -23,13 +30,19 @@ export interface InvestmentRecordTableProps {
   onRowUpdate: (rowId: string, updates: InvestmentRecordRowUpdate) => void
   /** 删除行 */
   onRowDelete: (rowId: string) => void
+  /** 行重新排序 */
+  onRowReorder?: (oldIndex: number, newIndex: number) => void
+  /** 是否处于编辑模式 */
+  editing?: boolean
 }
 
 export function InvestmentRecordTable({
   rows,
   totalInvestment,
   onRowUpdate,
-  onRowDelete
+  onRowDelete,
+  onRowReorder,
+  editing = false
 }: InvestmentRecordTableProps) {
   // 管理每行的错误状态
   const [rowErrors, setRowErrors] = useState<Record<string, Record<string, string>>>({})
@@ -119,7 +132,7 @@ export function InvestmentRecordTable({
   // 获取输入框的错误类名
   const getInputErrorClass = (rowId: string, field: string): string => {
     const hasError = rowErrors[rowId]?.[field]
-    return hasError ? 'investment-record-table__input--error' : ''
+    return hasError ? 'investment-record-table__cell--error' : ''
   }
 
   // 获取字段的错误消息
@@ -132,42 +145,19 @@ export function InvestmentRecordTable({
     return totalInvestment * (percentage / 100)
   }
 
-  // 键盘导航处理
-  const handleKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>,
-    rowId: string,
-    field: string,
-    rowIndex: number
-  ) => {
-    // Tab键：默认行为即可移动焦点
-    if (event.key === 'Tab') {
+  // 处理拖拽结束
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (!over || active.id === over.id) {
       return
     }
 
-    // Enter键：移动到下一行的同字段
-    if (event.key === 'Enter') {
-      event.preventDefault()
-      const nextRowIndex = rowIndex + 1
-      if (nextRowIndex < rows.length) {
-        const nextRowId = rows[nextRowIndex].id
-        const nextInput = document.querySelector(
-          `input[data-row-id="${nextRowId}"][data-field="${field}"]`
-        ) as HTMLInputElement
-        nextInput?.focus()
-        nextInput?.select()
-      }
-    }
+    const oldIndex = rows.findIndex(row => row.id === active.id)
+    const newIndex = rows.findIndex(row => row.id === over.id)
 
-    // Escape键：取消编辑
-    if (event.key === 'Escape') {
-      event.preventDefault()
-      event.currentTarget.blur()
-    }
-
-    // Delete键：删除当前行
-    if (event.key === 'Delete' && window.confirm('确定要删除这一行吗？')) {
-      event.preventDefault()
-      onRowDelete(rowId)
+    if (oldIndex !== -1 && newIndex !== -1) {
+      onRowReorder?.(oldIndex, newIndex)
     }
   }
 
@@ -182,130 +172,147 @@ export function InvestmentRecordTable({
 
   return (
     <div className="investment-record-table">
-      <table className="investment-record-table__table">
-        <thead>
-          <tr>
-            <th>起始点</th>
-            <th>终点</th>
-            <th>规划比例%</th>
-            <th>规划金额</th>
-            <th>实际金额</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, rowIndex) => {
-            const plannedAmount = calculatePlannedAmount(row.plannedPercentage)
-            const startPointError = getFieldError(row.id, 'startPoint')
-            const endPointError = getFieldError(row.id, 'endPoint')
-            const percentageError = getFieldError(row.id, 'plannedPercentage')
-            const actualAmountError = getFieldError(row.id, 'actualAmount')
+      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext
+          items={rows.map(r => r.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <table className="investment-record-table__table">
+            <thead>
+              <tr>
+                <th className="investment-record-table__th--drag"></th>
+                <th>价值区间</th>
+                <th>规划比例%</th>
+                <th>规划金额</th>
+                <th>实际金额</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, _rowIndex) => {
+                const plannedAmount = calculatePlannedAmount(row.plannedPercentage)
+                const startPointError = getFieldError(row.id, 'startPoint')
+                const endPointError = getFieldError(row.id, 'endPoint')
+                const percentageError = getFieldError(row.id, 'plannedPercentage')
+                const actualAmountError = getFieldError(row.id, 'actualAmount')
 
-            // 计算行进度
-            const rowProgress = plannedAmount > 0
-              ? Math.min((row.actualAmount / plannedAmount) * 100, 100)
-              : 0
+                // 计算行进度
+                const rowProgress = plannedAmount > 0
+                  ? Math.min((row.actualAmount / plannedAmount) * 100, 100)
+                  : 0
 
-            return (
-              <tr key={row.id}>
-                <td>
-                  <input
-                    type="number"
-                    className={`investment-record-table__input ${getInputErrorClass(row.id, 'startPoint')}`}
-                    value={row.startPoint || ''}
-                    onChange={(e) => handleStartPointChange(row, e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(e, row.id, 'startPoint', rowIndex)}
-                    data-row-id={row.id}
-                    data-field="startPoint"
-                    placeholder="0.00"
-                    min="0"
-                    step="0.01"
-                  />
-                  {startPointError && (
-                    <div className="investment-record-table__error-message">{startPointError}</div>
-                  )}
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    className={`investment-record-table__input ${getInputErrorClass(row.id, 'endPoint')}`}
-                    value={row.endPoint || ''}
-                    onChange={(e) => handleEndPointChange(row, e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(e, row.id, 'endPoint', rowIndex)}
-                    data-row-id={row.id}
-                    data-field="endPoint"
-                    placeholder="0.00"
-                    min="0"
-                    step="0.01"
-                  />
-                  {endPointError && (
-                    <div className="investment-record-table__error-message">{endPointError}</div>
-                  )}
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    className={`investment-record-table__input ${getInputErrorClass(row.id, 'plannedPercentage')}`}
-                    value={row.plannedPercentage || ''}
-                    onChange={(e) => handlePercentageChange(row, e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(e, row.id, 'plannedPercentage', rowIndex)}
-                    data-row-id={row.id}
-                    data-field="plannedPercentage"
-                    placeholder="0"
-                    min="0"
-                    max="100"
-                    step="0.1"
-                  />
-                  {percentageError && (
-                    <div className="investment-record-table__error-message">{percentageError}</div>
-                  )}
-                </td>
-                <td className="investment-record-table__planned-amount">
-                  {formatCurrency(plannedAmount, 'CNY')}
-                </td>
-                <td>
-                  <div className="investment-record-table__amount-with-progress">
-                    <input
-                      type="number"
-                      className={`investment-record-table__input ${getInputErrorClass(row.id, 'actualAmount')}`}
-                      value={row.actualAmount || ''}
-                      onChange={(e) => handleActualAmountChange(row, e.target.value)}
-                      onKeyDown={(e) => handleKeyDown(e, row.id, 'actualAmount', rowIndex)}
-                      data-row-id={row.id}
-                      data-field="actualAmount"
-                      placeholder="0.00"
-                      min="0"
-                      step="0.01"
-                    />
-                    {plannedAmount > 0 && (
-                      <div className="investment-record-table__row-progress">
-                        <div
-                          className="investment-record-table__row-progress-bar"
-                          style={{
-                            width: `${rowProgress}%`,
-                            backgroundColor: rowProgress >= 100 ? '#00b894' : rowProgress >= 80 ? '#fdcb6e' : '#0984e3'
-                          }}
+                return (
+                  <DraggableRow key={row.id} id={row.id}>
+                    {/* 拖拽手柄列 - 仅编辑模式显示 */}
+                    {editing && (
+                      <td className="investment-record-table__td--drag">
+                        <DragHandle type="row" />
+                      </td>
+                    )}
+
+                    {/* 价值区间 - 合并起始点和终点 */}
+                    <td className={getInputErrorClass(row.id, 'startPoint') || getInputErrorClass(row.id, 'endPoint') ? 'investment-record-table__cell--error' : ''}>
+                      <div className="investment-record-table__value-range">
+                        <EditableCell
+                          type="number"
+                          value={row.startPoint}
+                          onChange={(value) => handleStartPointChange(row, value)}
+                          placeholder="0.00"
+                          min={0}
+                          step={0.01}
+                          data-row-id={row.id}
+                          data-field="startPoint"
+                        />
+                        <span className="investment-record-table__range-separator">--</span>
+                        <EditableCell
+                          type="number"
+                          value={row.endPoint}
+                          onChange={(value) => handleEndPointChange(row, value)}
+                          placeholder="0.00"
+                          min={0}
+                          step={0.01}
+                          data-row-id={row.id}
+                          data-field="endPoint"
                         />
                       </div>
+                      {(startPointError || endPointError) && (
+                        <div className="investment-record-table__error-message">
+                          {startPointError || endPointError}
+                        </div>
+                      )}
+                    </td>
+
+                    {/* 规划比例 */}
+                    <td className={getInputErrorClass(row.id, 'plannedPercentage')}>
+                      <EditableCell
+                        type="number"
+                        value={row.plannedPercentage}
+                        onChange={(value) => handlePercentageChange(row, value)}
+                        placeholder="0"
+                        min={0}
+                        max={100}
+                        step={0.1}
+                        data-row-id={row.id}
+                        data-field="plannedPercentage"
+                      />
+                      {percentageError && (
+                        <div className="investment-record-table__error-message">{percentageError}</div>
+                      )}
+                    </td>
+
+                    {/* 规划金额（只读） */}
+                    <td className="investment-record-table__planned-amount">
+                      {formatCurrency(plannedAmount, 'CNY')}
+                    </td>
+
+                    {/* 实际金额 */}
+                    <td className={getInputErrorClass(row.id, 'actualAmount')}>
+                      <div className="investment-record-table__amount-with-progress">
+                        <EditableCell
+                          type="number"
+                          value={row.actualAmount}
+                          onChange={(value) => handleActualAmountChange(row, value)}
+                          placeholder="0.00"
+                          min={0}
+                          step={0.01}
+                          data-row-id={row.id}
+                          data-field="actualAmount"
+                        />
+                        {plannedAmount > 0 && (
+                          <div className="investment-record-table__row-progress">
+                            <div
+                              className="investment-record-table__row-progress-bar"
+                              style={{
+                                width: `${rowProgress}%`,
+                                backgroundColor: rowProgress >= 100 ? '#00b894' : rowProgress >= 80 ? '#fdcb6e' : '#0984e3'
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                      {actualAmountError && (
+                        <div className="investment-record-table__error-message">{actualAmountError}</div>
+                      )}
+                    </td>
+
+                    {/* 操作按钮 - 仅编辑模式显示 */}
+                    {editing && (
+                      <td>
+                        <button
+                          className="investment-record-table__btn investment-record-table__btn--delete"
+                          onClick={() => onRowDelete(row.id)}
+                        >
+                          删除
+                        </button>
+                      </td>
                     )}
-                  </div>
-                  {actualAmountError && (
-                    <div className="investment-record-table__error-message">{actualAmountError}</div>
-                  )}
-                </td>
-                <td>
-                  <button
-                    className="investment-record-table__btn investment-record-table__btn--delete"
-                    onClick={() => onRowDelete(row.id)}
-                  >
-                    删除
-                  </button>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+                  </DraggableRow>
+                )
+              })}
+            </tbody>
+          </table>
+        </SortableContext>
+      </DndContext>
     </div>
   )
 }

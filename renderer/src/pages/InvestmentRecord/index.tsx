@@ -2,9 +2,13 @@
  * 投资记录页面
  *
  * 记录和管理各类投资资产的详细信息
+ * 支持卡片拖拽、批量添加行、行拖拽排序
  */
 
 import { useEffect, useState, useMemo } from 'react'
+import { DndContext, closestCenter } from '@dnd-kit/core'
+import type { DragEndEvent } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { investmentRecordStorage } from '../../services/storage/investmentRecordStorage'
 import { InvestmentRecordCard } from '../../components/InvestmentRecord/InvestmentRecordCard'
 import { StatisticsPanel } from '../../components/InvestmentRecord/StatisticsPanel'
@@ -62,7 +66,10 @@ export default function InvestmentRecord() {
   const handleAddCard = () => {
     const defaultCard: Omit<InvestmentRecordCardType, 'id' | 'createdAt' | 'updatedAt'> = {
       name: `资产 ${cards.length + 1}`,
-      rows: []
+      stockCode: '',
+      latestPrice: 0,
+      rows: [],
+      cardOrderIndex: cards.length
     }
 
     const newCard = investmentRecordStorage.addCard(defaultCard)
@@ -71,17 +78,17 @@ export default function InvestmentRecord() {
     }
   }
 
-  // 更新卡片名称
-  const handleNameUpdate = (cardId: string, name: string) => {
-    investmentRecordStorage.updateCard(cardId, { name })
+  // 更新卡片字段（名称、股票代码、最新价等）
+  const handleCardUpdate = (cardId: string, updates: { name?: string; stockCode?: string; latestPrice?: number }) => {
+    investmentRecordStorage.updateCard(cardId, updates)
     setCards(cards.map(card =>
-      card.id === cardId ? { ...card, name } : card
+      card.id === cardId ? { ...card, ...updates } : card
     ))
   }
 
   // 添加行到卡片
   const handleAddRow = (cardId: string) => {
-    const defaultRow: Omit<InvestmentRecordRow, 'id' | 'createdAt' | 'updatedAt'> = {
+    const defaultRow: Omit<InvestmentRecordRow, 'id' | 'createdAt' | 'updatedAt' | 'orderIndex'> = {
       startPoint: 0,
       endPoint: 0,
       plannedPercentage: 0,
@@ -100,6 +107,91 @@ export default function InvestmentRecord() {
         }
         return card
       }))
+    }
+  }
+
+  // 批量添加行到卡片
+  const handleBatchAddRows = (
+    cardId: string,
+    rowCount: number,
+    startPercentage: number,
+    increment: number
+  ) => {
+    setCards(cards.map(card => {
+      if (card.id === cardId) {
+        const newRows: InvestmentRecordRow[] = []
+
+        for (let i = 0; i < rowCount; i++) {
+          const newRow: Omit<InvestmentRecordRow, 'id' | 'createdAt' | 'updatedAt' | 'orderIndex'> = {
+            startPoint: 0,
+            endPoint: 0,
+            plannedPercentage: startPercentage + (i * increment),
+            actualAmount: 0
+          }
+          const addedRow = investmentRecordStorage.addRow(cardId, newRow)
+          if (addedRow) {
+            newRows.push(addedRow)
+          }
+        }
+
+        // 重新加载卡片数据以获取正确的 orderIndex
+        const updatedCard = investmentRecordStorage.getAllCards().find(c => c.id === cardId)
+        return updatedCard || card
+      }
+      return card
+    }))
+  }
+
+  // 行重新排序
+  const handleRowReorder = (cardId: string, oldIndex: number, newIndex: number) => {
+    investmentRecordStorage.reorderRows(cardId, oldIndex, newIndex)
+    setCards(cards.map(card => {
+      if (card.id === cardId) {
+        const reorderedRows = [...card.rows]
+        const [movedRow] = reorderedRows.splice(oldIndex, 1)
+        reorderedRows.splice(newIndex, 0, movedRow)
+
+        // 更新 orderIndex
+        const updatedRows = reorderedRows.map((row, index) => ({
+          ...row,
+          orderIndex: index
+        }))
+
+        return {
+          ...card,
+          rows: updatedRows,
+          updatedAt: new Date().toISOString()
+        }
+      }
+      return card
+    }))
+  }
+
+  // 卡片重新排序
+  const handleCardDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (!over || active.id === over.id) {
+      return
+    }
+
+    const oldIndex = cards.findIndex(card => card.id === active.id)
+    const newIndex = cards.findIndex(card => card.id === over.id)
+
+    if (oldIndex !== -1 && newIndex !== -1) {
+      investmentRecordStorage.reorderCards(oldIndex, newIndex)
+
+      const reorderedCards = [...cards]
+      const [movedCard] = reorderedCards.splice(oldIndex, 1)
+      reorderedCards.splice(newIndex, 0, movedCard)
+
+      // 更新 cardOrderIndex
+      const updatedCards = reorderedCards.map((card, index) => ({
+        ...card,
+        cardOrderIndex: index
+      }))
+
+      setCards(updatedCards)
     }
   }
 
@@ -190,9 +282,9 @@ export default function InvestmentRecord() {
     lastUpdated: new Date().toISOString()
   }), [cards])
 
-  // 按行数从多到少排序卡片
+  // 按 cardOrderIndex 排序卡片（卡片已由存储服务排序，这里确保显示顺序一致）
   const sortedCards = useMemo(() => {
-    return [...cards].sort((a, b) => b.rows.length - a.rows.length)
+    return [...cards].sort((a, b) => a.cardOrderIndex - b.cardOrderIndex)
   }, [cards])
 
   return (
@@ -252,20 +344,31 @@ export default function InvestmentRecord() {
           </div>
         </div>
       ) : (
-        <div className="investment-record__cards-container">
-          {sortedCards.map(card => (
-            <InvestmentRecordCard
-              key={card.id}
-              card={card}
-              totalInvestment={totalIncome}
-              onNameUpdate={handleNameUpdate}
-              onAddRow={handleAddRow}
-              onRowUpdate={handleRowUpdate}
-              onRowDelete={handleRowDelete}
-              onDelete={handleDeleteClick}
-            />
-          ))}
-        </div>
+        <DndContext collisionDetection={closestCenter} onDragEnd={handleCardDragEnd}>
+          <SortableContext
+            items={sortedCards.map(c => c.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="investment-record__cards-container">
+              {sortedCards.map(card => (
+                <InvestmentRecordCard
+                  key={card.id}
+                  card={card}
+                  totalInvestment={totalIncome}
+                  onCardUpdate={handleCardUpdate}
+                  onAddRow={handleAddRow}
+                  onBatchAddRows={(cardId, rowCount, startPercentage, increment) =>
+                    handleBatchAddRows(cardId, rowCount, startPercentage, increment)
+                  }
+                  onRowUpdate={handleRowUpdate}
+                  onRowDelete={(rowId) => handleRowDelete(card.id, rowId)}
+                  onRowReorder={(oldIndex, newIndex) => handleRowReorder(card.id, oldIndex, newIndex)}
+                  onDelete={handleDeleteClick}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       )}
 
       {/* 删除确认对话框 */}
