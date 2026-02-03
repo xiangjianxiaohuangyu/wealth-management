@@ -12,6 +12,7 @@ const WealthOverview = lazy(() => import('../pages/WealthOverview'))
 const Investment = lazy(() => import('../pages/Investment'))
 const InvestmentRecord = lazy(() => import('../pages/InvestmentRecord'))
 const AssetTracking = lazy(() => import('../pages/AssetTracking'))
+const TestZone = lazy(() => import('../pages/TestZone'))
 const Changelog = lazy(() => import('../pages/Changelog'))
 const Settings = lazy(() => import('../pages/Settings'))
 
@@ -60,13 +61,23 @@ export const routeConfigs: RouteConfig[] = [
     }
   },
   {
+    path: '/test-zone',
+    component: TestZone,
+    title: '测试区',
+    meta: {
+      description: '投资测试和模拟',
+      icon: '🧪',
+      order: 5
+    }
+  },
+  {
     path: '/changelog',
     component: Changelog,
     title: '开发日志',
     meta: {
       description: '查看应用更新历史',
       icon: '📜',
-      order: 5
+      order: 6
     }
   },
   {
@@ -76,7 +87,7 @@ export const routeConfigs: RouteConfig[] = [
     meta: {
       description: '应用设置和数据管理',
       icon: '⚙️',
-      order: 6
+      order: 7
     }
   }
 ]

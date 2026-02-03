@@ -1,0 +1,207 @@
+/**
+ * 测试区表格行组件样式
+ */
+
+.testzone-table__row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr 1fr 0.8fr;
+  gap: var(--spacing-md, 12px);
+  align-items: center;
+  padding: var(--spacing-lg, 16px) var(--spacing-md, 12px);
+  border-left: 1px solid rgba(77, 163, 255, 0.3);
+  border-right: 1px solid rgba(77, 163, 255, 0.3);
+  border-bottom: 1px solid var(--color-border-light, rgba(255, 255, 255, 0.1));
+  transition: background var(--transition-fast, 0.15s) ease;
+}
+
+.testzone-table__row:hover {
+  background: rgba(77, 163, 255, 0.05);
+}
+
+.testzone-table__row:last-child {
+  border-bottom: 1px solid rgba(77, 163, 255, 0.3);
+  border-radius: 0 0 var(--border-radius-md, 8px) var(--border-radius-md, 8px);
+}
+
+.testzone-table__cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  font-size: var(--font-size-base, 14px);
+  color: var(--color-text, #2d3436);
+  position: relative;
+}
+
+.testzone-table__cell--input {
+  flex-direction: column;
+  gap: 6px;
+}
+
+.testzone-table__cell--range {
+  justify-content: center;
+  gap: var(--spacing-sm, 8px);
+}
+
+/* 价值区间输入框 */
+.testzone-table__range-separator {
+  color: var(--color-text-secondary, #636e72);
+  font-weight: var(--font-weight-medium, 500);
+  font-size: var(--font-size-base, 14px);
+}
+
+.testzone-table__input--small {
+  width: 80px;
+  padding: var(--spacing-sm, 6px) var(--spacing-md, 8px);
+  font-size: var(--font-size-sm, 12px);
+  text-align: center;
+}
+
+/* 输入框样式 */
+.testzone-table__input {
+  width: 100%;
+  max-width: 120px;
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
+  font-size: var(--font-size-base, 14px);
+  color: var(--color-text, #2d3436);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.2));
+  border-radius: var(--border-radius-sm, 4px);
+  transition: all var(--transition-fast, 0.15s) ease;
+  text-align: center;
+  /* 隐藏number输入框的上下箭头 */
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.testzone-table__input::-webkit-outer-spin-button,
+.testzone-table__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.testzone-table__input:focus {
+  outline: none;
+  border-color: var(--color-primary, #4da3ff);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.testzone-table__input::placeholder {
+  color: var(--color-text-tertiary, #b2bec3);
+}
+
+.testzone-table__input-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  max-width: 120px;
+}
+
+.testzone-table__input-wrapper .testzone-table__input {
+  padding-right: 30px;
+}
+
+.testzone-table__suffix {
+  position: absolute;
+  right: var(--spacing-sm, 8px);
+  font-size: var(--font-size-xs, 11px);
+  color: var(--color-text-secondary, #636e72);
+  pointer-events: none;
+}
+
+/* 切换按钮 */
+.testzone-table__toggle-btn {
+  padding: 2px 8px;
+  font-size: var(--font-size-xs, 10px);
+  font-weight: var(--font-weight-medium, 500);
+  background: rgba(77, 163, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(77, 163, 255, 0.2);
+  border-radius: var(--border-radius-sm, 4px);
+  color: #4da3ff;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+  outline: none;
+}
+
+.testzone-table__toggle-btn:hover {
+  background: rgba(77, 163, 255, 0.2);
+  border-color: rgba(77, 163, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+/* 操作按钮组 */
+.testzone-table__actions {
+  display: flex;
+  gap: var(--spacing-sm, 8px);
+  justify-content: center;
+}
+
+.testzone-table__action-btn {
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
+  font-size: var(--font-size-sm, 12px);
+  font-weight: var(--font-weight-medium, 500);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.2));
+  border-radius: var(--border-radius-sm, 4px);
+  color: var(--color-text, #2d3436);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+  outline: none;
+}
+
+.testzone-table__action-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.testzone-table__action-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--color-primary, #4da3ff);
+  transform: translateY(-1px);
+}
+
+.testzone-table__action-btn--save {
+  background: rgba(0, 184, 148, 0.15);
+  border-color: rgba(0, 184, 148, 0.3);
+  color: #00b894;
+}
+
+.testzone-table__action-btn--save:hover {
+  background: rgba(0, 184, 148, 0.25);
+  border-color: rgba(0, 184, 148, 0.5);
+}
+
+.testzone-table__action-btn--delete {
+  padding: 5px 10px;
+  font-size: 11px;
+  background: rgba(214, 48, 49, 0.08);
+  border-color: rgba(214, 48, 49, 0.2);
+  color: #d63031;
+}
+
+.testzone-table__action-btn--delete:hover {
+  background: rgba(214, 48, 49, 0.25);
+  border-color: rgba(214, 48, 49, 0.5);
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .testzone-table__row {
+    min-width: 900px;
+  }
+
+  .testzone-table__input {
+    max-width: 100px;
+  }
+
+  .testzone-table__input-wrapper {
+    max-width: 100px;
+  }
+}

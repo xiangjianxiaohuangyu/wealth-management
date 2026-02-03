@@ -1,0 +1,59 @@
+/**
+ * 测试区工作区组件样式
+ */
+
+.testzone-workspace {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 400px;
+}
+
+.testzone-workspace__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xxl, 60px);
+  background: rgba(77, 163, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px dashed rgba(77, 163, 255, 0.3);
+  border-radius: var(--border-radius-md, 8px);
+  color: var(--color-text-secondary, #636e72);
+  font-size: var(--font-size-base, 14px);
+}
+
+.testzone-workspace__tables {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg, 16px);
+  margin-bottom: var(--spacing-lg, 16px);
+}
+
+/* 添加表格按钮 */
+.testzone-workspace__add-table-btn {
+  width: 100%;
+  padding: var(--spacing-lg, 16px);
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-semibold, 600);
+  background: rgba(77, 163, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px dashed rgba(77, 163, 255, 0.4);
+  border-radius: var(--border-radius-md, 8px);
+  color: var(--color-primary, #4da3ff);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+  outline: none;
+}
+
+.testzone-workspace__add-table-btn:hover {
+  background: rgba(77, 163, 255, 0.15);
+  border-color: rgba(77, 163, 255, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(77, 163, 255, 0.2);
+}
+
+.testzone-workspace__add-table-btn:active {
+  transform: translateY(0);
+}

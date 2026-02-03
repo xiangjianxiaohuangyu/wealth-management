@@ -1,0 +1,192 @@
+/**
+ * 测试区表格组件样式
+ */
+
+.testzone-table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: var(--spacing-xl, 32px);
+  background: rgba(77, 163, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(77, 163, 255, 0.3);
+  border-radius: var(--border-radius-md, 8px);
+  padding: var(--spacing-lg, 16px);
+}
+
+.testzone-table__header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md, 12px);
+  padding-bottom: var(--spacing-md, 12px);
+  border-bottom: 1px solid rgba(77, 163, 255, 0.2);
+}
+
+.testzone-table__title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+}
+
+.testzone-table__collapse-btn {
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-primary, #4da3ff);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+  outline: none;
+  font-size: var(--font-size-sm, 12px);
+}
+
+.testzone-table__collapse-btn:hover {
+  background: rgba(77, 163, 255, 0.1);
+  border-radius: var(--border-radius-sm, 4px);
+}
+
+.testzone-table__collapse-btn:active {
+  transform: scale(0.9);
+}
+
+.testzone-table__title {
+  margin: 0;
+  font-size: var(--font-size-lg, 16px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text, #2d3436);
+}
+
+.testzone-table__delete-btn {
+  padding: var(--spacing-sm, 6px) var(--spacing-md, 12px);
+  font-size: var(--font-size-sm, 12px);
+  font-weight: var(--font-weight-medium, 500);
+  background: rgba(214, 48, 49, 0.1);
+  border: 1px solid rgba(214, 48, 49, 0.3);
+  border-radius: var(--border-radius-sm, 4px);
+  color: #d63031;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+  outline: none;
+}
+
+.testzone-table__delete-btn:hover {
+  background: rgba(214, 48, 49, 0.2);
+  border-color: rgba(214, 48, 49, 0.5);
+  transform: translateY(-1px);
+}
+
+.testzone-table__header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr 1fr 0.8fr;
+  gap: var(--spacing-md, 12px);
+  padding: var(--spacing-md, 12px);
+  margin: -1px -1px 0 -1px;
+  background: rgba(77, 163, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(77, 163, 255, 0.3);
+  border-left: 1px solid rgba(77, 163, 255, 0.3);
+  border-right: 1px solid rgba(77, 163, 255, 0.3);
+  border-bottom: 1px solid var(--color-border-light, rgba(255, 255, 255, 0.1));
+  border-radius: var(--border-radius-md, 8px) var(--border-radius-md, 8px) 0 0;
+  font-weight: var(--font-weight-medium, 500);
+  font-size: var(--font-size-base, 14px);
+  color: var(--color-text, #2d3436);
+  text-align: center;
+}
+
+.testzone-table__header > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.testzone-table__body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* 自定义滚动条 */
+.testzone-table__body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.testzone-table__body::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.testzone-table__body::-webkit-scrollbar-thumb {
+  background: rgba(77, 163, 255, 0.3);
+  border-radius: 3px;
+}
+
+.testzone-table__body::-webkit-scrollbar-thumb:hover {
+  background: rgba(77, 163, 255, 0.5);
+}
+
+.testzone-table__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl, 40px);
+  color: var(--color-text-secondary, #636e72);
+  font-size: var(--font-size-sm, 12px);
+  text-align: center;
+}
+
+/* 添加行按钮 */
+.testzone-table__add-row-btn {
+  width: 100%;
+  padding: var(--spacing-md, 12px);
+  margin-top: var(--spacing-md, 12px);
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-medium, 500);
+  background: transparent;
+  border: 2px dashed rgba(77, 163, 255, 0.4);
+  border-radius: var(--border-radius-md, 8px);
+  color: var(--color-primary, #4da3ff);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+}
+
+.testzone-table__add-row-btn:hover {
+  background: rgba(77, 163, 255, 0.08);
+  border-color: rgba(77, 163, 255, 0.6);
+  border-style: dashed;
+}
+
+.testzone-table__add-row-btn:active {
+  transform: scale(0.98);
+}
+
+/* 折叠状态 */
+.testzone-table--collapsed {
+  padding-bottom: var(--spacing-lg, 16px);
+}
+
+.testzone-table--collapsed .testzone-table__header-row {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .testzone-table__header {
+    min-width: 900px;
+  }
+
+  .testzone-table__body {
+    overflow-x: auto;
+  }
+}

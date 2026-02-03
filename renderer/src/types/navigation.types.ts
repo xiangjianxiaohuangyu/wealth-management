@@ -12,6 +12,7 @@ export type RoutePath =
   | '/investment'
   | '/investment-record'
   | '/asset-tracking'
+  | '/test-zone'
   | '/changelog'
   | '/settings'
 
