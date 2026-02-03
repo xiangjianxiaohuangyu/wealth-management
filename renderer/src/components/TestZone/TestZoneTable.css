@@ -24,6 +24,11 @@
   border-bottom: 1px solid rgba(77, 163, 255, 0.2);
 }
 
+.testzone-table__header-actions {
+  display: flex;
+  gap: var(--spacing-sm, 8px);
+}
+
 .testzone-table__title-row {
   display: flex;
   align-items: center;
@@ -60,6 +65,25 @@
   font-size: var(--font-size-lg, 16px);
   font-weight: var(--font-weight-semibold, 600);
   color: var(--color-text, #2d3436);
+}
+
+.testzone-table__edit-btn {
+  padding: var(--spacing-sm, 6px) var(--spacing-md, 12px);
+  font-size: var(--font-size-sm, 12px);
+  font-weight: var(--font-weight-medium, 500);
+  background: rgba(0, 184, 148, 0.1);
+  border: 1px solid rgba(0, 184, 148, 0.3);
+  border-radius: var(--border-radius-sm, 4px);
+  color: #00b894;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+  outline: none;
+}
+
+.testzone-table__edit-btn:hover {
+  background: rgba(0, 184, 148, 0.2);
+  border-color: rgba(0, 184, 148, 0.5);
+  transform: translateY(-1px);
 }
 
 .testzone-table__delete-btn {
@@ -157,6 +181,7 @@
   color: var(--color-primary, #4da3ff);
   cursor: pointer;
   transition: all var(--transition-fast, 0.15s) ease;
+  outline: none;
 }
 
 .testzone-table__add-row-btn:hover {
@@ -178,6 +203,74 @@
   margin-bottom: 0;
   padding-bottom: 0;
   border-bottom: none;
+}
+
+/* 折叠图标旋转动画 */
+.testzone-table__collapse-btn {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.testzone-table__collapse-btn:hover {
+  transform: scale(1.1);
+}
+
+.testzone-table__collapse-btn:active {
+  transform: scale(0.95);
+}
+
+/* 折叠时图标旋转 */
+.testzone-table--collapsed .testzone-table__collapse-btn {
+  transform: rotate(-90deg);
+}
+
+.testzone-table--collapsed .testzone-table__collapse-btn:hover {
+  transform: rotate(-90deg) scale(1.1);
+}
+
+/* 表格内容折叠动画 */
+.testzone-table__content {
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.4s ease,
+              margin-top 0.3s ease;
+  max-height: 2000px;
+  opacity: 1;
+  margin-top: var(--spacing-md, 12px);
+}
+
+.testzone-table--collapsed .testzone-table__content {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+}
+
+/* 拖拽手柄 */
+.testzone-table__drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  cursor: grab;
+  color: var(--color-text-secondary, #636e72);
+  transition: all var(--transition-fast, 0.15s) ease;
+  user-select: none;
+  margin-left: var(--spacing-sm, 8px);
+}
+
+.testzone-table__drag-handle:hover {
+  color: var(--color-primary, #4da3ff);
+  transform: scale(1.1);
+}
+
+.testzone-table__drag-handle:active {
+  cursor: grabbing;
+}
+
+.testzone-table__drag-handle-icon {
+  font-size: var(--font-size-base, 14px);
+  line-height: 1;
+  letter-spacing: -2px;
 }
 
 /* 响应式设计 */

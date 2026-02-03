@@ -2,6 +2,14 @@
  * 测试区页面样式
  */
 
+/* 全局按钮样式重置 - 移除所有按钮的焦点外框 */
+.testzone button,
+.testzone button:focus,
+.testzone button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 .testzone {
   padding: var(--spacing-xl, 20px);
   max-width: 1400px;
@@ -20,6 +28,64 @@
   font-weight: var(--font-weight-semibold, 600);
   color: var(--color-text, #2d3436);
   margin: 0;
+}
+
+/* 标题行操作按钮 */
+.testzone__header-actions {
+  display: flex;
+  gap: var(--spacing-md, 12px);
+}
+
+.testzone__add-table-btn {
+  padding: var(--spacing-md, 12px) var(--spacing-lg, 16px);
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-semibold, 600);
+  background: rgba(77, 163, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px dashed rgba(77, 163, 255, 0.4);
+  border-radius: var(--border-radius-md, 8px);
+  color: var(--color-primary, #4da3ff);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+  outline: none;
+}
+
+.testzone__add-table-btn:hover {
+  background: rgba(77, 163, 255, 0.15);
+  border-color: rgba(77, 163, 255, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(77, 163, 255, 0.2);
+}
+
+.testzone__add-table-btn:active {
+  transform: translateY(0);
+}
+
+.testzone__settings-btn {
+  padding: var(--spacing-md, 12px) var(--spacing-lg, 16px);
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-semibold, 600);
+  background: rgba(108, 92, 231, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px dashed rgba(108, 92, 231, 0.4);
+  border-radius: var(--border-radius-md, 8px);
+  color: #9b59b6;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+  outline: none;
+}
+
+.testzone__settings-btn:hover {
+  background: rgba(108, 92, 231, 0.15);
+  border-color: rgba(155, 89, 182, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(155, 89, 182, 0.2);
+}
+
+.testzone__settings-btn:active {
+  transform: translateY(0);
 }
 
 /* 统计卡片容器 */

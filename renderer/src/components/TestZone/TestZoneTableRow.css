@@ -2,6 +2,26 @@
  * 测试区表格行组件样式
  */
 
+/* 只读显示值样式 */
+.testzone-table__value {
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text, #2d3436);
+}
+
+.testzone-table__value-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.testzone-table__calc-base {
+  font-size: var(--font-size-xs, 11px);
+  color: var(--color-text-secondary, #636e72);
+  font-weight: var(--font-weight-medium, 500);
+}
+
 .testzone-table__row {
   display: grid;
   grid-template-columns: 2fr 1fr 1.5fr 1fr 0.8fr;

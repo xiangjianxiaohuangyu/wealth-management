@@ -1,0 +1,95 @@
+/**
+ * 测试区设置弹窗样式
+ */
+
+.testzone-settings {
+  padding: var(--spacing-md, 12px) 0;
+}
+
+.testzone-settings__label {
+  margin-bottom: var(--spacing-md, 12px);
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text, #2d3436);
+}
+
+.testzone-settings__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 12px);
+}
+
+.testzone-settings__option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 12px);
+  padding: var(--spacing-lg, 16px);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(77, 163, 255, 0.2);
+  border-radius: var(--border-radius-md, 8px);
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+  outline: none;
+  text-align: left;
+}
+
+.testzone-settings__option:hover {
+  background: rgba(77, 163, 255, 0.1);
+  border-color: rgba(77, 163, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.testzone-settings__option:active {
+  transform: translateY(0);
+}
+
+.testzone-settings__option--active {
+  background: rgba(0, 184, 148, 0.15);
+  border-color: rgba(0, 184, 148, 0.4);
+  box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.1);
+}
+
+.testzone-settings__option-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-md, 8px);
+}
+
+.testzone-settings__option--active .testzone-settings__option-icon {
+  background: rgba(0, 184, 148, 0.2);
+}
+
+.testzone-settings__option-content {
+  flex: 1;
+}
+
+.testzone-settings__option-title {
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text, #2d3436);
+  margin-bottom: var(--spacing-xs, 4px);
+}
+
+.testzone-settings__option-desc {
+  font-size: var(--font-size-sm, 12px);
+  color: var(--color-text-secondary, #636e72);
+  line-height: 1.5;
+}
+
+.testzone-settings__note {
+  margin-top: var(--spacing-lg, 16px);
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
+  background: rgba(253, 203, 110, 0.1);
+  border-left: 3px solid rgba(253, 203, 110, 0.3);
+  border-radius: var(--border-radius-sm, 4px);
+  font-size: var(--font-size-sm, 12px);
+  color: var(--color-text-secondary, #636e72);
+}

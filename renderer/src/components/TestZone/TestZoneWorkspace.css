@@ -26,13 +26,21 @@
 .testzone-workspace__tables {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg, 16px);
+  gap: var(--spacing-sm, 8px);
   margin-bottom: var(--spacing-lg, 16px);
+}
+
+/* 操作按钮组 */
+.testzone-workspace__actions {
+  display: flex;
+  gap: var(--spacing-md, 12px);
+  margin-bottom: var(--spacing-lg, 16px);
+  justify-content: flex-end;
 }
 
 /* 添加表格按钮 */
 .testzone-workspace__add-table-btn {
-  width: 100%;
+  flex: 1;
   padding: var(--spacing-lg, 16px);
   font-size: var(--font-size-base, 14px);
   font-weight: var(--font-weight-semibold, 600);
@@ -57,3 +65,32 @@
 .testzone-workspace__add-table-btn:active {
   transform: translateY(0);
 }
+
+/* 设置按钮 */
+.testzone-workspace__settings-btn {
+  flex: 1;
+  padding: var(--spacing-lg, 16px);
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-semibold, 600);
+  background: rgba(108, 92, 231, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px dashed rgba(108, 92, 231, 0.4);
+  border-radius: var(--border-radius-md, 8px);
+  color: #9b59b6;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s) ease;
+  outline: none;
+}
+
+.testzone-workspace__settings-btn:hover {
+  background: rgba(108, 92, 231, 0.15);
+  border-color: rgba(155, 89, 182, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(155, 89, 182, 0.2);
+}
+
+.testzone-workspace__settings-btn:active {
+  transform: translateY(0);
+}
+

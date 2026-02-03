@@ -1,0 +1,35 @@
+/**
+ * 拖拽手柄组件样式
+ */
+
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  cursor: grab;
+  color: var(--color-text-secondary, #636e72);
+  transition: all var(--transition-fast, 0.15s) ease;
+  user-select: none;
+}
+
+.drag-handle:hover {
+  color: var(--color-primary, #4da3ff);
+  transform: scale(1.1);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.drag-handle--dragging {
+  cursor: grabbing;
+  color: var(--color-primary, #4da3ff);
+}
+
+.drag-handle__dots {
+  font-size: var(--font-size-base, 14px);
+  line-height: 1;
+  letter-spacing: -2px;
+}

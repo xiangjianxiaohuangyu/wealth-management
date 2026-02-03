@@ -115,6 +115,29 @@ export const testZoneStorage = {
   },
 
   /**
+   * 重新排序表格
+   */
+  reorderTables(tableIds: string[]): boolean {
+    const data = this.getData()
+    if (!data) return false
+
+    // 根据提供的ID顺序重新排序表格
+    const reorderedTables = tableIds
+      .map(id => data.tables.find(t => t.id === id))
+      .filter((t): t is TestZoneTable => t !== undefined)
+
+    // 检查是否所有表格都找到了
+    if (reorderedTables.length !== tableIds.length) return false
+
+    data.tables = reorderedTables
+    const result = this.setData(data)
+    if (result) {
+      eventBus.emit('testzone-changed')
+    }
+    return result
+  },
+
+  /**
    * 添加表格行
    */
   addRow(tableId: string, row: Omit<TestZoneRow, 'id'>): boolean {

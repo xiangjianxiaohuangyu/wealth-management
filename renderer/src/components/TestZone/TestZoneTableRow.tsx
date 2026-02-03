@@ -8,6 +8,7 @@
 
 import { useState, useEffect } from 'react'
 import type { TestZoneRow } from '../../types/testzone.types'
+import type { CalculationMethod } from '../../types/testZoneSettings.types'
 import './TestZoneTableRow.css'
 
 export interface TestZoneTableRowProps {
@@ -21,6 +22,10 @@ export interface TestZoneTableRowProps {
   onSave: (row: TestZoneRow) => void
   /** 删除回调 */
   onDelete?: () => void
+  /** 是否处于编辑模式 */
+  isEditing?: boolean
+  /** 投资金额计算方式 */
+  calculationMethod?: CalculationMethod
 }
 
 export function TestZoneTableRow({
@@ -28,7 +33,9 @@ export function TestZoneTableRow({
   totalIncome,
   totalInvestment,
   onSave,
-  onDelete
+  onDelete,
+  isEditing = false,
+  calculationMethod = 'total-income'
 }: TestZoneTableRowProps) {
   // 编辑时的临时数据
   const [tempRow, setTempRow] = useState<TestZoneRow>(row)
@@ -40,19 +47,19 @@ export function TestZoneTableRow({
     setIsCustomAmount(false)
   }, [row.id, row.valueRangeStart, row.valueRangeEnd, row.investmentPercentage, row.actualAmount])
 
-  // 计算投资金额
+  // 计算投资金额 - 基于全局计算方式
   const calculatedInvestmentAmount = isCustomAmount
     ? tempRow.investmentAmount
-    : ((tempRow.useTotalInvestment ? totalInvestment : totalIncome) * tempRow.investmentPercentage) / 100
+    : ((calculationMethod === 'total-investment' ? totalInvestment : totalIncome) * tempRow.investmentPercentage) / 100
 
-  // 当比例或计算基准变化时，自动计算投资金额
+  // 当比例或计算方式变化时，自动计算投资金额
   useEffect(() => {
     if (!isCustomAmount) {
-      const baseAmount = tempRow.useTotalInvestment ? totalInvestment : totalIncome
+      const baseAmount = calculationMethod === 'total-investment' ? totalInvestment : totalIncome
       const calculated = (baseAmount * tempRow.investmentPercentage) / 100
       setTempRow(prev => ({ ...prev, investmentAmount: calculated }))
     }
-  }, [tempRow.investmentPercentage, tempRow.useTotalInvestment, isCustomAmount, totalIncome, totalInvestment])
+  }, [tempRow.investmentPercentage, calculationMethod, isCustomAmount, totalIncome, totalInvestment])
 
   const handleSave = () => {
     onSave(tempRow)
@@ -92,98 +99,114 @@ export function TestZoneTableRow({
     setTempRow({ ...tempRow, actualAmount: numValue })
   }
 
-  const handleToggleCalculationBase = () => {
-    setTempRow({ ...tempRow, useTotalInvestment: !tempRow.useTotalInvestment })
-    setIsCustomAmount(false)
-  }
-
   return (
     <div className="testzone-table__row">
       {/* 价值区间 */}
       <div className="testzone-table__cell testzone-table__cell--range">
-        <input
-          type="number"
-          className="testzone-table__input testzone-table__input--small"
-          value={tempRow.valueRangeStart}
-          onChange={e => handleRangeStartChange(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="0"
-        />
-        <span className="testzone-table__range-separator">--</span>
-        <input
-          type="number"
-          className="testzone-table__input testzone-table__input--small"
-          value={tempRow.valueRangeEnd}
-          onChange={e => handleRangeEndChange(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="0"
-        />
+        {isEditing ? (
+          <>
+            <input
+              type="number"
+              className="testzone-table__input testzone-table__input--small"
+              value={tempRow.valueRangeStart}
+              onChange={e => handleRangeStartChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="0"
+            />
+            <span className="testzone-table__range-separator">--</span>
+            <input
+              type="number"
+              className="testzone-table__input testzone-table__input--small"
+              value={tempRow.valueRangeEnd}
+              onChange={e => handleRangeEndChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="0"
+            />
+          </>
+        ) : (
+          <span className="testzone-table__value">
+            {tempRow.valueRangeStart} -- {tempRow.valueRangeEnd}
+          </span>
+        )}
       </div>
 
       {/* 投资比例 */}
       <div className="testzone-table__cell testzone-table__cell--input">
-        <div className="testzone-table__input-wrapper">
-          <input
-            type="number"
-            className="testzone-table__input"
-            min="0"
-            max="100"
-            step="0.1"
-            value={tempRow.investmentPercentage}
-            onChange={e => handlePercentageChange(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <span className="testzone-table__suffix">%</span>
-        </div>
+        {isEditing ? (
+          <div className="testzone-table__input-wrapper">
+            <input
+              type="number"
+              className="testzone-table__input"
+              min="0"
+              max="100"
+              step="0.1"
+              value={tempRow.investmentPercentage}
+              onChange={e => handlePercentageChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <span className="testzone-table__suffix">%</span>
+          </div>
+        ) : (
+          <span className="testzone-table__value">
+            {tempRow.investmentPercentage}%
+          </span>
+        )}
       </div>
 
       {/* 投资金额 */}
       <div className="testzone-table__cell testzone-table__cell--input">
-        <div className="testzone-table__input-wrapper">
-          <input
-            type="number"
-            className="testzone-table__input"
-            min="0"
-            step="100"
-            value={Math.round(calculatedInvestmentAmount)}
-            onChange={e => handleInvestmentAmountChange(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <span className="testzone-table__suffix">￥</span>
-        </div>
-        <button
-          className="testzone-table__toggle-btn"
-          onClick={handleToggleCalculationBase}
-          title={tempRow.useTotalInvestment ? "点击切换为按总收入计算" : "点击切换为按总投资计算"}
-        >
-          {tempRow.useTotalInvestment ? "总投资" : "总收入"}
-        </button>
+        {isEditing ? (
+          <div className="testzone-table__input-wrapper">
+            <input
+              type="number"
+              className="testzone-table__input"
+              min="0"
+              step="100"
+              value={Math.round(calculatedInvestmentAmount)}
+              onChange={e => handleInvestmentAmountChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <span className="testzone-table__suffix">￥</span>
+          </div>
+        ) : (
+          <span className="testzone-table__value">
+            ￥{Math.round(calculatedInvestmentAmount).toLocaleString()}
+          </span>
+        )}
       </div>
 
       {/* 实际金额 */}
       <div className="testzone-table__cell testzone-table__cell--input">
-        <div className="testzone-table__input-wrapper">
-          <input
-            type="number"
-            className="testzone-table__input"
-            min="0"
-            step="100"
-            value={tempRow.actualAmount}
-            onChange={e => handleActualAmountChange(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <span className="testzone-table__suffix">￥</span>
-        </div>
+        {isEditing ? (
+          <div className="testzone-table__input-wrapper">
+            <input
+              type="number"
+              className="testzone-table__input"
+              min="0"
+              step="100"
+              value={tempRow.actualAmount}
+              onChange={e => handleActualAmountChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <span className="testzone-table__suffix">￥</span>
+          </div>
+        ) : (
+          <span className="testzone-table__value">
+            ￥{tempRow.actualAmount.toLocaleString()}
+          </span>
+        )}
       </div>
 
       {/* 操作按钮 */}
       <div className="testzone-table__cell testzone-table__actions">
-        <button
-          className="testzone-table__action-btn testzone-table__action-btn--save"
-          onClick={handleSave}
-        >
-          保存
-        </button>
+        {isEditing ? (
+          <button
+            className="testzone-table__action-btn testzone-table__action-btn--save"
+            onClick={handleSave}
+          >
+            保存
+          </button>
+        ) : null}
         {onDelete && (
           <button
             className="testzone-table__action-btn testzone-table__action-btn--delete"

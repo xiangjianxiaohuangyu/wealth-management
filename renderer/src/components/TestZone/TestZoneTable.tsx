@@ -7,10 +7,13 @@
  * - 支持删除整个表格
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { TestZoneTable as TestZoneTableType } from '../../types/testzone.types'
 import { TestZoneTableRow } from './TestZoneTableRow'
 import { testZoneStorage } from '../../services/storage/testZoneStorage'
+import { testZoneSettingsStorage } from '../../services/storage/testZoneSettingsStorage'
+import { eventBus } from '../../utils/eventBus'
+import type { CalculationMethod } from '../../types/testZoneSettings.types'
 import './TestZoneTable.css'
 
 export interface TestZoneTableProps {
@@ -22,16 +25,37 @@ export interface TestZoneTableProps {
   totalInvestment: number
   /** 删除表格回调 */
   onDeleteTable: (tableId: string) => void
+  /** 拖拽手柄属性 */
+  dragHandleProps?: React.HTMLAttributes<HTMLDivElement>
 }
 
 export function TestZoneTable({
   table,
   totalIncome,
   totalInvestment,
-  onDeleteTable
+  onDeleteTable,
+  dragHandleProps
 }: TestZoneTableProps) {
   const [rows, setRows] = useState(table.rows)
   const [collapsed, setCollapsed] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [calculationMethod, setCalculationMethod] = useState<CalculationMethod>('total-income')
+
+  // 加载计算方式设置
+  useEffect(() => {
+    setCalculationMethod(testZoneSettingsStorage.getCalculationMethod())
+  }, [])
+
+  // 监听设置变化
+  useEffect(() => {
+    const handleSettingsChange = () => {
+      setCalculationMethod(testZoneSettingsStorage.getCalculationMethod())
+    }
+    eventBus.on('testzone-settings-changed', handleSettingsChange)
+    return () => {
+      eventBus.off('testzone-settings-changed', handleSettingsChange)
+    }
+  }, [])
 
   const handleSaveRow = (rowId: string, updatedRow: TestZoneTableType['rows'][0]) => {
     testZoneStorage.updateRow(table.id, rowId, updatedRow)
@@ -71,6 +95,10 @@ export function TestZoneTable({
     setCollapsed(!collapsed)
   }
 
+  const toggleEditMode = () => {
+    setIsEditing(!isEditing)
+  }
+
   return (
     <div className={`testzone-table ${collapsed ? 'testzone-table--collapsed' : ''}`}>
       <div className="testzone-table__header-row">
@@ -84,55 +112,75 @@ export function TestZoneTable({
           </button>
           <h3 className="testzone-table__title">{table.name}</h3>
         </div>
-        <button
-          className="testzone-table__delete-btn"
-          onClick={handleDeleteTable}
-          title="删除表格"
-        >
-          删除表格
-        </button>
+        <div className="testzone-table__header-actions">
+          <button
+            className="testzone-table__edit-btn"
+            onClick={toggleEditMode}
+            title={isEditing ? "完成编辑" : "编辑"}
+          >
+            {isEditing ? '完成' : '编辑'}
+          </button>
+          <button
+            className="testzone-table__delete-btn"
+            onClick={handleDeleteTable}
+            title="删除表格"
+          >
+            删除表格
+          </button>
+          {dragHandleProps && (
+            <div className="testzone-table__drag-handle" {...dragHandleProps}>
+              <span className="testzone-table__drag-handle-icon">⋮⋮</span>
+            </div>
+          )}
+        </div>
       </div>
 
-      {!collapsed && (
-        <>
-          {/* 表头 */}
-          <div className="testzone-table__header">
-            <div>价值区间</div>
-            <div>投资比例(%)</div>
-            <div>投资金额(￥)</div>
-            <div>实际金额(￥)</div>
-            <div>操作</div>
-          </div>
+      <div className="testzone-table__content">
+        {!collapsed && (
+          <>
+            {/* 表头 */}
+            <div className="testzone-table__header">
+              <div>价值区间</div>
+              <div>投资比例(%)</div>
+              <div>投资金额(￥)</div>
+              <div>实际金额(￥)</div>
+              <div>操作</div>
+            </div>
 
-          {/* 数据行 */}
-          <div className="testzone-table__body">
-            {rows.length === 0 ? (
-              <div className="testzone-table__empty">
-                <p>暂无数据，点击下方"添加行"按钮开始添加</p>
-              </div>
-            ) : (
-              rows.map(row => (
-                <TestZoneTableRow
-                  key={row.id}
-                  row={row}
-                  totalIncome={totalIncome}
-                  totalInvestment={totalInvestment}
-                  onSave={(updatedRow) => handleSaveRow(row.id, updatedRow)}
-                  onDelete={() => handleDeleteRow(row.id)}
-                />
-              ))
+            {/* 数据行 */}
+            <div className="testzone-table__body">
+              {rows.length === 0 ? (
+                <div className="testzone-table__empty">
+                  <p>暂无数据，点击下方"添加行"按钮开始添加</p>
+                </div>
+              ) : (
+                rows.map(row => (
+                  <TestZoneTableRow
+                    key={row.id}
+                    row={row}
+                    totalIncome={totalIncome}
+                    totalInvestment={totalInvestment}
+                    onSave={(updatedRow) => handleSaveRow(row.id, updatedRow)}
+                    onDelete={() => handleDeleteRow(row.id)}
+                    isEditing={isEditing}
+                    calculationMethod={calculationMethod}
+                  />
+                ))
+              )}
+            </div>
+
+            {/* 添加行按钮 - 仅在编辑状态显示 */}
+            {isEditing && (
+              <button
+                className="testzone-table__add-row-btn"
+                onClick={handleAddRow}
+              >
+                + 添加行
+              </button>
             )}
-          </div>
-
-          {/* 添加行按钮 */}
-          <button
-            className="testzone-table__add-row-btn"
-            onClick={handleAddRow}
-          >
-            + 添加行
-          </button>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   )
 }

@@ -1,0 +1,23 @@
+/**
+ * 可拖拽测试区表格组件样式
+ */
+
+.draggable-testzone-table {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm, 8px);
+}
+
+.draggable-testzone-table__drag-handle {
+  flex-shrink: 0;
+  padding-top: var(--spacing-lg, 16px);
+}
+
+.draggable-testzone-table--dragging {
+  z-index: 1000;
+}
+
+.draggable-testzone-table--dragging .testzone-table {
+  box-shadow: 0 8px 24px rgba(77, 163, 255, 0.3);
+}
