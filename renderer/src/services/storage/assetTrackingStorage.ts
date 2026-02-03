@@ -6,6 +6,7 @@
 
 import { storage } from './localStorage'
 import type { MonthlyAssetRecord, AssetTrackingData, AssetAdjustment } from '../../types/assetTracking.types'
+import { eventBus } from '../../utils/eventBus'
 
 /**
  * 资产跟踪数据存储服务
@@ -78,7 +79,11 @@ export const assetTrackingStorage = {
     data.fixedAssetAdjustments = data.fixedAssetAdjustments || []
     data.fixedAssetAdjustments.push(newAdjustment)
 
-    return this.setData(data)
+    const result = this.setData(data)
+    if (result) {
+      eventBus.emit('asset-tracking-changed')
+    }
+    return result
   },
 
   /**
@@ -92,7 +97,11 @@ export const assetTrackingStorage = {
     if (filteredAdjustments.length === data.fixedAssetAdjustments.length) return false
 
     data.fixedAssetAdjustments = filteredAdjustments
-    return this.setData(data)
+    const result = this.setData(data)
+    if (result) {
+      eventBus.emit('asset-tracking-changed')
+    }
+    return result
   },
 
   /**
@@ -129,11 +138,15 @@ export const assetTrackingStorage = {
       return a.month - b.month
     })
 
-    return this.setData({
+    const result = this.setData({
       records,
       lastUpdated: data?.lastUpdated || new Date().toISOString(),
       fixedAssetAdjustments: data?.fixedAssetAdjustments || []
     })
+    if (result) {
+      eventBus.emit('asset-tracking-changed')
+    }
+    return result
   },
 
   /**
@@ -152,7 +165,11 @@ export const assetTrackingStorage = {
       updatedAt: new Date().toISOString()
     }
 
-    return this.setData(data)
+    const result = this.setData(data)
+    if (result) {
+      eventBus.emit('asset-tracking-changed')
+    }
+    return result
   },
 
   /**
@@ -165,18 +182,26 @@ export const assetTrackingStorage = {
     const filteredRecords = data.records.filter(r => r.id !== id)
     if (filteredRecords.length === data.records.length) return false
 
-    return this.setData({
+    const result = this.setData({
       records: filteredRecords,
       lastUpdated: data.lastUpdated,
       fixedAssetAdjustments: data.fixedAssetAdjustments
     })
+    if (result) {
+      eventBus.emit('asset-tracking-changed')
+    }
+    return result
   },
 
   /**
    * 清除所有数据
    */
   clearData(): boolean {
-    return storage.remove(this.STORAGE_KEY)
+    const result = storage.remove(this.STORAGE_KEY)
+    if (result) {
+      eventBus.emit('asset-tracking-changed')
+    }
+    return result
   },
 
   /**
@@ -206,7 +231,10 @@ export const assetTrackingStorage = {
         }
       }
 
-      this.setData(data)
+      const result = this.setData(data)
+      if (result) {
+        eventBus.emit('asset-tracking-changed')
+      }
       return { success: true }
     } catch (error) {
       return { success: false, error: '数据格式错误' }

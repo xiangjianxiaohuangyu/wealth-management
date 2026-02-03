@@ -5,6 +5,7 @@
  */
 
 import { useState, useMemo } from 'react'
+import React from 'react'
 import { Card } from '../common/Card/Card'
 import { InvestmentRecordTable } from './InvestmentRecordTable'
 import type { InvestmentRecordCard as InvestmentRecordCardType, InvestmentRecordRowUpdate } from '../../types/investmentRecord.types'
@@ -27,7 +28,7 @@ export interface InvestmentRecordCardProps {
   onDelete: (cardId: string) => void
 }
 
-export function InvestmentRecordCard({
+function InvestmentRecordCard({
   card,
   totalInvestment,
   onNameUpdate,
@@ -146,3 +147,21 @@ export function InvestmentRecordCard({
     </Card>
   )
 }
+
+// 使用 React.memo 优化，仅在 props 变化时重新渲染
+const MemoizedInvestmentRecordCard = React.memo(InvestmentRecordCard, (prevProps, nextProps) => {
+  // 自定义比较函数：仅当关键 props 变化时才重新渲染
+  return (
+    prevProps.card === nextProps.card &&
+    prevProps.totalInvestment === nextProps.totalInvestment &&
+    prevProps.onNameUpdate === nextProps.onNameUpdate &&
+    prevProps.onAddRow === nextProps.onAddRow &&
+    prevProps.onRowUpdate === nextProps.onRowUpdate &&
+    prevProps.onRowDelete === nextProps.onRowDelete &&
+    prevProps.onDelete === nextProps.onDelete
+  )
+})
+
+MemoizedInvestmentRecordCard.displayName = 'InvestmentRecordCard'
+
+export { MemoizedInvestmentRecordCard as InvestmentRecordCard }

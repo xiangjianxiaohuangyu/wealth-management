@@ -65,17 +65,18 @@ export function AssetDetailModal({
   })
 
   // 加载调整记录
-  useEffect(() => {
-    if (isOpen) {
-      loadAdjustments()
-    }
-  }, [isOpen, assetType])
-
   const loadAdjustments = () => {
     const allAdjustments = assetTrackingStorage.getAllAdjustments()
     const filtered = allAdjustments.filter(a => a.type === assetType)
     setAdjustments(filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()))
   }
+
+  // 加载调整记录
+  useEffect(() => {
+    if (isOpen) {
+      loadAdjustments()
+    }
+  }, [isOpen, assetType])
 
   // 计算基础值（从月度记录）
   const calculateBaseValue = (): number => {

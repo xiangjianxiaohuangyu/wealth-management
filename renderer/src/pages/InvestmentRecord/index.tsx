@@ -6,13 +6,14 @@
 
 import { useEffect, useState, useMemo } from 'react'
 import { investmentRecordStorage } from '../../services/storage/investmentRecordStorage'
-import { assetTrackingStorage } from '../../services/storage/assetTrackingStorage'
 import { InvestmentRecordCard } from '../../components/InvestmentRecord/InvestmentRecordCard'
 import { StatisticsPanel } from '../../components/InvestmentRecord/StatisticsPanel'
 import { ImportDialog } from '../../components/InvestmentRecord/ImportDialog'
 import { ConfirmDialog } from '../../components/Investment/ConfirmDialog'
 import { Card } from '../../components/common/Card/Card'
 import { formatCurrency } from '../../utils/format/currency'
+import { eventBus } from '../../utils/eventBus'
+import { calculateTotalIncome, calculateTotalInvestment } from '../../utils/calculation/assetCalculation'
 import type { InvestmentRecordCard as InvestmentRecordCardType, InvestmentRecordRow, InvestmentRecordRowUpdate, InvestmentRecordData } from '../../types/investmentRecord.types'
 import './InvestmentRecord.css'
 
@@ -30,39 +31,24 @@ export default function InvestmentRecord() {
     setCards(loadedCards)
   }, [])
 
-  // 从资产跟踪获取总收入（所有月度记录的总收入之和）
-  const getTotalIncome = (): number => {
-    const records = assetTrackingStorage.getAllRecords()
-    return records.reduce((sum, r) => sum + r.totalIncome, 0)
-  }
-
-  // 从资产跟踪获取投资金额
-  const getTotalInvestment = (): number => {
-    const records = assetTrackingStorage.getAllRecords()
-    const adjustments = assetTrackingStorage.getAllAdjustments()
-
-    const baseInvestment = records.reduce((sum, r) => sum + r.investment, 0)
-    const investmentAdjustments = adjustments
-      .filter(a => a.type === 'investment')
-      .reduce((sum, adj) => sum + adj.amount, 0)
-
-    return baseInvestment + investmentAdjustments
-  }
-
-  // 实时监听数据变化（每秒检查一次）
+  // 监听资产跟踪数据变化（使用事件总线替代轮询）
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      const newIncome = getTotalIncome()
-      const newInvestment = getTotalInvestment()
-      setTotalIncome(newIncome)
-      setTotalInvestment(newInvestment)
-    }, 1000)
+    // 更新数据的函数
+    const updateData = () => {
+      setTotalIncome(calculateTotalIncome())
+      setTotalInvestment(calculateTotalInvestment())
+    }
 
     // 初始化时立即获取一次
-    setTotalIncome(getTotalIncome())
-    setTotalInvestment(getTotalInvestment())
+    updateData()
 
-    return () => clearInterval(intervalId)
+    // 监听资产跟踪数据变化事件
+    eventBus.on('asset-tracking-changed', updateData)
+
+    // 清理函数
+    return () => {
+      eventBus.off('asset-tracking-changed', updateData)
+    }
   }, [])
 
   // 数据持久化

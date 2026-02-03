@@ -14,8 +14,9 @@ import { TotalInvestmentInput } from './TotalInvestmentInput'
 import { PortfolioCard } from './PortfolioCard'
 import type { AssetAllocationItem } from '../../types/investment.types'
 import { investmentStorage } from '../../services/storage/investmentStorage'
-import { assetTrackingStorage } from '../../services/storage/assetTrackingStorage'
 import { updateAllAssetsCalculations } from '../../utils/calculation/portfolioCalculation'
+import { calculateTotalInvestment } from '../../utils/calculation/assetCalculation'
+import { eventBus } from '../../utils/eventBus'
 import './AssetAllocationTable.css'
 
 interface TotalInvestmentProps {
@@ -36,22 +37,6 @@ export function AssetAllocationTable({
     assetsRef.current = assets
   }, [assets])
 
-  // 计算总投资金额的函数
-  const calculateTotalAmount = () => {
-    const records = assetTrackingStorage.getAllRecords()
-    const allAdjustments = assetTrackingStorage.getAllAdjustments()
-
-    // 计算基础投资金额
-    const baseInvestment = records.reduce((sum, r) => sum + r.investment, 0)
-
-    // 计算投资调整金额
-    const investmentAdjustments = allAdjustments
-      .filter(a => a.type === 'investment')
-      .reduce((sum, adj) => sum + adj.amount, 0)
-
-    return baseInvestment + investmentAdjustments
-  }
-
   // 初始化：从localStorage加载资产配置
   useEffect(() => {
     const savedAssets = investmentStorage.getAssets()
@@ -61,15 +46,16 @@ export function AssetAllocationTable({
     }
 
     // 初始化总投资金额
-    const initialAmount = calculateTotalAmount()
+    const initialAmount = calculateTotalInvestment()
     setTotalAmount(initialAmount)
     prevTotalAmountRef.current = initialAmount
   }, [])
 
-  // 监听资产跟踪数据变化
+  // 监听资产跟踪数据变化（使用事件总线替代轮询）
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      const newAmount = calculateTotalAmount()
+    // 更新数据的函数
+    const updateAmount = () => {
+      const newAmount = calculateTotalInvestment()
 
       // 如果总投资金额发生变化，更新所有资产的计算
       if (newAmount !== prevTotalAmountRef.current) {
@@ -85,10 +71,19 @@ export function AssetAllocationTable({
 
         onChange?.(newAmount)
       }
-    }, 1000) // 每秒检查一次
+    }
 
-    return () => clearInterval(intervalId)
-  }, [])
+    // 初始化时立即获取一次
+    updateAmount()
+
+    // 监听资产跟踪数据变化事件
+    eventBus.on('asset-tracking-changed', updateAmount)
+
+    // 清理函数
+    return () => {
+      eventBus.off('asset-tracking-changed', updateAmount)
+    }
+  }, [onChange])
 
   // 保存资产配置到localStorage（不包含总金额）
   useEffect(() => {

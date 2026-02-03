@@ -16,6 +16,7 @@ import { assetTrackingStorage } from '../../services/storage/assetTrackingStorag
 import { calculateCumulativeAssets } from '../../services/data/assetTrackingService'
 import { investmentStorage } from '../../services/storage/investmentStorage'
 import { updateAllAssetsCalculations } from '../../utils/calculation/portfolioCalculation'
+import { calculateTotalInvestment, calculateTotalSavings, calculateTotalFixedAssets } from '../../utils/calculation/assetCalculation'
 import { CHART_COLORS } from '../../utils/constants'
 import type { MonthlyAssetRecord } from '../../types/assetTracking.types'
 import type { AssetAllocationItem } from '../../types/investment.types'
@@ -50,22 +51,7 @@ export default function Dashboard() {
 
   // 计算总资产金额（用于环形图）
   const totalAmount = useMemo(() => {
-    const baseSavings = records.reduce((sum, r) => sum + r.savings, 0)
-    const baseInvestment = records.reduce((sum, r) => sum + r.investment, 0)
-    const allAdjustments = assetTrackingStorage.getAllAdjustments()
-
-    const fixedAssetAdjustments = allAdjustments.filter(a => a.type === 'fixed-asset')
-    const fixedAssets = fixedAssetAdjustments.reduce((sum, adj) => sum + adj.amount, 0)
-
-    const investmentAdjustments = allAdjustments
-      .filter(a => a.type === 'investment')
-      .reduce((sum, adj) => sum + adj.amount, 0)
-
-    const savingsAdjustments = allAdjustments
-      .filter(a => a.type === 'savings')
-      .reduce((sum, adj) => sum + adj.amount, 0)
-
-    return baseSavings + savingsAdjustments + baseInvestment + investmentAdjustments + fixedAssets
+    return calculateTotalSavings() + calculateTotalInvestment() + calculateTotalFixedAssets()
   }, [records])
 
   // 计算累计资产数据（用于折线图）

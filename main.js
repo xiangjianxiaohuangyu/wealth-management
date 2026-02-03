@@ -30,7 +30,7 @@ function createWindow() {
     minWidth: 1200,
     minHeight: 700,
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
     },
@@ -172,6 +172,24 @@ ipcMain.handle('get-app-version', async () => {
 
 // 读取项目目录中的文件（用于更新日志等）
 ipcMain.handle('read-project-file', async (_event, fileName) => {
+  // 安全验证：检查文件名格式
+  if (!fileName || typeof fileName !== 'string') {
+    return { success: false, error: 'Invalid file name' };
+  }
+
+  // 验证文件名只包含安全字符（防止路径遍历攻击）
+  if (!/^[a-zA-Z0-9._-]+$/.test(fileName)) {
+    console.error('Invalid file name format:', fileName);
+    return { success: false, error: 'Invalid file name' };
+  }
+
+  // 限制在白名单文件列表
+  const allowedFiles = ['changelog.md', 'README.md', 'ARCHITECTURE.md', 'PROJECT_INTRO.md'];
+  if (!allowedFiles.includes(fileName)) {
+    console.error('File not in whitelist:', fileName);
+    return { success: false, error: 'File not allowed' };
+  }
+
   // 开发环境和生产环境：main.js 和 changelog.md 都在同一目录
   // 开发环境：项目根目录
   // 生产环境：resources/app 目录

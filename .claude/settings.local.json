@@ -18,7 +18,11 @@
       "Bash(git push)",
       "Bash(npm run release:*)",
       "Bash(curl:*)",
-      "Bash(npm version minor:*)"
+      "Bash(npm version minor:*)",
+      "Bash(git push:*)",
+      "Bash(npm audit:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npm run lint)"
     ]
   }
 }
