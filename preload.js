@@ -38,7 +38,8 @@ contextBridge.exposeInMainWorld('electron', {
       'load-plan-from-file',
       'get-plans-directory',
       'delete-plan-file',
-      'read-project-file'
+      'read-project-file',
+      'get-stock-data'
     ]
     if (validChannels.includes(channel)) {
       return ipcRenderer.invoke(channel, ...args)

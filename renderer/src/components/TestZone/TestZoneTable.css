@@ -86,6 +86,73 @@
   border-color: rgba(77, 163, 255, 0.6);
 }
 
+/* 股票信息内联显示 */
+.testzone-table__stock-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  font-size: 13px;
+  color: var(--color-text-secondary, #636e72);
+}
+
+/* 股票代码 */
+.testzone-table__stock-code {
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-weight: 500;
+  color: #0984e3;
+  background: rgba(9, 132, 227, 0.08);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+/* 分隔符 */
+.testzone-table__separator {
+  color: var(--color-text-secondary, #636e72);
+  opacity: 0.5;
+}
+
+/* 最新价显示 */
+.testzone-table__latest-price {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+
+.testzone-table__latest-price.positive {
+  color: #00b894;
+}
+
+.testzone-table__latest-price.negative {
+  color: #d63031;
+}
+
+/* 涨跌幅 */
+.testzone-table__change-percent {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+/* 编辑模式下的股票输入 */
+.testzone-table__stock-input {
+  width: 140px;
+  padding: 4px 8px;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(77, 163, 255, 0.3);
+  border-radius: 4px;
+  color: var(--color-text, #2d3436);
+  outline: none;
+  transition: all 0.15s ease;
+  margin-left: 8px;
+}
+
+.testzone-table__stock-input:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(77, 163, 255, 0.6);
+}
+
 .testzone-table__edit-btn {
   padding: var(--spacing-sm, 6px) var(--spacing-md, 12px);
   font-size: var(--font-size-sm, 12px);

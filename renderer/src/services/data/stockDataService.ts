@@ -42,22 +42,28 @@ export const stockDataService = {
    * 获取股票实时数据
    * @param stockCode 股票代码
    * @returns 股票数据或 null
-   *
-   * TODO: 集成爬虫接口
-   * - 方案1: Electron 主进程通过 axios/cheerio 爬取数据
-   * - 方案2: 使用第三方 API（如 Alpha Vantage, Yahoo Finance）
-   * - 方案3: 自建后端服务提供数据接口
    */
   async getStockData(stockCode: string): Promise<StockData | null> {
     try {
-      // 模拟实现 - 后续替换为真实数据源
+      if (!stockCode || !stockCode.trim()) {
+        return null
+      }
+
       console.log(`[StockDataService] 获取股票数据: ${stockCode}`)
 
-      // 预留接口调用
-      // const response = await window.electron.ipc.invoke('get-stock-data', stockCode)
-      // return response
+      // 调用主进程API
+      const response = await (window as any).electron.invoke('get-stock-data', stockCode.trim()) as {
+        success: boolean
+        data?: StockData
+        error?: string
+      }
 
-      return null
+      if (response.success && response.data) {
+        return response.data
+      } else {
+        console.error('[StockDataService] 获取失败:', response.error)
+        return null
+      }
     } catch (error) {
       console.error('[StockDataService] 获取股票数据失败:', error)
       return null

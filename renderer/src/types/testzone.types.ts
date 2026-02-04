@@ -24,6 +24,14 @@ export interface TestZoneTable {
   id: string
   name: string
   rows: TestZoneRow[]
+  /** 股票代码（可选）如：sh600000、hk00700 */
+  stockCode?: string
+  /** 最新价格缓存 */
+  latestPrice?: number
+  /** 涨跌幅缓存（%） */
+  changePercent?: number
+  /** 股票数据更新时间 */
+  stockDataUpdateTime?: string
   createdAt: string
   updatedAt: string
 }

@@ -8,6 +8,7 @@
  */
 
 import { useState, useEffect } from 'react'
+import { useStockData } from '../../hooks/useStockData'
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import type { DragEndEvent } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable'
@@ -46,6 +47,42 @@ export function TestZoneTable({
   const [calculationMethod, setCalculationMethod] = useState<CalculationMethod>('total-income')
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [title, setTitle] = useState(table.name)
+  const [stockCode, setStockCode] = useState(table.stockCode || '')
+
+  // 股票数据自动更新 - 只使用已保存的股票代码，不在编辑时请求
+  // 这样确保只有点击"完成"保存后才会开始爬取数据
+  const { data: stockData } = useStockData(isEditing ? '' : (table.stockCode || ''), {
+    refreshInterval: 3 * 60 * 1000, // 3分钟刷新
+    enableAutoRefresh: !isEditing && !!table.stockCode,
+    onDataChange: (data) => {
+      // 数据更新时保存到table
+      if (data) {
+        testZoneStorage.updateTable(table.id, {
+          latestPrice: data.currentPrice,
+          changePercent: data.changePercent,
+          stockDataUpdateTime: data.updateTime
+        })
+      }
+    }
+  })
+
+  // 使用实时数据或缓存数据（只有当股票代码存在时才显示价格）
+  const displayPrice = table.stockCode ? (stockData?.currentPrice ?? table.latestPrice) : undefined
+  const displayChange = table.stockCode ? (stockData?.changePercent ?? table.changePercent) : undefined
+
+  // 根据股票代码确定货币符号
+  const getCurrencySymbol = (code: string) => {
+    if (!code) return '¥'
+    const upperCode = code.toUpperCase()
+    if (upperCode.startsWith('SH') || upperCode.startsWith('SZ') || upperCode.startsWith('AU')) {
+      return '¥'
+    } else if (upperCode.startsWith('HK')) {
+      return 'HK$'
+    } else {
+      // 美股指数、国际期货等
+      return '$'
+    }
+  }
 
   // 加载计算方式设置
   useEffect(() => {
@@ -135,9 +172,26 @@ export function TestZoneTable({
       if (title.trim() && title !== table.name) {
         testZoneStorage.updateTable(table.id, { name: title.trim() })
       }
+      // 保存股票代码 - 允许为空来清除代码
+      const trimmedCode = stockCode.trim()
+      if (trimmedCode !== table.stockCode) {
+        if (trimmedCode) {
+          // 有新代码，保存代码
+          testZoneStorage.updateTable(table.id, { stockCode: trimmedCode })
+        } else {
+          // 清空代码：将所有相关字段设为null（JSON会删除null值）
+          testZoneStorage.updateTable(table.id, {
+            stockCode: null,
+            latestPrice: null,
+            changePercent: null,
+            stockDataUpdateTime: null
+          } as any)
+        }
+      }
     } else {
       // 进入编辑模式时，标题变为输入框
       setTitle(table.name)
+      setStockCode(table.stockCode || '')
     }
     setIsEditing(!isEditing)
   }
@@ -169,19 +223,51 @@ export function TestZoneTable({
             {collapsed ? '▶' : '▼'}
           </button>
           {isEditing ? (
-            <input
-              type="text"
-              className="testzone-table__title-input"
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-              onBlur={handleTitleSave}
-              onKeyDown={handleTitleKeyDown}
-              autoFocus
-            />
+            <>
+              <input
+                type="text"
+                className="testzone-table__title-input"
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+                onBlur={handleTitleSave}
+                onKeyDown={handleTitleKeyDown}
+                autoFocus
+              />
+              <input
+                type="text"
+                className="testzone-table__stock-input"
+                value={stockCode}
+                onChange={e => setStockCode(e.target.value)}
+                placeholder="代码 (sh600000/IXIC/AU9999)"
+              />
+            </>
           ) : (
-            <h3 className="testzone-table__title">
-              {table.name}
-            </h3>
+            <>
+              <h3 className="testzone-table__title">
+                {table.name}
+              </h3>
+              {/* 股票信息显示 */}
+              {(table.stockCode || displayPrice) && (
+                <span className="testzone-table__stock-inline">
+                  {table.stockCode && (
+                    <>
+                      <span className="testzone-table__stock-code">{table.stockCode}</span>
+                      {displayPrice && <span className="testzone-table__separator">·</span>}
+                    </>
+                  )}
+                  {displayPrice && (
+                    <span className={`testzone-table__latest-price ${displayChange !== undefined ? (displayChange >= 0 ? 'positive' : 'negative') : ''}`}>
+                      {getCurrencySymbol(table.stockCode || '')}{displayPrice.toFixed(2)}
+                      {displayChange !== undefined && (
+                        <span className="testzone-table__change-percent">
+                          {displayChange >= 0 ? '+' : ''}{displayChange.toFixed(2)}%
+                        </span>
+                      )}
+                    </span>
+                  )}
+                </span>
+              )}
+            </>
           )}
         </div>
         <div className="testzone-table__header-actions">
