@@ -11,20 +11,15 @@ import { useState, useEffect, useMemo } from 'react'
 import { Card } from '../../components/common/Card'
 import { LineChart } from '../../components/charts'
 import { AssetStatsCards } from '../../components/AssetTracking/AssetStatsCards'
-import { PortfolioCharts } from '../../components/Investment/PortfolioCharts'
 import { assetTrackingStorage } from '../../services/storage/assetTrackingStorage'
 import { calculateCumulativeAssets } from '../../services/data/assetTrackingService'
-import { investmentStorage } from '../../services/storage/investmentStorage'
-import { updateAllAssetsCalculations } from '../../utils/calculation/portfolioCalculation'
-import { calculateTotalInvestment, calculateTotalSavings, calculateTotalFixedAssets } from '../../utils/calculation/assetCalculation'
+import { calculateTotalSavings, calculateTotalFixedAssets } from '../../utils/calculation/assetCalculation'
 import { CHART_COLORS } from '../../utils/constants'
 import type { MonthlyAssetRecord } from '../../types/assetTracking.types'
-import type { AssetAllocationItem } from '../../types/investment.types'
 import './Dashboard.css'
 
 export default function Dashboard() {
   const [records, setRecords] = useState<MonthlyAssetRecord[]>([])
-  const [assets, setAssets] = useState<AssetAllocationItem[]>([])
 
   // 加载资产跟踪数据
   useEffect(() => {
@@ -34,25 +29,6 @@ export default function Dashboard() {
     }
     loadRecords()
   }, [])
-
-  // 加载投资规划数据
-  useEffect(() => {
-    const loadAssets = () => {
-      const savedAssets = investmentStorage.getAssets()
-      // 重新计算所有资产
-      const recalculatedAssets = updateAllAssetsCalculations(
-        savedAssets,
-        investmentStorage.getTotalAmount()
-      )
-      setAssets(recalculatedAssets)
-    }
-    loadAssets()
-  }, [])
-
-  // 计算总资产金额（用于环形图）
-  const totalAmount = useMemo(() => {
-    return calculateTotalSavings() + calculateTotalInvestment() + calculateTotalFixedAssets()
-  }, [records])
 
   // 计算累计资产数据（用于折线图）
   const chartData = useMemo(() => {
@@ -138,11 +114,6 @@ export default function Dashboard() {
           height={400}
           yAxisFormatter={(value) => `¥${(value / 10000).toFixed(1)}万`}
         />
-      </Card>
-
-      {/* 两张环形图 */}
-      <Card title="投资配置" className="dashboard__portfolio-charts">
-        <PortfolioCharts assets={assets} totalAmount={totalAmount} />
       </Card>
     </div>
   )

@@ -9,8 +9,6 @@ import type { ReactNode } from 'react'
  */
 export type RoutePath =
   | '/dashboard'
-  | '/investment'
-  | '/investment-record'
   | '/asset-tracking'
   | '/test-zone'
   | '/changelog'

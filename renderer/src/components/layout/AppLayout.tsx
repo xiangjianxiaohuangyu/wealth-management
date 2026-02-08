@@ -14,8 +14,6 @@ import './AppLayout.css'
  */
 const routeComponents = {
   '/dashboard': lazy(() => import('../../pages/WealthOverview')),
-  '/investment': lazy(() => import('../../pages/Investment')),
-  '/investment-record': lazy(() => import('../../pages/InvestmentRecord')),
   '/asset-tracking': lazy(() => import('../../pages/AssetTracking')),
   '/test-zone': lazy(() => import('../../pages/TestZone')),
   '/changelog': lazy(() => import('../../pages/Changelog')),

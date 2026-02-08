@@ -14,7 +14,7 @@ import { testZoneSettingsStorage } from '../../services/storage/testZoneSettings
 import { testZoneStorage } from '../../services/storage/testZoneStorage'
 import { TestZoneWorkspace } from '../../components/TestZone/TestZoneWorkspace'
 import { TestZoneSettings } from '../../components/TestZone/TestZoneSettings'
-import { ConfirmDialog } from '../../components/Investment/ConfirmDialog'
+import { ConfirmDialog } from '../../components/common/ConfirmDialog'
 import { exportTestData, importTestData, downloadJsonFile, readJsonFile } from '../../utils/testZoneImportExport'
 import type { MonthlyAssetRecord } from '../../types/assetTracking.types'
 import type { CalculationMethod } from '../../types/testZoneSettings.types'
