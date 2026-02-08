@@ -132,7 +132,7 @@ export const CHART_COLORS = [
  */
 export const ROUTE_PATHS: Record<string, RoutePath> = {
   DASHBOARD: '/dashboard',
-  INVESTMENT: '/investment',
+  TEST_ZONE: '/test-zone',
   CHANGELOG: '/changelog',
   SETTINGS: '/settings'
 } as const

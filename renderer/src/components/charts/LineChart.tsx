@@ -6,7 +6,6 @@
 
 import { useEffect, useRef, useState, useMemo } from 'react'
 import echarts from '../../utils/echarts'
-import type { EChartsOption } from '../../utils/echarts'
 import type { LineChartProps, LineSeries } from './charts.types'
 import { CHART_COLORS } from '../../utils/constants'
 import './Charts.css'
