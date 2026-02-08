@@ -37,7 +37,7 @@ export function UpdateDialog() {
       setIsDownloading(true)
     }
 
-    const handleUpdateDownloaded = (...args: unknown[]) => {
+    const handleUpdateDownloaded = () => {
       console.log('下载完成')
       setIsDownloaded(true)
       setIsDownloading(false)
