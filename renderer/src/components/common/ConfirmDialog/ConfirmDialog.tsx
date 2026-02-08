@@ -76,7 +76,7 @@ export function ConfirmDialog({
         </div>
 
         <div className="confirm-dialog__footer">
-          <Button variant="ghost" onClick={onClose}>
+          <Button variant="outline" onClick={onClose}>
             {cancelText}
           </Button>
           <Button

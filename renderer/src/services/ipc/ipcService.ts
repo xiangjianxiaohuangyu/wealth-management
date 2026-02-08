@@ -32,7 +32,7 @@ class IPCService {
     }
 
     try {
-      return await window.electron.invoke(channel, ...args)
+      return await window.electron.invoke(channel, ...args) as T
     } catch (error) {
       console.error(`IPC invoke error: ${channel}`, error)
       throw error

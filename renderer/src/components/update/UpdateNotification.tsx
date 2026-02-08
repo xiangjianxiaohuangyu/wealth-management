@@ -18,33 +18,37 @@ export function UpdateNotification() {
 
   // 监听更新事件
   useEffect(() => {
-    const handleUpdateAvailable = (_event: any, info: UpdateInfo) => {
+    const handleUpdateAvailable = (...args: unknown[]) => {
+      const info = args[1] as UpdateInfo
       console.log('🎉 收到更新可用事件:', info)
       setUpdateInfo(info)
       setIsVisible(true)
     }
 
-    const handleUpdateNotAvailable = (_event: any, info: any) => {
+    const handleUpdateNotAvailable = (...args: unknown[]) => {
+      const info = args[1] as any
       console.log('已是最新版本:', info.version)
       setShowLatestVersion(true)
       setIsVisible(true)
     }
 
-    const handleDownloadProgress = (_event: any, progress: DownloadProgress) => {
+    const handleDownloadProgress = (...args: unknown[]) => {
+      const progress = args[1] as DownloadProgress
       console.log('下载进度:', progress.percent.toFixed(1) + '%')
       setDownloadProgress(progress)
       setIsDownloading(true)
       setIsVisible(true)
     }
 
-    const handleUpdateDownloaded = (_event: any) => {
+    const handleUpdateDownloaded = () => {
       console.log('下载完成')
       setIsDownloaded(true)
       setIsDownloading(false)
       setDownloadProgress(null)
     }
 
-    const handleUpdateError = (_event: any, error: any) => {
+    const handleUpdateError = (...args: unknown[]) => {
+      const error = args[1] as any
       console.error('更新错误:', error)
       setUpdateError(error.message || '更新失败，请稍后重试')
       setIsVisible(true)

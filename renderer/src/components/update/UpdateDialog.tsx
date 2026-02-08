@@ -17,31 +17,35 @@ export function UpdateDialog() {
 
   // 监听更新事件
   useEffect(() => {
-    const handleUpdateAvailable = (_event: any, info: UpdateInfo) => {
+    const handleUpdateAvailable = (...args: unknown[]) => {
+      const info = args[1] as UpdateInfo
       console.log('🎉 收到更新可用事件:', info)
       setUpdateInfo(info)
     }
 
-    const handleUpdateNotAvailable = (_event: any, info: any) => {
+    const handleUpdateNotAvailable = (...args: unknown[]) => {
+      const info = args[1] as any
       console.log('已是最新版本:', info.version)
       setShowLatestVersion(true)
       setTimeout(() => setShowLatestVersion(false), 3000)
     }
 
-    const handleDownloadProgress = (_event: any, progress: DownloadProgress) => {
+    const handleDownloadProgress = (...args: unknown[]) => {
+      const progress = args[1] as DownloadProgress
       console.log('下载进度:', progress.percent.toFixed(1) + '%')
       setDownloadProgress(progress)
       setIsDownloading(true)
     }
 
-    const handleUpdateDownloaded = (_event: any) => {
+    const handleUpdateDownloaded = (...args: unknown[]) => {
       console.log('下载完成')
       setIsDownloaded(true)
       setIsDownloading(false)
       setDownloadProgress(null)
     }
 
-    const handleUpdateError = (_event: any, error: any) => {
+    const handleUpdateError = (...args: unknown[]) => {
+      const error = args[1] as any
       console.error('更新错误:', error)
       alert(`更新失败：${error.message}`)
     }
