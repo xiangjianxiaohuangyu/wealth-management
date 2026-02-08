@@ -4,6 +4,7 @@
  * 显示月度资产记录列表
  */
 
+import { useMemo } from 'react'
 import { formatCurrency } from '../../utils/format/currency'
 import type { MonthlyAssetRecord } from '../../types/assetTracking.types'
 import './AssetRecordTable.css'
@@ -15,13 +16,25 @@ export interface AssetRecordTableProps {
 }
 
 export function AssetRecordTable({ records, onEdit, onDelete }: AssetRecordTableProps) {
-  // 按时间倒序排序
-  const sortedRecords = [...records].sort((a, b) => {
-    if (a.year !== b.year) return b.year - a.year
-    return b.month - a.month
-  })
+  // 按时间倒序排序并计算比率
+  const sortedRecordsWithRates = useMemo(() => {
+    return [...records]
+      .sort((a, b) => {
+        if (a.year !== b.year) return b.year - a.year
+        return b.month - a.month
+      })
+      .map(record => ({
+        record,
+        savingsRate: record.totalIncome > 0
+          ? (record.savings / record.totalIncome) * 100
+          : 0,
+        investmentRate: record.totalIncome > 0
+          ? (record.investment / record.totalIncome) * 100
+          : 0
+      }))
+  }, [records])
 
-  if (sortedRecords.length === 0) {
+  if (sortedRecordsWithRates.length === 0) {
     return (
       <div className="asset-record-table__empty">
         <div className="asset-record-table__empty-icon">📊</div>
@@ -48,50 +61,41 @@ export function AssetRecordTable({ records, onEdit, onDelete }: AssetRecordTable
           </tr>
         </thead>
         <tbody>
-          {sortedRecords.map(record => {
-            const savingsRate = record.totalIncome > 0
-              ? (record.savings / record.totalIncome) * 100
-              : 0
-            const investmentRate = record.totalIncome > 0
-              ? (record.investment / record.totalIncome) * 100
-              : 0
-
-            return (
-              <tr key={record.id}>
-                <td>{record.year}年{record.month}月</td>
-                <td>{formatCurrency(record.totalIncome, 'CNY')}</td>
-                <td>{formatCurrency(record.consumption, 'CNY')}</td>
-                <td className="asset-record-table__positive">
-                  {formatCurrency(record.savings, 'CNY')}
-                </td>
-                <td className="asset-record-table__positive">
-                  {formatCurrency(record.investment, 'CNY')}
-                </td>
-                <td>{savingsRate.toFixed(1)}%</td>
-                <td>{investmentRate.toFixed(1)}%</td>
-                <td
-                  className="asset-record-table__notes"
-                  title={record.notes || ''}
+          {sortedRecordsWithRates.map(({ record, savingsRate, investmentRate }) => (
+            <tr key={record.id}>
+              <td>{record.year}年{record.month}月</td>
+              <td>{formatCurrency(record.totalIncome, 'CNY')}</td>
+              <td>{formatCurrency(record.consumption, 'CNY')}</td>
+              <td className="asset-record-table__positive">
+                {formatCurrency(record.savings, 'CNY')}
+              </td>
+              <td className="asset-record-table__positive">
+                {formatCurrency(record.investment, 'CNY')}
+              </td>
+              <td>{savingsRate.toFixed(1)}%</td>
+              <td>{investmentRate.toFixed(1)}%</td>
+              <td
+                className="asset-record-table__notes"
+                title={record.notes || ''}
+              >
+                {record.notes || '-'}
+              </td>
+              <td>
+                <button
+                  className="asset-record-table__btn asset-record-table__btn--edit"
+                  onClick={() => onEdit(record)}
                 >
-                  {record.notes || '-'}
-                </td>
-                <td>
-                  <button
-                    className="asset-record-table__btn asset-record-table__btn--edit"
-                    onClick={() => onEdit(record)}
-                  >
-                    编辑
-                  </button>
-                  <button
-                    className="asset-record-table__btn asset-record-table__btn--delete"
-                    onClick={() => onDelete(record.id)}
-                  >
-                    删除
-                  </button>
-                </td>
-              </tr>
-            )
-          })}
+                  编辑
+                </button>
+                <button
+                  className="asset-record-table__btn asset-record-table__btn--delete"
+                  onClick={() => onDelete(record.id)}
+                >
+                  删除
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

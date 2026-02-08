@@ -1,5 +1,5 @@
 /**
- * 测试区设置弹窗组件
+ * 投资规划设置弹窗组件
  *
  * 功能：
  * - 选择投资金额计算方式
@@ -33,7 +33,7 @@ export function TestZoneSettings({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="测试区设置">
+    <Modal isOpen={isOpen} onClose={onClose} title="投资规划设置">
       <div className="testzone-settings">
         <p className="testzone-settings__label">投资金额计算方式：</p>
         <div className="testzone-settings__options">

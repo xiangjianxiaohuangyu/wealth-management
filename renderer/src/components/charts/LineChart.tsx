@@ -4,8 +4,9 @@
  * 基于 ECharts 的折线图封装，支持单条或多条折线
  */
 
-import { useEffect, useRef, useState } from 'react'
-import * as echarts from 'echarts'
+import { useEffect, useRef, useState, useMemo } from 'react'
+import echarts from '../../utils/echarts'
+import type { EChartsOption } from '../../utils/echarts'
 import type { LineChartProps, LineSeries } from './charts.types'
 import { CHART_COLORS } from '../../utils/constants'
 import './Charts.css'
@@ -55,55 +56,25 @@ export function LineChart({
     }
   }, [])
 
-  // 更新图表配置
-  useEffect(() => {
-    if (!isReady || !chartInstance.current) return
+  // 标准化数据为数组格式
+  const seriesData: LineSeries[] = useMemo(() => {
+    return Array.isArray(data) ? data : [data]
+  }, [data])
 
-    const chart = chartInstance.current
+  // 检查数据是否为空
+  const isEmpty = useMemo(() => {
+    return seriesData.length === 0 || seriesData.every(s => !s.data || s.data.length === 0)
+  }, [seriesData])
 
-    // 标准化数据为数组格式
-    const seriesData: LineSeries[] = Array.isArray(data) ? data : [data]
+  // 获取 X 轴数据（使用第一个系列的 X 轴数据）
+  const xAxisData = useMemo(() => {
+    return seriesData[0]?.data?.map(point => point.x) || []
+  }, [seriesData])
 
-    // 检查数据是否为空
-    const isEmpty = seriesData.length === 0 || seriesData.every(s => !s.data || s.data.length === 0)
-
-    // 显示加载状态
-    if (loading) {
-      chart.showLoading({
-        text: loadingText,
-        color: CHART_COLORS[0],
-        textColor: '#666',
-        maskColor: 'rgba(255, 255, 255, 0.8)',
-        zlevel: 0
-      })
-      return
-    } else {
-      chart.hideLoading()
-    }
-
-    // 显示空数据状态
-    if (empty || isEmpty) {
-      chart.clear()
-      chart.setOption({
-        title: {
-          text: emptyText,
-          left: 'center',
-          top: 'center',
-          textStyle: {
-            color: '#999',
-            fontSize: 14
-          }
-        }
-      })
-      return
-    }
-
-    // 获取 X 轴数据（使用第一个系列的 X 轴数据）
-    const xAxisData = seriesData[0]?.data?.map(point => point.x) || []
-
-    // 构建系列配置
-    const series = seriesData.map((seriesItem, index) => {
-      const seriesOption: echarts.LineSeriesOption = {
+  // 构建系列配置
+  const series = useMemo(() => {
+    return seriesData.map((seriesItem, index) => {
+      const seriesOption: any = {
         name: seriesItem.name,
         type: 'line',
         smooth: seriesItem.smooth ?? true,
@@ -136,9 +107,11 @@ export function LineChart({
 
       return seriesOption
     })
+  }, [seriesData, showArea, showPoints])
 
-    // 构建图表配置
-    const option: echarts.EChartsOption = {
+  // 构建图表配置
+  const chartOption = useMemo(() => {
+    return {
       title: title ? {
         text: title,
         left: 'center',
@@ -150,7 +123,7 @@ export function LineChart({
         }
       } : undefined,
       tooltip: {
-        trigger: 'axis',
+        trigger: 'axis' as const,
         formatter: tooltipFormatter || ((params: any) => {
           let result = `${params[0].axisValue}<br/>`
           params.forEach((param: any) => {
@@ -160,7 +133,7 @@ export function LineChart({
         })
       },
       legend: showLegend ? {
-        orient: 'horizontal',
+        orient: 'horizontal' as const,
         bottom: 10,
         left: 'center'
       } : undefined,
@@ -172,17 +145,17 @@ export function LineChart({
         containLabel: true
       },
       xAxis: {
-        type: 'category',
+        type: 'category' as const,
         boundaryGap: false,
         data: xAxisData,
         axisLabel: {
           rotate: xAxisLabelRotate,
-          interval: 'auto',
+          interval: 'auto' as const,
           fontSize: 12
         }
       },
       yAxis: {
-        type: 'value',
+        type: 'value' as const,
         axisLabel: {
           formatter: yAxisFormatter || ((value: number) => value.toString()),
           fontSize: 12
@@ -190,8 +163,46 @@ export function LineChart({
       },
       series
     }
+  }, [title, showLegend, xAxisData, series, xAxisLabelRotate, yAxisFormatter, tooltipFormatter])
 
-    chart.setOption(option, true)
+  // 更新图表配置
+  useEffect(() => {
+    if (!isReady || !chartInstance.current) return
+
+    const chart = chartInstance.current
+
+    // 显示加载状态
+    if (loading) {
+      chart.showLoading({
+        text: loadingText,
+        color: CHART_COLORS[0],
+        textColor: '#666',
+        maskColor: 'rgba(255, 255, 255, 0.8)',
+        zlevel: 0
+      })
+      return
+    } else {
+      chart.hideLoading()
+    }
+
+    // 显示空数据状态
+    if (empty || isEmpty) {
+      chart.clear()
+      chart.setOption({
+        title: {
+          text: emptyText,
+          left: 'center',
+          top: 'center',
+          textStyle: {
+            color: '#999',
+            fontSize: 14
+          }
+        }
+      })
+      return
+    }
+
+    chart.setOption(chartOption, true)
 
     // 点击事件
     const handleChartClick = (params: any) => {
@@ -209,7 +220,7 @@ export function LineChart({
     chart.off('click')
     chart.on('click', handleChartClick)
 
-  }, [isReady, data, title, showLegend, showArea, showPoints, xAxisLabelRotate, yAxisFormatter, tooltipFormatter, loading, empty, emptyText, loadingText, onClick])
+  }, [isReady, chartOption, loading, empty, isEmpty, emptyText, loadingText, onClick, seriesData])
 
   return (
     <div

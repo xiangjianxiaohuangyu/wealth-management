@@ -4,6 +4,8 @@
  * 预留接口用于后期集成爬虫获取实时数据
  */
 
+import { logger } from '../../utils/logger'
+
 export interface StockData {
   /** 股票代码 */
   stockCode: string
@@ -49,7 +51,7 @@ export const stockDataService = {
         return null
       }
 
-      console.log(`[StockDataService] 获取股票数据: ${stockCode}`)
+      logger.debug(`[StockDataService] 获取股票数据: ${stockCode}`)
 
       // 调用主进程API
       const response = await (window as any).electron.invoke('get-stock-data', stockCode.trim()) as {
@@ -61,11 +63,11 @@ export const stockDataService = {
       if (response.success && response.data) {
         return response.data
       } else {
-        console.error('[StockDataService] 获取失败:', response.error)
+        logger.error('[StockDataService] 获取失败:', response.error)
         return null
       }
     } catch (error) {
-      console.error('[StockDataService] 获取股票数据失败:', error)
+      logger.error('[StockDataService] 获取股票数据失败:', error)
       return null
     }
   },
@@ -80,7 +82,7 @@ export const stockDataService = {
   async getIndexPoints(indexCode: string): Promise<StockPointData | null> {
     try {
       // 模拟实现
-      console.log(`[StockDataService] 获取指数点数: ${indexCode}`)
+      logger.debug(`[StockDataService] 获取指数点数: ${indexCode}`)
 
       // 预留接口调用
       // const response = await window.electron.ipc.invoke('get-index-points', indexCode)
@@ -88,7 +90,7 @@ export const stockDataService = {
 
       return null
     } catch (error) {
-      console.error('[StockDataService] 获取指数点数失败:', error)
+      logger.error('[StockDataService] 获取指数点数失败:', error)
       return null
     }
   },

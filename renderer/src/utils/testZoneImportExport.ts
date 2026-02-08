@@ -1,7 +1,7 @@
 /**
- * 测试区数据导入导出工具
+ * 投资规划数据导入导出工具
  *
- * 处理测试区数据的导入导出功能
+ * 处理投资规划数据的导入导出功能
  */
 
 import type { TestZoneData } from '../types/testzone.types'

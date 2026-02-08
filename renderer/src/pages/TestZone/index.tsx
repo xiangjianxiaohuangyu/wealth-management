@@ -1,5 +1,5 @@
 /**
- * 测试区页面
+ * 投资规划页面
  *
  * 功能：
  * - 显示总收入和总投资金额统计卡片
@@ -57,7 +57,7 @@ export default function TestZone() {
     }
   }, [])
 
-  // 加载测试区设置
+  // 加载投资规划设置
   useEffect(() => {
     const loadSettings = () => {
       setCalculationMethod(testZoneSettingsStorage.getCalculationMethod())
@@ -190,7 +190,7 @@ export default function TestZone() {
   return (
     <div className="testzone">
       <div className="testzone__header">
-        <h1 className="testzone__title">测试区</h1>
+        <h1 className="testzone__title">投资规划</h1>
         <div className="testzone__header-actions">
           <button
             className="testzone__add-table-btn"
@@ -270,7 +270,7 @@ export default function TestZone() {
         onClose={() => setShowImportConfirm(false)}
         onConfirm={handleConfirmImport}
         title="导入数据"
-        message="导入数据将覆盖当前所有测试区数据，确定要继续吗？此操作不可恢复。"
+        message="导入数据将覆盖当前所有投资规划数据，确定要继续吗？此操作不可恢复。"
         confirmText="导入"
         cancelText="取消"
         type="danger"

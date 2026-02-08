@@ -1,5 +1,5 @@
 /**
- * 测试区类型定义
+ * 投资规划类型定义
  */
 
 /** 价值区间 */
@@ -36,7 +36,7 @@ export interface TestZoneTable {
   updatedAt: string
 }
 
-/** 测试区数据 */
+/** 投资规划数据 */
 export interface TestZoneData {
   tables: TestZoneTable[]
   lastUpdated: string

@@ -148,3 +148,23 @@ export const DEFAULT_SETTINGS = {
   /** 默认货币 */
   CURRENCY: 'CNY'
 } as const
+
+/**
+ * UI 文本常量
+ */
+export const UI_TEXTS = {
+  /** 图表标题 */
+  ASSET_ALLOCATION: '资产配置',
+  INCOME: '收入',
+  EXPENSE: '支出',
+  INVESTMENT_AMOUNT: '投资金额',
+  /** 确认对话框 */
+  DELETE_CONFIRM: '确定要删除这条记录吗？此操作无法撤销。',
+  /** 状态文本 */
+  LOADING: '加载中...',
+  NO_DATA: '暂无数据',
+  /** 其他 */
+  TOTAL_ASSETS: '总资产',
+  TOTAL_LIABILITIES: '总负债',
+  NET_WORTH: '净资产'
+} as const

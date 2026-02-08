@@ -5,6 +5,7 @@
 import { useMemo } from 'react'
 import type { PieDataItem, LineSeries } from '../components/charts/charts.types'
 import type { Asset, Transaction } from '../types/wealth.types'
+import { ASSET_CATEGORY_LABELS, TRANSACTION_CATEGORY_LABELS } from '../utils/constants'
 
 /**
  * 图表数据处理 Hook 的属性
@@ -31,36 +32,6 @@ export interface UseChartDataReturn {
     income: PieDataItem[]
     expense: PieDataItem[]
   }
-}
-
-/**
- * 资产类别标签映射
- */
-const ASSET_CATEGORY_LABELS: Record<string, string> = {
-  cash: '现金',
-  stock: '股票',
-  fund: '基金',
-  bond: '债券',
-  real_estate: '房产',
-  crypto: '加密货币',
-  other: '其他'
-}
-
-/**
- * 交易类别标签映射
- */
-const TRANSACTION_CATEGORY_LABELS: Record<string, string> = {
-  salary: '工资',
-  bonus: '奖金',
-  investment: '投资收益',
-  rent: '房租',
-  food: '餐饮',
-  transport: '交通',
-  shopping: '购物',
-  entertainment: '娱乐',
-  medical: '医疗',
-  education: '教育',
-  other: '其他'
 }
 
 /**
@@ -106,7 +77,7 @@ export function useChartData({
 
     // 转换为饼图数据格式
     return Array.from(categoryMap.entries()).map(([category, value]) => ({
-      name: ASSET_CATEGORY_LABELS[category] || category,
+      name: ASSET_CATEGORY_LABELS[category as keyof typeof ASSET_CATEGORY_LABELS] || category,
       value
     }))
   }, [assets])
@@ -178,12 +149,12 @@ export function useChartData({
 
     // 转换为饼图数据格式
     const incomeData = Array.from(incomeMap.entries()).map(([category, value]) => ({
-      name: TRANSACTION_CATEGORY_LABELS[category] || category,
+      name: TRANSACTION_CATEGORY_LABELS[category as keyof typeof TRANSACTION_CATEGORY_LABELS] || category,
       value
     }))
 
     const expenseData = Array.from(expenseMap.entries()).map(([category, value]) => ({
-      name: TRANSACTION_CATEGORY_LABELS[category] || category,
+      name: TRANSACTION_CATEGORY_LABELS[category as keyof typeof TRANSACTION_CATEGORY_LABELS] || category,
       value
     }))
 

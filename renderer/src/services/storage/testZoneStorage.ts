@@ -1,7 +1,7 @@
 /**
- * 测试区数据存储服务
+ * 投资规划数据存储服务
  *
- * 用于保存和加载测试区数据
+ * 用于保存和加载投资规划数据
  */
 
 import { storage } from './localStorage'
@@ -9,14 +9,14 @@ import type { TestZoneData, TestZoneTable, TestZoneRow } from '../../types/testz
 import { eventBus } from '../../utils/eventBus'
 
 /**
- * 测试区数据存储服务
+ * 投资规划数据存储服务
  */
 export const testZoneStorage = {
   /** 存储键 */
   STORAGE_KEY: 'wealth_testzone_data',
 
   /**
-   * 获取完整的测试区数据
+   * 获取完整的投资规划数据
    */
   getData(): TestZoneData | null {
     const data = storage.get<TestZoneData>(this.STORAGE_KEY)
@@ -24,7 +24,7 @@ export const testZoneStorage = {
   },
 
   /**
-   * 保存测试区数据
+   * 保存投资规划数据
    */
   setData(data: TestZoneData): boolean {
     const dataToSave: TestZoneData = {

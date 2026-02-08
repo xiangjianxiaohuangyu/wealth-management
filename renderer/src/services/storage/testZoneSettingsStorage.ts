@@ -1,7 +1,7 @@
 /**
- * 测试区设置存储服务
+ * 投资规划设置存储服务
  *
- * 用于保存和加载测试区设置
+ * 用于保存和加载投资规划设置
  */
 
 import { storage } from './localStorage'
@@ -9,7 +9,7 @@ import type { TestZoneSettings, CalculationMethod } from '../../types/testZoneSe
 import { eventBus } from '../../utils/eventBus'
 
 /**
- * 测试区设置存储服务
+ * 投资规划设置存储服务
  */
 export const testZoneSettingsStorage = {
   /** 存储键 */
